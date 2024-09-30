@@ -7,7 +7,24 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // handle form submission logic here, like sending the email to the backend
-    console.log('Email submitted:', email);
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+      "to": email
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+
+    fetch("http://localhost:3000/send-email", requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.error(error));
     alert('Thank you for signing up to be a beta tester!');
     setEmail('');
   };

@@ -4,10 +4,13 @@ const nodemailer = require('nodemailer');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const cors = require('cors');
+app.use(cors());
 
 app.use(express.json());
 
 app.post('/send-email', (req, res) => {
+  
   const { to } = req.body;
 
   const transporter = nodemailer.createTransport({

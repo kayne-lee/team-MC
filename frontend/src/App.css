@@ -1,10 +1,39 @@
 .App {
+  width: 240px;
+  height: 254px;
+  padding: 0 15px;
   text-align: center;
-  padding: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  background: #fff;
+  border-radius: 20px;
+}
+
+.bg {
+  background-color: gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 form {
-  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  input {
+    margin-top: 10px;
+    outline: 0;
+    background: rgb(255, 255, 255);
+    box-shadow: transparent 0px 0px 0px 1px inset;
+    padding: 0.6em;
+    border-radius: 14px;
+    border: 1px solid #333;
+    color: black;
+  }
 }
 
 input {
@@ -16,7 +45,7 @@ input {
 
 button {
   padding: 10px 20px;
-  background-color: #4CAF50;
+  background-color: black;
   color: white;
   border: none;
   border-radius: 5px;
@@ -25,4 +54,16 @@ button {
 
 button:hover {
   background-color: #45a049;
+}
+
+h1 {
+  font-size: 23px;
+  font-weight: 900;
+  color: #333;
+}
+
+.card__content {
+  font-size: 13px;
+  line-height: 18px;
+  color: #333;
 }

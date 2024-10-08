@@ -30,12 +30,16 @@ function App() {
   };
 
   return (
+    <div className="bg">
     <div className="App">
       <header className="App-header">
-        <h1>Welcome to be a beta tester!</h1>
+        <h2>Subscribe</h2>
+        <p class="card__content">Signup to be a Beta Tester for the Master List Generator
+        </p>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="email">Enter your email:</label>
+          {/* <label htmlFor="email">Enter your email:</label> */}
           <input
+            placeholder="Your Email"
             type="email"
             id="email"
             name="email"
@@ -46,6 +50,7 @@ function App() {
           <button type="submit">Submit</button>
         </form>
       </header>
+    </div>
     </div>
   );
 }

@@ -4,6 +4,7 @@ import com.qtma.be.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -14,7 +15,8 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    private String SECRET_KEY = "asdf987a6sdfa9s8df76a9sdf";  // In production, use a more secure key and store it safely
+    @Value("${jwt.secret}")
+    private String secretKey;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -30,7 +32,7 @@ public class JwtUtil {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     }
 
     public Boolean isTokenExpired(String token) {
@@ -48,7 +50,7 @@ public class JwtUtil {
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))  // Token valid for 10 hours
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 

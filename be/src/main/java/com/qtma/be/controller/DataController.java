@@ -1,6 +1,8 @@
 package com.qtma.be.controller;
 
+import com.qtma.be.model.OpenAIRequest;
 import com.qtma.be.model.User;
+import com.qtma.be.service.OpenAIService;
 import com.qtma.be.service.UserService;
 import com.qtma.be.util.JwtUtil;
 import org.slf4j.Logger;
@@ -11,10 +13,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @RestController
@@ -29,6 +34,9 @@ public class DataController {
     // You can inject any required services here
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private OpenAIService openaiService;
 
     @GetMapping("/user")
     public ResponseEntity<Optional<User>> getUserData(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
@@ -56,5 +64,22 @@ public class DataController {
         } else {
             return ResponseEntity.status(401).build(); // Unauthorized
         }
+    }
+    @PostMapping("/openai")
+    public ResponseEntity<String> openaiResponse(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader, @RequestBody OpenAIRequest openAIRequest) throws IOException {
+        String token = null;
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            // Extract the token by removing the "Bearer " prefix
+            token = authorizationHeader.substring(7);
+        }
+        if (token != null && !jwtUtil.isTokenExpired(token)) {
+            
+            String response = openaiService.openaiCall(openAIRequest);
+            return ResponseEntity.ok(response);
+        }
+        else {
+            return ResponseEntity.status(401).build(); // Unauthorized
+        }
+       
     }
 }

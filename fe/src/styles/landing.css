@@ -1,0 +1,46 @@
+.logo {
+    width: 110px;
+    margin-left: 50px;
+    margin-top: 25px;
+    p {
+        text-align: left;
+        font-family: 'Inter', sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: normal;
+        background: linear-gradient(90deg, #9747FF 0%, #DAC4F9 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+}
+.header {
+    width: 1512px;
+    height: 70.387px;
+    flex-shrink: 0;
+}
+.landing {
+    height: calc(100vh - 70.387px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .first {
+        text-align: left;
+        font-family: 'Inter', sans-serif;
+        font-size: 52px;
+        font-weight: 700;
+        line-height: normal;
+        span {
+
+            background: linear-gradient(90deg, #9747FF 0%, #DAC4F9 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    }
+    .second {
+        font-size: 24px;
+    }
+}

@@ -18,12 +18,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.io.IOException;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/data")
+@CrossOrigin(origins = "http://localhost:3000")
 public class DataController {
 
     private static final Logger logger = LoggerFactory.getLogger(DataController.class);

@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
+import CardStack from './CardStack';
 
 export default function Landing() {
   const words = ['Create', 'Plan', 'Manage'];
@@ -73,8 +74,10 @@ export default function Landing() {
           </div>
         </div>
         <div className="mt-[45px] flex flex-col">
-          <img src="/assets/images/exCards.png" alt="" className="w-[598px] "/>
-          <div className="font-[400] text-[32px] w-[606px] text-left mt-[67px]">
+          <div>
+          <CardStack />
+          </div>
+          <div className="font-[400] text-[32px] w-[606px] text-left mt-[760px]">
             <span className="w-[110px] h-[23px] text-[32px] font-[700]">Syllabus Puller&nbsp;</span>
             Automatically fills your Tasks List with upcoming assignments <br />and dates from all your courses.
           </div>

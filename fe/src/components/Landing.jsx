@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
+import CardStack from './CardStack';
 
 export default function Landing() {
   const words = ['Create', 'Plan', 'Manage'];
@@ -96,6 +97,10 @@ export default function Landing() {
       </div>
       <div className="text-[#9B9B9B] ">
         <Footer />
+      </div>
+      <div className="flex justify-center items-center">
+
+      <CardStack />
       </div>
     </div>
   )

@@ -59,7 +59,7 @@ export default function CardStack() {
             animate={
               isAnimating && isFrontCard
                 ? {
-                    x: 245, // Move right
+                    x: 505, // Move right
                     y: -32, // Move up
                     rotate: 0, // Reset rotation
                   }

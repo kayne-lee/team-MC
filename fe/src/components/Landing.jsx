@@ -1,4 +1,4 @@
-import { React, useState } from 'react'
+import { React, useState, useEffect } from 'react'
 import '../styles/landing.css'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom';
@@ -9,9 +9,13 @@ export default function Landing() {
   const words = ['Create', 'Plan', 'Manage'];
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
 
-  const handleWordChange = () => {
-    setCurrentWordIndex((prevIndex) => (prevIndex + 1) % words.length);
-  };
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentWordIndex((prevIndex) => (prevIndex + 1) % words.length);
+    }, 2000); // Change word every 2 seconds
+
+    return () => clearInterval(intervalId);
+  }, []);
   return (
     <div className="flex flex-col bg-white">
       {/* header */}
@@ -20,7 +24,7 @@ export default function Landing() {
       {/* landing */}
       <div className=" mt-[25px] landing border-t-[1px] border-black">
         <div className='first flex-row flex gap-4 w-[545px]'>
-          <div className="word-container inline-block w-[194px] text-right cursor-pointer" onClick={handleWordChange}>
+          <div className="word-container inline-block w-[194px] text-right">
             <AnimatePresence mode="wait">
               <motion.span
                 key={words[currentWordIndex]}

@@ -41,7 +41,7 @@ export default function CardStack() {
 
   return (
     <>
-    <div className="relative" onClick={handleClick}>
+    <div className="relative cursor-pointer" onClick={handleClick}>
       {cardOrder.map((card, index) => {
         const styles = getStyles(index) // Get dynamic styles for each card
         const isFrontCard = index === 0 // The first card in the order should animate

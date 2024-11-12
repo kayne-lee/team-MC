@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 
 export default function CardStack() {
@@ -32,8 +32,16 @@ export default function CardStack() {
     }
   }
 
+  useEffect(() => {
+    if (shuffleReady && isAnimating) {
+      // Add a slight delay before shuffling to ensure animation completes
+      setTimeout(shuffleCards, 300)
+    }
+  }, [shuffleReady, isAnimating])
+
   return (
-    <div className="relative w-full h-[900px] bg-black" onClick={handleClick}>
+    <>
+    <div className="relative" onClick={handleClick}>
       {cardOrder.map((card, index) => {
         const styles = getStyles(index) // Get dynamic styles for each card
         const isFrontCard = index === 0 // The first card in the order should animate
@@ -43,13 +51,13 @@ export default function CardStack() {
             key={card}
             src={`/assets/images/${card}.png`}
             alt={`${card} Image`}
-            className="absolute w-[320px] rounded-lg shadow-custom"
+            className="absolute w-[472px] cards"
             initial={{
               rotate: styles.rotate,
               left: styles.left,
             }}
             animate={
-              isFrontCard && isAnimating
+              isAnimating && isFrontCard
                 ? {
                     x: 245, // Move right
                     y: -32, // Move up
@@ -64,11 +72,11 @@ export default function CardStack() {
             onAnimationComplete={
               isFrontCard && isAnimating
                 ? () => {
-                    setShuffleReady(true) // Trigger shuffle after animation
+                    // Set shuffle readiness after front card completes the animation
+                    setShuffleReady(true)
                   }
                 : undefined
             }
-            positionTransition // This ensures smooth transitions for positions
             style={{
               position: 'absolute',
               left: styles.left,
@@ -78,8 +86,8 @@ export default function CardStack() {
           />
         )
       })}
-      {/* Trigger shuffle only after the front card completes the translation */}
-      {shuffleReady && shuffleCards()}
     </div>
+    </>
+    
   )
 }

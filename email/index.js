@@ -5,7 +5,7 @@ const nodemailer = require('nodemailer');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const cors = require('cors');
-const allowedOrigins = ['https://team-mc.vercel.app', 'https://team-mc.vercel.app/signup', 'http://localhost:3000/'];
+const allowedOrigins = ['https://team-mc.vercel.app', 'https://team-mc.vercel.app/signup', 'http://localhost:3000'];
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -15,6 +15,8 @@ app.use(cors({
     }
   },
 }));
+
+app.options('*', cors());
 
 app.use(express.json());
 

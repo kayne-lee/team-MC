@@ -4,8 +4,12 @@ const nodemailer = require('nodemailer');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
 const cors = require('cors');
-const allowedOrigins = ['https://team-mc.vercel.app', 'https://team-mc.vercel.app/signup', 'http://localhost:3000'];
+const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? ['https://team-mc.vercel.app']
+  : ['https://team-mc.vercel.app', 'http://localhost:3000'];
+
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -14,9 +18,22 @@ app.use(cors({
       callback(new Error('Not allowed by CORS'));
     }
   },
+  methods: ['GET', 'POST', 'OPTIONS', 'DELETE'], // Allow specific HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Add required headers
+  preflightContinue: false, // Finish OPTIONS requests without routing them further
+  optionsSuccessStatus: 204, // Respond with status 204 for preflight requests
+  maxAge: 86400, // Cache preflight response for 1 day (optional)
 }));
 
-app.options('*', cors());
+// Handle OPTIONS requests separately
+app.options('*', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Max-Age', 86400); // Cache for 1 day
+  res.sendStatus(204); // Respond with 204 No Content
+});
+
 
 app.use(express.json());
 

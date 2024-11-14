@@ -40,7 +40,7 @@ export default function Landing() {
       redirect: "follow"
     };
 
-    fetch("http://localhost:3000/send-email", requestOptions)
+    fetch("https://team-mc-email-m0t3evqkg-kayne-lees-projects.vercel.app/send-email", requestOptions)
       .then((response) => response.text())
       .then((result) => console.log(result))
       .catch((error) => console.error(error));

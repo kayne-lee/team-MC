@@ -35,6 +35,7 @@ export default function Landing() {
 
     const requestOptions = {
       method: "POST",
+      mode: 'cors',
       headers: myHeaders,
       body: raw,
       redirect: "follow"

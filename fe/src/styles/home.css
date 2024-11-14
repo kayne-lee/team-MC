@@ -1,0 +1,85 @@
+.task-page {
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .nav-item {
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .nav-item.active {
+    color: white;
+    background-color: #6a0dad;
+    border-radius: 20px;
+  }
+  
+  .profile-icon {
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .task-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    padding: 20px;
+    width: 90%;
+  }
+  
+  .task-box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .task-box h3 {
+    color: #6a0dad;
+    margin-bottom: 10px;
+  }
+  
+  .task-box ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .date-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .date-button {
+    background-color: #d3d3d3;
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+  }
+  
+  .date-button.active {
+    background-color: #6a0dad;
+    color: white;
+  }
+  
+  .calendar-icon {
+    font-size: 24px;
+    cursor: pointer;
+  }
+  

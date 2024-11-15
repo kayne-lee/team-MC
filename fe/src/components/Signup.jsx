@@ -25,7 +25,7 @@ export default function Signup() {
       redirect: "follow"
     };
 
-    fetch("https://team-mc-email.vercel.app/send-email", requestOptions)
+    fetch("https://team-mc-email.vercel.app/api/send-email", requestOptions)
       .then((response) => response.text())
       .then((result) => console.log(result))
       .catch((error) => console.error(error));

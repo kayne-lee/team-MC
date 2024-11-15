@@ -37,7 +37,7 @@ app.options('*', (req, res) => {
 
 app.use(express.json());
 
-app.post('/send-email', (req, res) => {
+app.post('/', (req, res) => {
   
   const { to } = req.body;
 

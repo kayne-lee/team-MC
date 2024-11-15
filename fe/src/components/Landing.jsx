@@ -31,20 +31,19 @@ export default function Landing() {
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append('Access-Control-Allow-Origin', 'http://localhost:3000');
     myHeaders.append('Access-Control-Allow-Credentials', 'true');
-
+    
     const raw = JSON.stringify({
       "to": email
     });
-
+    
     const requestOptions = {
       method: "POST",
-      mode: 'cors',
       headers: myHeaders,
       body: raw,
       redirect: "follow"
     };
-
-    axios.post("https://team-mc-email.vercel.app/api/send-email", requestOptions)
+    
+    fetch("https://team-mc-email.vercel.app/api/send-email", requestOptions)
       .then((response) => response.text())
       .then((result) => console.log(result))
       .catch((error) => console.error(error));

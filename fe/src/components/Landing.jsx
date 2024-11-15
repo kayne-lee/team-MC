@@ -44,7 +44,7 @@ export default function Landing() {
       redirect: "follow"
     };
 
-    axios.post("https://team-mc-email.vercel.app/", requestOptions)
+    axios.post("https://team-mc-email.vercel.app/api/send-email", requestOptions)
       .then((response) => response.text())
       .then((result) => console.log(result))
       .catch((error) => console.error(error));

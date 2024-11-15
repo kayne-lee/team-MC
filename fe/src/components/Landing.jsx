@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import CardStack from './CardStack';
+import axios from 'axios'
 
 export default function Landing() {
   const words = ['Create', 'Plan', 'Manage'];
@@ -28,6 +29,8 @@ export default function Landing() {
     // handle form submission logic here, like sending the email to the backend
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
+    myHeaders.append('Access-Control-Allow-Origin', 'http://localhost:3000');
+    myHeaders.append('Access-Control-Allow-Credentials', 'true');
 
     const raw = JSON.stringify({
       "to": email
@@ -41,7 +44,7 @@ export default function Landing() {
       redirect: "follow"
     };
 
-    fetch("https://team-mc-email.vercel.app/send-email", requestOptions)
+    axios.post("https://team-mc-email.vercel.app/", requestOptions)
       .then((response) => response.text())
       .then((result) => console.log(result))
       .catch((error) => console.error(error));

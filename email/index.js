@@ -149,6 +149,13 @@ app.post('/send-email', (req, res) => {
   });
 });
 
+app.get('/debug', (req, res) => {
+  res.json({
+    EMAIL_USER: process.env.EMAIL_USER || 'Not set',
+    EMAIL_PASSWORD: process.env.EMAIL_PASSWORD ? 'Exists' : 'Not set',
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

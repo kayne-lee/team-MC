@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 const cors = require('cors');
+require('dotenv').config();
 
 const allowedOrigins = process.env.NODE_ENV === 'production'
   ? ['https://team-mc.vercel.app']
@@ -19,6 +20,7 @@ const handler = async (req, res) => {
         pass: process.env.EMAIL_PASSWORD,
       },
     });
+    console.log('EMAIL_USER:', process.env.EMAIL_USER);
   
     const mailOptions = {
       from: process.env.EMAIL_USER,

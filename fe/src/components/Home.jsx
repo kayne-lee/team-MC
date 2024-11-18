@@ -1,6 +1,11 @@
-import React from 'react'
-import '../styles/home.css'
+import React, { useState } from 'react';
+import '../styles/home.css';
+
 export default function Home() {
+    const [selectedDay, setSelectedDay] = useState(1);
+
+    const days = [1, 2, 3, 4, 5, 6, 7];
+
     return (
         <div className="flex flex-col background min-h-screen">
             <div className="nav-placeholder h-36"></div>
@@ -17,10 +22,13 @@ export default function Home() {
             </div>
             <div className="date-selector w-full h-[145px] flex items-center justify-center fixed bottom-0 mx-auto">
                 <div className="select-buttons flex flex-row justify-between w-full">
-                    <button><div className="cursor-pointer h-[81px] w-[81px] text-[24px] text-white rounded-[45px] bg-[#8338EC] mt-[38px] flex justify-center items-center">1</div></button>
-                    <button><div className="cursor-pointer h-[81px] w-[81px] text-[24px] text-white rounded-[45px] bg-[#8338EC] mt-[38px] flex justify-center items-center">2</div></button>
-                    <button><div className="cursor-pointer h-[81px] w-[81px] text-[24px] text-white rounded-[45px] bg-[#8338EC] mt-[38px] flex justify-center items-center">3</div></button>
-                
+                    {days.map(day => (
+                        <button key={day} onClick={() => setSelectedDay(day)}>
+                            <div className={`cursor-pointer h-[81px] w-[81px] text-[24px] text-white rounded-[45px] mt-[38px] flex justify-center items-center ${selectedDay === day ? 'bg-[#8338EC]' : 'bg-gray-500'}`}>
+                                {day}
+                            </div>
+                        </button>
+                    ))}
                 </div>
             </div>
         </div>

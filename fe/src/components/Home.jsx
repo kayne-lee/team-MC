@@ -19,7 +19,7 @@ export default function Home() {
         const updateButtonsToShow = () => {
             const containerWidth = window.innerWidth - 200; // Account for padding and arrows
             const buttonWidth = 90; // Approximate width of a button (81px width + margin/padding)
-            const maxButtons = Math.floor(containerWidth / buttonWidth);
+            const maxButtons = Math.floor(containerWidth / buttonWidth) - 4;
             setButtonsToShow(Math.max(3, maxButtons)); // Ensure at least 3 buttons are displayed
         };
 
@@ -53,10 +53,10 @@ export default function Home() {
                 <div className="day-box">SUNDAY</div>
             </div>
             <div className="date-selector w-full h-[145px] flex items-center justify-center fixed bottom-0 mx-auto">
-                <button onClick={handlePreviousWeek} className="arrow-button text-[100px] flex items-center justify-center">&lt;</button>
+                <button onClick={handlePreviousWeek} className="arrow-button text-[100px] flex items-center justify-center ml-[34px]">&lt;</button>
                 <div className="select-buttons flex flex-row justify-center items-center w-full">
                     {days.map((day) => (
-                        <button key={day} onClick={() => setSelectedDay(day)} className="flex items-center justify-center">
+                        <button key={day} onClick={() => setSelectedDay(day)} className="flex items-center justify-center mx-[16px]">
                             <div
                                 className={`day-buttons cursor-pointer h-[81px] w-[81px] text-[24px] text-black font-bold rounded-[45px] flex justify-center items-center ${
                                     selectedDay === day ? 'bg-[#8338EC]' : 'bg-[#D9D9D9]'

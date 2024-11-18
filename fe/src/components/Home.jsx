@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FaCalendar } from "react-icons/fa";
 import '../styles/home.css';
 
 export default function Home() {
@@ -58,8 +59,8 @@ export default function Home() {
                     {days.map((day) => (
                         <button key={day} onClick={() => setSelectedDay(day)}>
                             <div
-                                className={`cursor-pointer h-[81px] w-[81px] text-[24px] text-white rounded-[45px] mt-[38px] flex justify-center items-center ${
-                                    selectedDay === day ? 'bg-[#8338EC]' : 'bg-gray-500'
+                                className={`day-buttons cursor-pointer h-[81px] w-[81px] text-[24px] text-black font-bold rounded-[45px] mt-[38px] flex justify-center items-center ${
+                                    selectedDay === day ? 'bg-[#8338EC]' : 'bg-[#D9D9D9]'
                                 }`}
                             >
                                 {day}
@@ -68,6 +69,7 @@ export default function Home() {
                     ))}
                 </div>
                 <button onClick={handleNextWeek} className="arrow-button text-[100px]">&gt;</button>
+                <img src="/assets/icons/Calendar.png" alt="Calendar Icon" className="w-[81px] ml-[12px] mr-[34px]" />
             </div>
         </div>
     );

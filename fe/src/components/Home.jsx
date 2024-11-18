@@ -3,8 +3,17 @@ import '../styles/home.css';
 
 export default function Home() {
     const [selectedDay, setSelectedDay] = useState(1);
+    const [weekOffset, setWeekOffset] = useState(0);
 
     const days = [1, 2, 3, 4, 5, 6, 7];
+
+    const handlePreviousWeek = () => {
+        setWeekOffset(weekOffset - 1);
+    };
+
+    const handleNextWeek = () => {
+        setWeekOffset(weekOffset + 1);
+    };
 
     return (
         <div className="flex flex-col background min-h-screen">
@@ -21,15 +30,17 @@ export default function Home() {
                 <div className="day-box">SUNDAY</div>
             </div>
             <div className="date-selector w-full h-[145px] flex items-center justify-center fixed bottom-0 mx-auto">
+                <button onClick={handlePreviousWeek} className="arrow-button text-[100px]">&lt;</button>
                 <div className="select-buttons flex flex-row justify-between w-full">
                     {days.map(day => (
-                        <button key={day} onClick={() => setSelectedDay(day)}>
-                            <div className={`cursor-pointer h-[81px] w-[81px] text-[24px] text-white rounded-[45px] mt-[38px] flex justify-center items-center ${selectedDay === day ? 'bg-[#8338EC]' : 'bg-gray-500'}`}>
-                                {day}
+                        <button key={day} onClick={() => setSelectedDay(day + weekOffset * 7)}>
+                            <div className={`cursor-pointer h-[81px] w-[81px] text-[24px] text-white rounded-[45px] mt-[38px] flex justify-center items-center ${selectedDay === day + weekOffset * 7 ? 'bg-[#8338EC]' : 'bg-gray-500'}`}>
+                                {day + weekOffset * 7}
                             </div>
                         </button>
                     ))}
                 </div>
+                <button onClick={handleNextWeek} className="arrow-button text-[100px]">&gt;</button>
             </div>
         </div>
     );

@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/home.css';
 
 export default function Home() {
     const [selectedDay, setSelectedDay] = useState(1);
     const [weekOffset, setWeekOffset] = useState(0);
-
-    const days = [1, 2, 3, 4, 5, 6, 7];
+    const [buttonsToShow, setButtonsToShow] = useState(7); // Default to 7 buttons
 
     const handlePreviousWeek = () => {
         setWeekOffset(weekOffset - 1);
@@ -14,6 +13,30 @@ export default function Home() {
     const handleNextWeek = () => {
         setWeekOffset(weekOffset + 1);
     };
+
+    // Dynamically calculate how many buttons fit in the screen
+    useEffect(() => {
+        const updateButtonsToShow = () => {
+            const containerWidth = window.innerWidth - 200; // Account for padding and arrows
+            const buttonWidth = 90; // Approximate width of a button (81px width + margin/padding)
+            const maxButtons = Math.floor(containerWidth / buttonWidth);
+            setButtonsToShow(Math.max(3, maxButtons)); // Ensure at least 3 buttons are displayed
+        };
+
+        // Add event listener for resize
+        window.addEventListener('resize', updateButtonsToShow);
+
+        // Initial calculation
+        updateButtonsToShow();
+
+        // Cleanup on component unmount
+        return () => {
+            window.removeEventListener('resize', updateButtonsToShow);
+        };
+    }, []);
+
+    // Generate the days to show based on weekOffset
+    const days = Array.from({ length: buttonsToShow }, (_, i) => i + 1 + weekOffset * buttonsToShow);
 
     return (
         <div className="flex flex-col background min-h-screen">
@@ -25,17 +48,21 @@ export default function Home() {
                 <div className="day-box">THURSDAY</div>
                 <div className="day-box">FRIDAY</div>
             </div>
-            <div className='flex flex-row justify-between w-full flex-grow mb-16 pb-32'>
+            <div className="flex flex-row justify-between w-full flex-grow mb-16 pb-32">
                 <div className="day-box">SATURDAY</div>
                 <div className="day-box">SUNDAY</div>
             </div>
             <div className="date-selector w-full h-[145px] flex items-center justify-center fixed bottom-0 mx-auto">
                 <button onClick={handlePreviousWeek} className="arrow-button text-[100px]">&lt;</button>
                 <div className="select-buttons flex flex-row justify-between w-full">
-                    {days.map(day => (
-                        <button key={day} onClick={() => setSelectedDay(day + weekOffset * 7)}>
-                            <div className={`cursor-pointer h-[81px] w-[81px] text-[24px] text-white rounded-[45px] mt-[38px] flex justify-center items-center ${selectedDay === day + weekOffset * 7 ? 'bg-[#8338EC]' : 'bg-gray-500'}`}>
-                                {day + weekOffset * 7}
+                    {days.map((day) => (
+                        <button key={day} onClick={() => setSelectedDay(day)}>
+                            <div
+                                className={`cursor-pointer h-[81px] w-[81px] text-[24px] text-white rounded-[45px] mt-[38px] flex justify-center items-center ${
+                                    selectedDay === day ? 'bg-[#8338EC]' : 'bg-gray-500'
+                                }`}
+                            >
+                                {day}
                             </div>
                         </button>
                     ))}

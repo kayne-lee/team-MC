@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { FaCalendar } from "react-icons/fa";
 import '../styles/home.css';
 
 export default function Home() {
@@ -54,12 +53,12 @@ export default function Home() {
                 <div className="day-box">SUNDAY</div>
             </div>
             <div className="date-selector w-full h-[145px] flex items-center justify-center fixed bottom-0 mx-auto">
-                <button onClick={handlePreviousWeek} className="arrow-button text-[100px]">&lt;</button>
-                <div className="select-buttons flex flex-row justify-between w-full">
+                <button onClick={handlePreviousWeek} className="arrow-button text-[100px] flex items-center justify-center">&lt;</button>
+                <div className="select-buttons flex flex-row justify-center items-center w-full">
                     {days.map((day) => (
-                        <button key={day} onClick={() => setSelectedDay(day)}>
+                        <button key={day} onClick={() => setSelectedDay(day)} className="flex items-center justify-center">
                             <div
-                                className={`day-buttons cursor-pointer h-[81px] w-[81px] text-[24px] text-black font-bold rounded-[45px] mt-[38px] flex justify-center items-center ${
+                                className={`day-buttons cursor-pointer h-[81px] w-[81px] text-[24px] text-black font-bold rounded-[45px] flex justify-center items-center ${
                                     selectedDay === day ? 'bg-[#8338EC]' : 'bg-[#D9D9D9]'
                                 }`}
                             >
@@ -68,8 +67,8 @@ export default function Home() {
                         </button>
                     ))}
                 </div>
-                <button onClick={handleNextWeek} className="arrow-button text-[100px]">&gt;</button>
-                <img src="/assets/icons/Calendar.png" alt="Calendar Icon" className="w-[81px] ml-[12px] mr-[34px]" />
+                <button onClick={handleNextWeek} className="arrow-button text-[100px] flex items-center justify-center">&gt;</button>
+                <img src="/assets/icons/Calendar.png" alt="Calendar Icon" className="w-[81px] ml-[12px] mr-[34px] flex items-center justify-center" />
             </div>
         </div>
     );

@@ -19,7 +19,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Upload PDF</h1>
+      <h1>Upload Syllabus</h1>
       <div className="output-section">
         {output && <p>{output}</p>}
       </div>

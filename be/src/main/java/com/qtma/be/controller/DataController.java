@@ -1,10 +1,18 @@
 package com.qtma.be.controller;
 
+import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
+import com.fasterxml.jackson.databind.node.JsonNodeType;
+import com.google.gson.JsonArray;
+import com.qtma.be.model.Assignment;
 import com.qtma.be.model.OpenAIRequest;
 import com.qtma.be.model.User;
 import com.qtma.be.service.OpenAIService;
 import com.qtma.be.service.UserService;
 import com.qtma.be.util.JwtUtil;
+import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -68,20 +78,12 @@ public class DataController {
         }
     }
     @PostMapping("/openai")
-    public ResponseEntity<String> openaiResponse(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader, @RequestBody OpenAIRequest openAIRequest) throws IOException {
-        String token = null;
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            // Extract the token by removing the "Bearer " prefix
-            token = authorizationHeader.substring(7);
+    public List<Assignment> extractAssignments(@RequestBody OpenAIRequest openaiRequest) {
+        try {
+            return openaiService.extractAssignments(openaiRequest.input);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
-        if (token != null && !jwtUtil.isTokenExpired(token)) {
-            
-            String response = openaiService.openaiCall(openAIRequest);
-            return ResponseEntity.ok(response);
-        }
-        else {
-            return ResponseEntity.status(401).build(); // Unauthorized
-        }
-       
     }
 }

@@ -12,5 +12,6 @@ import lombok.AllArgsConstructor;
 public class OpenAIRequest {
     
     public String input;
+    public String prompt;
   
 }

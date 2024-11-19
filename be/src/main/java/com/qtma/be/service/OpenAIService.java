@@ -8,17 +8,25 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.qtma.be.model.Assignment;
+import com.qtma.be.model.Course;
 import com.qtma.be.model.OpenAIRequest;
+import com.qtma.be.model.UserCourse;
+import com.qtma.be.repository.UserCourseRepository;
+import com.qtma.be.repository.UserRepository;
+import com.qtma.be.util.JwtUtil;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class OpenAIService {
@@ -26,7 +34,13 @@ public class OpenAIService {
     @Value("${openaikey}")
     private String API_KEY;
 
-    public List<Assignment> openaiCall(OpenAIRequest openAIRequest) throws IOException {
+    @Autowired
+    private UserCourseRepository userRepository;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    public JsonNode openaiCall(OpenAIRequest openAIRequest) throws IOException {
         final String API_URL = "https://api.openai.com/v1/chat/completions";
         OkHttpClient client = new OkHttpClient();
 
@@ -65,9 +79,23 @@ public class OpenAIService {
                         .getAsJsonObject("message")
                         .get("content").getAsString();
 
-                List<Assignment> assignments = objectMapper.readValue(content, new TypeReference<List<Assignment>>() {});
+                // Parse the JSON content into a Java object
+                JsonObject resultObject = JsonParser.parseString(content).getAsJsonObject();
 
-                return assignments;
+                String courseCode = resultObject.get("title").getAsString();
+                JsonArray assignmentsArray = resultObject.getAsJsonArray("assignments");
+
+                // Convert assignments into a Java List
+                List<Assignment> assignments = objectMapper.readValue(assignmentsArray.toString(), new TypeReference<List<Assignment>>() {});
+
+                // Create the final JSON object to return
+                Map<String, Object> result = new HashMap<>();
+
+                result.put("assignments", assignments);
+                result.put("title", courseCode);
+
+                // Return the final JSON object
+                return objectMapper.convertValue(result, JsonNode.class);
             } else {
                 System.out.println("Request failed: " + response);
                 throw new IOException("OpenAI API request failed with status code: " + response.code());
@@ -76,26 +104,62 @@ public class OpenAIService {
     }
 
 
-    public List<Assignment> extractAssignments(String syllabusText) throws IOException {
+    public JsonNode extractAssignments(String syllabusText) throws IOException {
         // Refine the prompt for stricter formatting
         String prompt = "Extract all assignments, tests, midterms, and exams from the following syllabus. " +
-                "Return the output as a **valid JSON array** where each object has the keys 'title', 'weight', and 'dueDate'. " +
-                "Ensure the response starts with '[' and ends with ']'. " +
-                "Example: [{\"title\": \"Assignment 1\", \"weight\": \"15%\", \"dueDate\": \"2024-12-10T23:59:00.000+00:00\"}] " +
+                "Return the output as a **valid JSON object** with the keys 'title' and 'assignments'. " +
+                "The 'title' field should contain the course code, and the 'assignments' field should be an array of assignments. " +
+                "Each assignment should have the keys 'title', 'weight', and 'dueDate'. " +
+                "Ensure the response starts with '{' and ends with '}'. " +
+                "Example: {\"title\": \"COURSE_CODE\", \"assignments\": [{\"title\": \"Assignment 1\", \"weight\": \"15%\", \"dueDate\": \"2024-12-10T23:59:00.000+00:00\"}]} " +
                 "Additional requirements: " +
                 "1. If the time is not specified, assume the time is 11:59 PM on the given date. " +
                 "2. If a date is not specified, fill in December 1, 2024, with the assumed time of 11:59 PM. " +
                 "3. The semester is divided as follows: " +
                 "   - Week 1 to Week 6: From September 2, 2024 (Monday of Week 1) to October 7, 2024 (Monday of Week 6). " +
                 "   - Week 7 to Week 12: From October 21, 2024 (Monday of Week 7) to November 25, 2024 (Monday of Week 12). " +
-                "Use these rules to generate the JSON array. " +
+                "4. Ensure that the total weight of all assignments, tests, midterms, and exams adds up to exactly 100%. " +
+                "Use these rules to generate the JSON object. " +
                 "Input: " + syllabusText;
 
         // Create OpenAI request
         OpenAIRequest openAIRequest = new OpenAIRequest(syllabusText, prompt);
 
         // Get the response from OpenAI
-        List<Assignment> response = openaiCall(openAIRequest);
+        JsonNode response = null;
+
+        int maxRetries = 5; // Set maximum retry attempts
+        int attempt = 0;
+
+        while (attempt < maxRetries) {
+            try {
+                attempt++;
+                System.out.println("Attempt " + attempt + " to call OpenAI...");
+
+                // Make the actual OpenAI call (adjust this method to your actual API calling logic)
+                response = openaiCall(openAIRequest);
+
+                // If successful, break the loop
+                System.out.println("OpenAI call succeeded on attempt " + attempt);
+                break;
+            } catch (Exception e) {
+                System.err.println("Error on attempt " + attempt + ": " + e.getMessage());
+
+                // If max retries are reached, throw the exception
+                if (attempt == maxRetries) {
+                    System.err.println("Max retry attempts reached. Failing...");
+                    throw new RuntimeException("Failed to call OpenAI after " + maxRetries + " attempts", e);
+                }
+
+                // Optional: Add a delay between retries
+                try {
+                    Thread.sleep(2000); // Wait 2 seconds before retrying
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException("Retrying interrupted", ie);
+                }
+            }
+        }
 
         // Validate and parse the response
         try {
@@ -105,5 +169,42 @@ public class OpenAIService {
             throw new IOException(e);
             // Log and handle the error
         }
+    }
+
+    public void saveCourseData(String email, JsonNode c) {
+        // Find the user by email or create a new user if not found
+        UserCourse user = userRepository.findByEmail(email).orElseGet(() -> {
+            UserCourse newUser = new UserCourse();
+            newUser.setEmail(email);
+            return newUser;
+        });
+
+        // Create the course object
+        Course course = new Course();
+        course.setTitle(c.get("title").asText());
+
+        // Extract assignments from the JsonNode
+        List<Assignment> assignments = new ArrayList<>();
+        if (c.has("assignments") && c.get("assignments").isArray()) {
+            for (JsonNode assignmentNode : c.get("assignments")) {
+                Assignment assignment = new Assignment();
+                assignment.setTitle(assignmentNode.get("title").asText());
+                assignment.setWeight(assignmentNode.get("weight").asText());
+                assignment.setDueDate(assignmentNode.get("dueDate").asText());
+                assignments.add(assignment);
+            }
+        }
+        course.setAssignments(assignments);
+
+        // Update the user's courses
+        if (user.getCourses() == null) {
+            user.setCourses(new ArrayList<>());
+        }
+
+        // Add the course to the user's courses list
+        user.getCourses().add(course);
+
+        // Save the user back to MongoDB
+        userRepository.save(user);
     }
 }

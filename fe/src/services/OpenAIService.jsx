@@ -1,33 +1,25 @@
-import axios from 'axios';
-
-
 function OpenAIService() {
     let sv = {
         
         openAICall(inputText) {
-            console.log(inputText)
+          const myHeaders = new Headers();
+          myHeaders.append("Content-Type", "application/json");
+          myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2NzNhODVmZjg3MGU2YzQ0Njk4YTJmOGMiLCJleHAiOjE3MzIwMTM3NjAsImlhdCI6MTczMTk3Nzc2MH0.Uzs-cTSIMUCKHR4NKQ2Yg4w_zziP3M14Lk_LDKfsICg");
             let data = JSON.stringify({
-                "input": "hey hows it going",
-               
+                "input": inputText
               });
           
-            let config = {
-                method: 'post',
-                maxBodyLength: Infinity,
-                url: 'http://localhost:8080/api/data/openai',
-                headers: { 
-                  'Content-Type': 'application/json', 
-                  'Authorization': "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2NzJlNjM5M2ViNTNiYzYzZTQ2Yzc2ZTUiLCJleHAiOjE3MzExNDE4NDQsImlhdCI6MTczMTEwNTg0NH0.9ne8Cg1Fn5hcSPUwfGlF-9EBIQ9zlIJH56k3IBzH4KA"
-                },
-                data : data
-              };     
-            axios.request(config)
-            .then((response) => {
-            console.log(JSON.stringify(response.data));
-            })
-            .catch((error) => {
-            console.log(error);
-            });
+              const requestOptions = {
+                method: "POST",
+                headers: myHeaders,
+                body: data,
+                redirect: "follow"
+              };
+              
+              fetch("http://localhost:8080/api/data/openai", requestOptions)
+                .then((response) => response.text())
+                .then((result) => console.log(result))
+                .catch((error) => console.error(error));
         },
 
     }

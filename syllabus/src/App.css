@@ -1,0 +1,101 @@
+.syllabus-puller {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+
+.upload-section h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  text-align: left;
+  width: 100%;
+}
+
+.upload-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  margin: 40px 0;
+  background-color: white;
+  border-radius: 24px;
+  padding: 40px 40px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.upload-box {
+  text-align: center;
+  border: 1px solid #000;
+  padding: 40px;
+  border-radius: 0px;
+  background: white;
+  width: 100%;
+  max-width: 600px;
+}
+
+.upload-button {
+  background-color: #8338EC;
+  color: white;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 45px;
+  cursor: pointer;
+}
+
+.file-icon {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+}
+
+.uploaded-syllabi {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  margin: 20px 0;
+  max-width: 600px;
+  background: white;
+  border-radius: 10px;
+  padding: 20px 20px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.uploaded-syllabi h2 {
+  margin-bottom: 20px;
+  font-size: 18px;
+  color: #333;
+}
+
+.syllabus-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.syllabus-item span {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: #333;
+}
+
+.delete-button {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  cursor: pointer;
+}

@@ -1,6 +1,7 @@
 package com.qtma.be.config;
 
 
+import com.qtma.be.service.OpenAIService;
 import com.qtma.be.service.UserService;
 
 
@@ -32,6 +33,9 @@ public class SecurityConfig {
     private UserService userService;
 
     @Autowired
+    private OpenAIService openAIService;
+
+    @Autowired
     private JwtUtil jwtUtil;
 
     @Bean
@@ -40,11 +44,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for stateless APIs
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/data/**").permitAll()
-                        .requestMatchers("/auth/signup", "/auth/login").permitAll() // Permit signup and login
+                        .requestMatchers("/auth/signup", "/auth/login").permitAll() // Permit signup and login  
                         .anyRequest().authenticated() // All other requests require authentication
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless session management
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Add JWT filter
+
 
         return http.build();
     }

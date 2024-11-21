@@ -3,6 +3,7 @@
 .parent {
     background: linear-gradient(178deg, #FDFBFD -2.49%, #E3CCFF 64.95%, #FDFBFD 120.82%);
     font-family: 'Lato', 'sans-serif', 'Arial';
+    min-height: 100vh;
 }
 
 /* Layout container */
@@ -10,6 +11,8 @@
     display: flex;
     gap: 20px;
     padding: 20px;
+    min-height: 50vh;
+
 }
 
 /* Left Box */
@@ -22,7 +25,6 @@
     padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 }
 
 .left-box h2 {
@@ -58,7 +60,6 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 }
 
 .grid-box ul {
@@ -67,16 +68,6 @@
     margin: 0;
 }
 
-/* Plus Box */
-.plus-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 36px;
-    font-weight: bold;
-    color: #a67aff;
-    border: 2px dashed #a67aff;
-}
 
 /* Header Styling */
 .header {

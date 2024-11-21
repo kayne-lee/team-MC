@@ -102,27 +102,24 @@ export default function SylaScan() {
   
     return (
       <div className="syllabus-puller">
-        <div className="upload-section">
-          <h2>Upload Syllabus</h2>
-          <div className="upload-box">
-            <div className="icon">
-              <img src={fileIcon} alt="File Icon" className="file-icon" />
-            </div>
-            <button
-              className="upload-button"
-              hidden = {showFetchDates}
-              onClick={() => document.getElementById('fileInput').click()}
-            >
-              Upload or Attach Syllabus
-            </button>
-            <input
-              type="file"
-              id="fileInput"
-              accept=".pdf"
-              style={{ display: 'none' }}
-              onChange={handleFileChange}
-            />
+        <div className="w-[988px] h-[540px] flex flex-col justify-center items-center bg-white rounded-[45px] border-[8px] border-[#8338EC] ">
+          <div className="icon">
+            <img src={fileIcon} alt="File Icon" className="file-icon" />
           </div>
+          <button
+            className="upload-button hover:bg-[#BFA1E9]"
+            hidden = {showFetchDates}
+            onClick={() => document.getElementById('fileInput').click()}
+          >
+            Upload or Attach Syllabus
+          </button>
+          <input
+            type="file"
+            id="fileInput"
+            accept=".pdf"
+            style={{ display: 'none' }}
+            onChange={handleFileChange}
+          />
         </div>
         <h2>Uploaded Syllabi</h2>
         <div className="uploaded-syllabi">

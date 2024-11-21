@@ -4,6 +4,7 @@ import '../styles/login.css'
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [message, setMessage] = useState('');
 
     const handleLogin = async (e) => {
         e.preventDefault(); 
@@ -23,9 +24,22 @@ export default function Login() {
         };
 
         fetch("http://localhost:8080/auth/login", requestOptions)
-        .then((response) => response.text())
-        .then((result) => console.log(result))
-        .catch((error) => console.error(error));
+            .then((response) => {
+                // Read the response body as text
+                return response.text().then((text) => {
+                if (!response.ok) {
+                    setMessage(text);
+                    
+                } else {
+                    setMessage('')
+                }
+                console.log(text)
+                
+                });
+            })
+            .catch((error) => {
+                console.error("Error:", error.message); // Log the error message from the server
+            });
       };
     
   return (
@@ -36,10 +50,15 @@ export default function Login() {
       </div>
 
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col  w-[791px] welcome justify-evenly items-center">
-        <div className="text-[#F5F5F5] text-center font-poppins text-[50px] font-bold pt-[57px]">
+        <div className="text-[#F5F5F5] text-center font-poppins text-[50px] font-bold pt-[57px]  mb-[29px]">
             Welcome Back
         </div>
-        <div className="w-[567px] h-[77px] rounded-[20px] bg-[#F3F3F3] mt-[29px]">
+        {message && (
+            <div className="h-[57px] rounded-[20px] mb-[10px] w-[567px] bg-[#d87762] text-white text-center flex flex-row justify-center items-center">
+                {message}
+            </div>
+        )}
+        <div className="w-[567px] h-[77px] rounded-[20px] bg-[#F3F3F3]">
             <div className="mt-[11px] ml-[23px] text-[#BFA1E9] font-[700] font-poppins text-[16px]">
                 Email
             </div>

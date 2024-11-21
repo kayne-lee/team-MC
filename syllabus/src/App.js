@@ -9,7 +9,6 @@ export default function App() {
       <Router>
         <Routes>
           <Route path="/" element={<SylaScan />} />
-          <Route path="/tasksPage" element={<SylaScan />} />
           <Route path="/tasksPage" element={<TasksPage />} />
         </Routes>
       </Router>

@@ -1,0 +1,5 @@
+.welcome {
+    border-radius: 45px;
+    background: radial-gradient(123.37% 145% at 29.41% 3.92%, #8338EC 49.11%, #BFA1E9 96.5%);
+    box-shadow: 8px 11px 4px 0px rgba(0, 0, 0, 0.25);
+}

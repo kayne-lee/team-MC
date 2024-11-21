@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/login.css'
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
+    const navigate = useNavigate()
 
     const handleLogin = async (e) => {
         e.preventDefault(); 
@@ -32,12 +34,15 @@ export default function Login() {
                     
                 } else {
                     setMessage('')
+                    localStorage.setItem("jwt", text);
+                    navigate("/");
                 }
                 console.log(text)
                 
                 });
             })
             .catch((error) => {
+                setMessage('Network error, please try again later')
                 console.error("Error:", error.message); // Log the error message from the server
             });
       };

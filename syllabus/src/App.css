@@ -7,8 +7,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(180deg, #FDFBFD 0%, #E3CCFF 55%, #FDFBFD 100%);
 
   overflow-y: auto;
   padding-bottom: 20px;

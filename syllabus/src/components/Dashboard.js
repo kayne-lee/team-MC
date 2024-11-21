@@ -7,8 +7,8 @@ export default function Dashboard() {
   return (
     <div className=" h-full flex flex-col">
         <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
-        {activeTab === 'Tasks' && <div>About tasks Content</div>}
-        {activeTab === 'Timeline' && <div>About timeline Content</div>}
+        {activeTab === 'Tasks' && <div className='h-full'>About tasks Content</div>}
+        {activeTab === 'Timeline' && <div className='h-full'>About timeline Content</div>}
         {activeTab === 'SylaScan' && <SylaScan />}
     </div>
   )

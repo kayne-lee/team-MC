@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../navbar/Navbar';
 import '../App.css';
 import fileIcon from '../assets/file_icon.png';
 import trashIcon from '../assets/trash.png';

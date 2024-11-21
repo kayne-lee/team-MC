@@ -15,7 +15,7 @@ function Navbar({ activeTab, setActiveTab }) {
 
   const handleLogout = () => {
     // Remove the JWT token from localStorage (or sessionStorage)
-    localStorage.removeItem('jwtToken'); // or sessionStorage.removeItem('jwtToken');
+    localStorage.removeItem('jwt'); // or sessionStorage.removeItem('jwtToken');
 
     // Navigate to the login page
     navigate("/login");

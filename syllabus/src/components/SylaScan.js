@@ -21,7 +21,6 @@ export default function SylaScan() {
   
     return (
       <div className="syllabus-puller">
-        <Navbar />
         <div className="upload-section">
           <h2>Upload Syllabus</h2>
           <div className="upload-box">

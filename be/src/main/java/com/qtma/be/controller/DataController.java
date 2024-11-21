@@ -90,7 +90,7 @@ public class DataController {
                 String username = jwtUtil.extractUsername(token);
                 Optional<User> user = userService.findById(username);
                 JsonNode res = openaiService.extractAssignments(openaiRequest.input);
-                openaiService.saveCourseData(user.get().getEmail(), res);
+                // openaiService.saveCourseData(user.get().getEmail(), res);
                 return res;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -100,6 +100,27 @@ public class DataController {
             return null;
         }
 
+    }
+
+    @PostMapping("/saveCourse")
+    public Boolean saveCourseInfo(@RequestBody JsonNode course, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+        String token = null;
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            // Extract the token by removing the "Bearer " prefix
+            token = authorizationHeader.substring(7);
+        }
+        if (token != null && !jwtUtil.isTokenExpired(token)) {
+        
+            String username = jwtUtil.extractUsername(token);
+            Optional<User> user = userService.findById(username);
+            
+            openaiService.saveCourseData(user.get().getEmail(), course);
+            return true;
+            
+        } else {
+            return null;
+        }
     }
 
     @GetMapping("/courses")

@@ -52,11 +52,15 @@ const TasksPage = () => {
                             <li>Work Cited</li>
                         </ul>
                     </div>
-                    <div className="grid-box plus-box">
-                        <span>+</span>
+                    <div className="grid-box">
+                        <h3 className="date-header">Saturday, November 13th</h3>
+                        <h3 className="task-header">QTMA</h3>
+                        <ul className="sub-list">
+                            <li>Meeting at 4:00 PM</li>
+                        </ul>
                     </div>
                     <div className="grid-box">
-                        <h3 className="date-header"> Saturday, November 13th</h3>
+                        <h3 className="date-header"> Sunday, November 14th</h3>
                         <h3 className="task-header">QTMA</h3>
                         <ul className="sub-list">
                             <li>Meeting at 4:00 PM</li>

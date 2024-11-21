@@ -108,17 +108,17 @@ public class OpenAIService {
         // Refine the prompt for stricter formatting
         String prompt = "Extract all assignments, tests, midterms, and exams from the following syllabus. " +
                 "Return the output as a **valid JSON object** with the keys 'title' and 'assignments'. " +
-                "The 'title' field should contain the course code, and the 'assignments' field should be an array of assignments. " +
-                "Each assignment should have the keys 'title', 'weight', and 'dueDate'. " +
+                "The 'title' field should contain the course code, and the 'assignments' field should be an array of assessments. " +
+                "Each assessment should have the keys 'title', 'weight', and 'dueDate'. " +
                 "Ensure the response starts with '{' and ends with '}'. " +
-                "Example: {\"title\": \"COURSE_CODE\", \"assignments\": [{\"title\": \"Assignment 1\", \"weight\": \"15%\", \"dueDate\": \"2024-12-10T23:59:00.000+00:00\"}]} " +
+                "Example: {\"title\": \"COURSE_CODE\", \"assessments\": [{\"title\": \"ASSESSMENT_NAME\", \"weight\": \"WEIGHT\", \"dueDate\": \"2024-12-10T23:59\"}]} " +
                 "Additional requirements: " +
                 "1. If the time is not specified, assume the time is 11:59 PM on the given date. " +
                 "2. If a date is not specified, fill in December 1, 2024, with the assumed time of 11:59 PM. " +
                 "3. The semester is divided as follows: " +
                 "   - Week 1 to Week 6: From September 2, 2024 (Monday of Week 1) to October 7, 2024 (Monday of Week 6). " +
                 "   - Week 7 to Week 12: From October 21, 2024 (Monday of Week 7) to November 25, 2024 (Monday of Week 12). " +
-                "4. Ensure that the total weight of all assignments, tests, midterms, and exams adds up to exactly 100%. " +
+                "4. Ensure that the total weight of all assessments adds up to exactly 100%. If you see a Final Exam mentioned, make sure to include it as well. If you find NO ASSESSMENTS AT ALL, return an empty JSON." +
                 "Use these rules to generate the JSON object. " +
                 "Input: " + syllabusText;
 

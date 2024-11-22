@@ -121,24 +121,23 @@ export default function SylaScan() {
             onChange={handleFileChange}
           />
         </div>
-        <h2>Uploaded Syllabi</h2>
         <div className="uploaded-syllabi">
           <ul>
             {uploadedSyllabi.map((syllabus, index) => (
               <li key={index} className="syllabus-item">
-                <span>{syllabus}</span>
+                <span className="">{syllabus}</span>
                 <img src={trashIcon} alt="Trash Icon" className="delete-button" onClick={() => handleDelete(index)}>
                 </img>
               </li>
             ))}
           </ul>
-          <button hidden = {!showFetchDates && (jsonData.assignments.length == 0)} onClick={ fetchDates } className="upload-button">
+          <button hidden = {!showFetchDates && (jsonData.assignments.length == 0)} onClick={ fetchDates } className="upload-button hover:bg-[#BFA1E9]">
             Generate Course Dates
           </button>
         </div>
         <div hidden = {!loading}>
           <h2 style={{ textAlign: "center" }}>{jsonData.assignments.length ==0 ? "Scanning For Course Assessments" : "Saving Your Course Data"}</h2>
-          <div div style={{ textAlign: "center" }}>
+          <div className="flex justify-center items-center">
           <img 
             src={loader} 
             alt="Loader" 
@@ -148,8 +147,8 @@ export default function SylaScan() {
           </div>
         </div>
         
-        <div hidden ={(jsonData.assignments.length > 0 ? false: true) || loading}>
-          <h2 style={{ textAlign: "center" }}>{jsonData.title} Assessments</h2>
+        <div hidden ={(jsonData.assignments.length > 0 ? false: true) || loading} className="bg-white w-[800px] p-[30px] ">
+          <h2 style={{ textAlign: "center" }} className="text-black font-inter text-[31.052px] font-bold not-italic leading-none mb-[20px]">{jsonData.title} Assessments</h2>
           <table border="1" style={{ borderCollapse: "collapse", width: "100%" }}>
             <thead>
               <tr>

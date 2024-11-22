@@ -23,23 +23,23 @@
 
 .left-box.expanded {
     position: absolute;
-    top: 10%;
+    top: 20%;
     left: 10%;
     width: 80%;
     height: 80%;
-    z-index: 10; /* Keep it above the blurred background */
+    z-index: 10; /* Ensure it overlays the blurred background */
     background: radial-gradient(123.37% 145% at 29.41% 3.92%, #8338EC 49.11%, #BFA1E9 96.5%);
     border-radius: 20px;
     padding: 40px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
     overflow-y: auto;
     transition: all 0.3s ease;
+    max-width: 50vw;
 }
 
 /* Blur the background when the left-box is expanded */
-.blur-background .layout-container,
-.blur-background .header,
-.blur-background .Navbar {
+.blur-background .right-grid,
+.blur-background .header{
     filter: blur(5px); /* Blurs the background */
     pointer-events: none; /* Prevent interaction with background elements */
     transition: filter 0.3s ease;

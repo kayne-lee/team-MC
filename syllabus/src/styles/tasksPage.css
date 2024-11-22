@@ -21,12 +21,45 @@
     z-index: 9999;
 }
 
+/* Scrollbar for modern browsers */
+::-webkit-scrollbar {
+    width: 6px; /* Narrow scrollbar width */
+    height: 6px; /* Narrow scrollbar height for horizontal bars */
+}
+
+::-webkit-scrollbar-track {
+    background: transparent; /* Invisible track */
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.4); /* Thumb for visibility */
+    border-radius: 10px; /* Rounded thumb for a clean look */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.6); /* Slightly darker thumb on hover */
+}
+
+/* Hide arrows for WebKit-based browsers */
+::-webkit-scrollbar-button {
+    display: none; /* Completely hide the scrollbar arrows */
+    background: transparent; /* Invisible track */
+    width: 0;
+}
+
+/* For Firefox */
 .left-box.expanded {
-    position: absolute;
+    scrollbar-width: thin; /* Narrow scrollbar width */
+    scrollbar-color: rgba(0, 0, 0, 0.4) transparent; /* Invisible track and visible thumb */
+}
+
+
+.left-box.expanded {
+    position: fixed;
     top: 20%;
     left: 10%;
     width: 80%;
-    height: 80%;
+    height: 60%;
     z-index: 10; /* Ensure it overlays the blurred background */
     background: radial-gradient(123.37% 145% at 29.41% 3.92%, #8338EC 49.11%, #BFA1E9 96.5%);
     border-radius: 20px;
@@ -68,7 +101,7 @@
 }
 
 .left-box h2 {
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 
 .task-list ul {

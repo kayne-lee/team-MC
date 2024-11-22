@@ -1,15 +1,33 @@
 import '../styles/tasksPage.css';
 import Navbar from '../navbar/Navbar';
+import { useState } from 'react';
 
 const TasksPage = () => {
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    const handleExpand = (event) => {
+        event.stopPropagation(); // Prevent event from propagating to the parent
+        setIsExpanded(!isExpanded); // Toggle expansion state
+    };
+
+    const handleClose = () => {
+        if (isExpanded) setIsExpanded(false); // Close only if expanded
+    };
+
     return (
-        <div className=" tasks-page parent min-h-screen">
+        <div
+            className={`tasks-page parent min-h-screen ${isExpanded ? 'blur-background' : ''}`}
+            onClick={handleClose} // Close when clicking outside the left box
+        >
             <Navbar />
             <h1 className="header">Upcoming Tasks</h1>
             <div className="layout-container ">
                 {/* Left Large Box */}
                 {/* CURRENT DAY BOX */}
-                <div className="left-box">
+                <div
+                    className={`left-box ${isExpanded ? 'expanded' : ''}`}
+                    onClick={handleExpand}
+                >
                     <h2 className="main-date-header">Tuesday, November 9th</h2>
                     <div className="task-list">
                         <h3 className="main-task-header">QTMA Work</h3>

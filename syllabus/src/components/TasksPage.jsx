@@ -19,14 +19,18 @@ const TasksPage = () => {
             className={`tasks-page parent min-h-screen ${isExpanded ? 'blur-background' : ''}`}
             onClick={handleClose} // Close when clicking outside the left box
         >
-            <Navbar />
+            {/* Navbar */}
+            <Navbar className="nav" />
+
+            {/* Page Header */}
             <h1 className="header">Upcoming Tasks</h1>
-            <div className="layout-container ">
+
+            {/* Layout Container */}
+            <div className="layout-container">
                 {/* Left Large Box */}
-                {/* CURRENT DAY BOX */}
                 <div
                     className={`left-box ${isExpanded ? 'expanded' : ''}`}
-                    onClick={handleExpand}
+                    onClick={handleExpand} // Prevent collapse on clicking the box
                 >
                     <h2 className="main-date-header">Tuesday, November 9th</h2>
                     <div className="task-list">
@@ -50,7 +54,6 @@ const TasksPage = () => {
                 </div>
 
                 {/* Right Grid of Boxes */}
-                {/* UPCOMING DAY BOXES*/}
                 <div className="right-grid">
                     <div className="grid-box">
                         <h3 className="date-header">Wednesday, November 10th</h3>

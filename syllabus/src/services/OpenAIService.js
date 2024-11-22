@@ -4,8 +4,9 @@ function OpenAIService() {
             return new Promise((resolve, reject) => {
               // Asynchronous operation here
                 const myHeaders = new Headers();
+                const token = localStorage.getItem("jwt");
                 myHeaders.append("Content-Type", "application/json");
-                myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2NzJlNjM5M2ViNTNiYzYzZTQ2Yzc2ZTUiLCJleHAiOjE3MzIyNDI2OTAsImlhdCI6MTczMjIwNjY5MH0.8490DppuWkgr4s02Eqpq0ZJuqi1qu26J1TNTDI6JFcM");
+                myHeaders.append("Authorization", `Bearer ${token}`);
                     let data = JSON.stringify({
                         "input": inputText
                     });

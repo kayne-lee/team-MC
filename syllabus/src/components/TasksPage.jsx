@@ -60,10 +60,26 @@ const TasksPage = () => {
                         </ul>
                     </div>
                     <div className="grid-box">
-                        <h3 className="date-header"> Sunday, November 14th</h3>
+                        <h3 className="date-header">Sunday, November 14th</h3>
                         <h3 className="task-header">QTMA</h3>
                         <ul className="sub-list">
                             <li>Meeting at 4:00 PM</li>
+                        </ul>
+                    </div>
+                    <div className="grid-box">
+                        <h3 className="date-header">Monday, November 15th</h3>
+                        <h3 className="task-header">New Project</h3>
+                        <ul className="sub-list">
+                            <li>Research Ideas</li>
+                            <li>Create Draft</li>
+                        </ul>
+                    </div>
+                    <div className="grid-box">
+                        <h3 className="date-header">Tuesday, November 16th</h3>
+                        <h3 className="task-header">Presentation</h3>
+                        <ul className="sub-list">
+                            <li>Finalize Slides</li>
+                            <li>Practice Speech</li>
                         </ul>
                     </div>
                 </div>

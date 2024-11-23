@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;800&display=swap');
 
 .parent {
-    background: linear-gradient(178deg, #FDFBFD -2.49%, #E3CCFF 64.95%, #FDFBFD 120.82%);
+    
     font-family: 'Lato', 'sans-serif', 'Arial';
     min-height: 100vh;
 }

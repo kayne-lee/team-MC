@@ -37,9 +37,6 @@ const TasksPage = () => {
             className={`tasks-page parent min-h-screen ${isExpanded ? 'blur-background' : ''}`}
             onClick={handleClose} // Close when clicking outside the left box
         >
-            {/* Navbar */}
-            <Navbar className="nav" />
-
             {/* Page Header */}
             <h1 className="header">Upcoming Tasks</h1>
 

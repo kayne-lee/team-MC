@@ -1,17 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;800&display=swap');
 
 .parent {
-    
     font-family: 'Lato', 'sans-serif', 'Arial';
-    min-height: 100vh;
+    min-height: calc(100vh - 114px);
+    padding-left: 60px;
 }
 
 /* Layout container */
 .layout-container {
     display: flex;
-    gap: 20px;
+    gap: 50px;
     padding: 20px;
     min-height: 663px;
+    max-height: calc(100vh - 234px);
     /* TODO maybe change this */
     justify-content: center; 
     
@@ -55,11 +56,6 @@
 
 
 .left-box.expanded {
-    position: fixed;
-    top: 20%;
-    left: 10%;
-    width: 80%;
-    height: 60%;
     z-index: 10; /* Ensure it overlays the blurred background */
     background: radial-gradient(123.37% 145% at 29.41% 3.92%, #8338EC 49.11%, #BFA1E9 96.5%);
     border-radius: 20px;
@@ -90,14 +86,14 @@
     background: radial-gradient(123.37% 145% at 29.41% 3.92%, #8338EC 49.11%, #BFA1E9 96.5%);
     box-shadow: 8px 11px 4px 0px rgba(0, 0, 0, 0.25);
     color: white;
-    border-radius: 15px;
-    padding: 20px;
+    border-radius: 45px;
+    padding: 30px;
     display: flex;
     flex-direction: column;
     max-width: 459px;
     flex-shrink: 0;
-    max-width: 270px;
-    min-width: 270px;
+    width: 459px;
+    transition: all 0.3s ease;
 }
 
 .left-box h2 {
@@ -114,24 +110,27 @@
 /* Right Grid */
 .right-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Three equal-width columns */
+    grid-template-columns: repeat(2, 1fr); /* Three equal-width columns */
     grid-template-rows: auto auto; /* Two rows with heights based on content */
-    gap: 20px;
-    overflow-x: auto; /* Enable horizontal scrolling */
+    gap: 50px;
     white-space: nowrap; /* Prevent wrapping */
     padding-bottom: 10px; /* Add padding for better scrolling experience */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none; /* Hide scrollbar */
 }
 
 /* Grid Boxes */
 .grid-box {
     background: white;
-    border-radius: 15px;
+    border-radius: 45px;
     padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     display: flex;
     flex-direction: column;
-    min-width: 300px; /* Ensure fixed width for each box */
-    max-width: 300px;
+    width: 393px;
+    height: 296px;
 }
 
 .grid-box ul {
@@ -149,12 +148,10 @@
     font-weight: 800;
     line-height: normal;
     text-align: left;
-    padding-left: 20px;
 }
 
 .main-date-header {
     color: #FFF;
-    font-family: Lato;
     font-size: 32px;
     font-style: normal;
     font-weight: 800;
@@ -192,7 +189,7 @@ li {
 
 .sub-list {
     color: #000;
-    font-family: Inter;
+    /* font-family: Inter; */
     font-size: 14px;
     font-style: normal;
     font-weight: 400;

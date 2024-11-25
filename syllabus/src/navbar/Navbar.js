@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Navbar.css';
 import nucleus from './assets/nucleus.png';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import profile from './assets/profile.png';
 

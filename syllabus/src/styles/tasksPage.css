@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;800&display=swap');
+
+.parent {
+    font-family: 'Lato', 'sans-serif', 'Arial';
+    min-height: calc(100vh - 114px);
+    padding-left: 60px;
+}
+
+/* Layout container */
+.layout-container {
+    display: flex;
+    gap: 50px;
+    padding: 20px;
+    min-height: 663px;
+    max-height: calc(100vh - 234px);
+    /* TODO maybe change this */
+    justify-content: center; 
+    
+}
+
+.nav {
+    z-index: 9999;
+}
+
+/* Scrollbar for modern browsers */
+::-webkit-scrollbar {
+    width: 6px; /* Narrow scrollbar width */
+    height: 6px; /* Narrow scrollbar height for horizontal bars */
+}
+
+::-webkit-scrollbar-track {
+    background: transparent; /* Invisible track */
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.4); /* Thumb for visibility */
+    border-radius: 10px; /* Rounded thumb for a clean look */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.6); /* Slightly darker thumb on hover */
+}
+
+/* Hide arrows for WebKit-based browsers */
+::-webkit-scrollbar-button {
+    display: none; /* Completely hide the scrollbar arrows */
+    background: transparent; /* Invisible track */
+    width: 0;
+}
+
+/* For Firefox */
+.left-box.expanded {
+    scrollbar-width: thin; /* Narrow scrollbar width */
+    scrollbar-color: rgba(0, 0, 0, 0.4) transparent; /* Invisible track and visible thumb */
+}
+
+
+.left-box.expanded {
+    z-index: 10; /* Ensure it overlays the blurred background */
+    background: radial-gradient(123.37% 145% at 29.41% 3.92%, #8338EC 49.11%, #BFA1E9 96.5%);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+    transition: all 0.3s ease;
+    max-width: 50vw;
+}
+
+/* Blur the background when the left-box is expanded */
+.blur-background .right-grid,
+.blur-background .header{
+    filter: blur(5px); /* Blurs the background */
+    pointer-events: none; /* Prevent interaction with background elements */
+    transition: filter 0.3s ease;
+}
+
+/* Add additional padding for content when expanded */
+.left-box.expanded .task-list {
+    padding: 20px;
+}
+
+
+/* Left Box */
+.left-box {
+    flex: 1;
+    background: radial-gradient(123.37% 145% at 29.41% 3.92%, #8338EC 49.11%, #BFA1E9 96.5%);
+    box-shadow: 8px 11px 4px 0px rgba(0, 0, 0, 0.25);
+    color: white;
+    border-radius: 45px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    max-width: 459px;
+    flex-shrink: 0;
+    width: 459px;
+    transition: all 0.3s ease;
+}
+
+.left-box h2 {
+    margin-bottom: 5px;
+}
+
+.task-list ul {
+    margin: 0 0 10px;
+    padding-left: 20px;
+    list-style: disc;
+}
+
+
+/* Right Grid */
+.right-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Three equal-width columns */
+    grid-template-rows: auto auto; /* Two rows with heights based on content */
+    gap: 50px;
+    white-space: nowrap; /* Prevent wrapping */
+    padding-bottom: 10px; /* Add padding for better scrolling experience */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none; /* Hide scrollbar */
+}
+
+/* Grid Boxes */
+.grid-box {
+    background: white;
+    border-radius: 45px;
+    padding: 20px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    width: 393px;
+    height: 296px;
+}
+
+.grid-box ul {
+    padding-left: 20px;
+    list-style: disc;
+    margin: 0;
+}
+
+
+/* Header Styling */
+.header {
+    color: #000;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    text-align: left;
+}
+
+.main-date-header {
+    color: #FFF;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+}
+
+.main-task-header {
+    color: #FFF;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.main-list {
+    color: #FFF;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+li {
+    list-style-type: none;
+}
+
+.date-header {
+    color: #000;
+    text-align: center;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.sub-list {
+    color: #000;
+    /* font-family: Inter; */
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}

@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/login.css'
+import Error from '../assets/error.png'
+import { motion } from "framer-motion";
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -48,51 +50,72 @@ export default function Login() {
       };
     
   return (
-    <div className="h-screen relative">
-      {/* Top Section */}
-      <div className="absolute top-[43px] left-[63px] w-full">
-        <img src="/nucleus.png" alt="" className="w-[141px] "/>
+    <div className="h-screen flex">
+    {/* Left Section */}
+    <div className="w-1/2 flex flex-col justify-center items-center">
+      <div className="absolute top-[43px] left-[63px]">
+        <img src="/nucleus.png" alt="" className="w-[141px]" />
       </div>
-
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col  w-[791px] welcome justify-evenly items-center">
-        <div className="text-[#F5F5F5] text-center font-poppins text-[50px] font-bold pt-[57px]  mb-[29px]">
-            Welcome Back
-        </div>
-        {message && (
-            <div className="h-[57px] rounded-[20px] mb-[10px] w-[567px] bg-[#d87762] text-white text-center flex flex-row justify-center items-center">
-                {message}
-            </div>
-        )}
-        <div className="w-[567px] h-[77px] rounded-[20px] bg-[#F3F3F3]">
-            <div className="mt-[11px] ml-[23px] text-[#BFA1E9] font-[700] font-poppins text-[16px]">
+    </div>
+  
+    {/* Right Section (Login Form) */}
+    <div className="w-1/2 flex flex-col justify-center items-center right-login">
+        <div className="flex justify-start w-[528px] flex-col">
+            <div class="text-[#F5F5F5] font-poppins text-[50px] font-bold leading-normal mb-[19px]">Welcome Back</div>
+            <div className="w-[528px] h-[77px] rounded-[20px] bg-[#F3F3F3]">
+                <div className="mt-[11px] ml-[23px] text-[#BFA1E9] font-[700] font-poppins text-[16px]">
                 Email
-            </div>
-            <input
+                </div>
+                <input
                 type="email"
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full h-[40px] rounded-[25px] pb-[5px] px-[23px] bg-[#F3F3F3] text-[#333] focus:outline-none"
-            />
-        </div>
-
-        <div className="w-[567px] h-[77px] rounded-[20px] bg-[#F3F3F3] mt-[10px]">
-            <div className="mt-[11px] ml-[23px] text-[#BFA1E9] font-[700] font-poppins text-[16px]">
-                Password
+                />
             </div>
-            <input
+    
+            <div className="w-[528px] h-[77px] rounded-[20px] bg-[#F3F3F3] mt-[20px]">
+                <div className="mt-[11px] ml-[23px] text-[#BFA1E9] font-[700] font-poppins text-[16px]">
+                Password
+                </div>
+                <input
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full h-[40px] rounded-[25px] pb-[5px] px-[23px] bg-[#F3F3F3] text-[#333] focus:outline-none"
-            />
-        </div>
+                />
+            </div>
 
-        <div onClick={handleLogin} className="w-[300px] h-[57px] bg-[#F3F3F3] flex flex-row justify-center items-center rounded-[25px] mt-[29px] mb-[29px] hover:bg-[#DECBF8] cursor-pointer">
-            <div className="text-[#8338EC] text-center font-poppins text-[30px] text-center font-bold">
-                Login
+            <div className="flex flex-row items-center px-[19px] justify-between w-full mt-[25px]">
+                <label class="flex items-center space-x-3">
+                    <input 
+                        type="checkbox" 
+                        class="w-[20px] h-[20px] text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                    />
+                    <span class="text-[#BFA1E9] font-poppins text-[14px] font-medium leading-none">
+                        Remember me
+                    </span>
+                </label>
+
+                <span class="text-[#BFA1E9] font-poppins text-[14px] font-medium leading-none cursor-pointer">
+                    Forgot Password?
+                </span>
+            </div>
+            {message && (
+                <div className="text-[#FB9393] font-poppins text-[14px] font-bold leading-none flex flex-row items-center justify-center mt-[23px]">
+                    <img src={Error} alt="" className="w-[29px] h-[29px] mr-[5px]"/>
+                    There was a problem with the user details entered.  Please try again
+                </div>
+            )}
+            <div
+                onClick={handleLogin}
+                className="w-full h-[45px] signin flex justify-center items-center rounded-[50px] mt-[29px] hover:bg-[#DECBF8] cursor-pointer"
+            >
+                <div className="text-[#F3F3F3] font-poppins text-[16px] font-bold leading-none">
+                SIGN IN
+                </div>
             </div>
         </div>
-
-
-      </div>
     </div>
+  </div>
+  
   )
 }

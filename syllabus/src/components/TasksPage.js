@@ -1,5 +1,4 @@
 import '../styles/tasksPage.css';
-import Navbar from '../navbar/Navbar';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -16,12 +15,27 @@ const TasksPage = () => {
     useEffect(() => {
         const days = [];
         for (let i = 0; i <= 6; i++) {
+            // Create a new Date object based on currentDate
             const nextDay = new Date(currentDate);
+            
+            // Set the time to midnight to avoid timezone issues
+            nextDay.setHours(0, 0, 0, 0); // Set time to 00:00:00.000
+            
+            // Add i days to currentDate
             nextDay.setDate(currentDate.getDate() + i);
+            
+            // Push the formatted date to the days array
             days.push(nextDay);
         }
         setUpcomingDays(days);
     }, [currentDate]);
+
+    const handleDateClick = (day) => {
+        const selectedDate = new Date(day);
+        selectedDate.setHours(0, 0, 0, 0);
+        selectedDate.setDate(selectedDate.getDate() + 1); 
+        setCurrentDate(selectedDate);
+      };
 
     // Fetch assignments and group them by due date
     useEffect(() => {
@@ -79,10 +93,32 @@ const TasksPage = () => {
     return (
         <div
             className={`parent min-h-screen ${isExpanded ? 'blur-background' : ''}`}
-            onClick={handleClose} // Close when clicking outside the left box
+            onClick={(e) => {
+                if (!e.target.closest('#date-picker')) handleClose();
+            }}
         >
             {/* Page Header */}
-            <h1 className="header">Upcoming Tasks</h1>
+            <div className="flex flex-row items-center gap-[10px]">
+                <h1 className="header">Upcoming Tasks</h1>
+
+                <div id="date-picker-wrapper" style={{ position: 'relative' }}>
+                    <div className={`calendar-icon-container ${isExpanded ? 'blur-background' : ''}`}>
+                        <label htmlFor="date-picker" tabIndex="0"></label>
+                    </div>
+                    <input
+                        type="date"
+                        className="form-control"
+                        id="date-picker"
+                        value={currentDate.toISOString().split('T')[0]}
+                        onClick={(e) => e.stopPropagation()} // Prevent the date input click from propagating
+                        onChange={(e) => {
+                            e.stopPropagation(); // Ensure change event doesn’t propagate
+                            handleDateClick(e.target.value); // Handle the date change
+                        }}
+                    />
+                </div>
+            </div>
+            
             {/* Layout Container */}
             <div className="layout-container">
                 {/* Left Large Box (Today's Tasks) */}
@@ -103,16 +139,16 @@ const TasksPage = () => {
                 </div>
 
                 {/* Right Grid of Boxes (Next 6 Days) */}
-                <div className="right-grid overflow-y-auto overflow-x-hidden no-scrollbar">
+                <div className="right-grid overflow-y-auto  no-scrollbar">
                     {upcomingDays.slice(1).map((day, index) => (
                         <div className="grid-box" key={index}>
-                            <div className="flex justify-center items-center flex-col">
-                                <h3 className="date-header">{formatDisplayDate(day)}</h3>
-                                <div className="w-[280px] h-[1px] bg-black"></div>
+                            <div className="flex justify-center items-center flex-col mb-[10px]">
+                                <h3 className="date-header mb-[7px]">{formatDisplayDate(day)}</h3>
+                                <div className="w-[320px] h-[1px] bg-black"></div>
                             </div>
                             <ul className="sub-list">
                                 {(assignmentsByDate[formatDateKey(day)] || []).map((assignment, idx) => (
-                                    <li key={idx}>
+                                    <li key={idx} className="flex items-center before:content-[''] before:w-1.5 before:h-1.5 before:mr-3 before:bg-black before:rounded-full">
                                         <strong>{assignment.title}</strong> - {assignment.course} ({assignment.weight})
                                     </li>
                                 ))}

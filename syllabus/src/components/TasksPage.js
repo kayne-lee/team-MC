@@ -78,12 +78,11 @@ const TasksPage = () => {
 
     return (
         <div
-            className={`tasks-page parent min-h-screen ${isExpanded ? 'blur-background' : ''}`}
+            className={`parent min-h-screen ${isExpanded ? 'blur-background' : ''}`}
             onClick={handleClose} // Close when clicking outside the left box
         >
             {/* Page Header */}
             <h1 className="header">Upcoming Tasks</h1>
-
             {/* Layout Container */}
             <div className="layout-container">
                 {/* Left Large Box (Today's Tasks) */}
@@ -91,13 +90,12 @@ const TasksPage = () => {
                     className={`left-box ${isExpanded ? 'expanded' : ''}`}
                     onClick={handleExpand} // Prevent collapse on clicking the box
                 >
-                    <h2 className="main-date-header">{formatDisplayDate(currentDate)}</h2>
+                    <div class="text-white font-poppins text-[26px] font-extrabold leading-normal">{formatDisplayDate(currentDate)}</div>
                     <div className="task-list">
-                        <h3 className="main-task-header">Today's Tasks</h3>
-                        <ul className="main-list">
+                        <ul className="main-list list-none">
                             {(assignmentsByDate[formatDateKey(currentDate)] || []).map((assignment, index) => (
-                                <li key={index}>
-                                    <strong>{assignment.title}</strong> - {assignment.course} ({assignment.weight}%)
+                                <li key={index} className="flex items-center before:content-[''] before:w-2.5 before:h-2.5 before:mr-3 before:bg-white before:rounded-full">
+                                    <strong>{assignment.title}</strong> - {assignment.course} ({assignment.weight})
                                 </li>
                             ))}
                         </ul>
@@ -105,10 +103,13 @@ const TasksPage = () => {
                 </div>
 
                 {/* Right Grid of Boxes (Next 6 Days) */}
-                <div className="right-grid">
+                <div className="right-grid overflow-y-auto overflow-x-hidden no-scrollbar">
                     {upcomingDays.slice(1).map((day, index) => (
                         <div className="grid-box" key={index}>
-                            <h3 className="date-header">{formatDisplayDate(day)}</h3>
+                            <div className="flex justify-center items-center flex-col">
+                                <h3 className="date-header">{formatDisplayDate(day)}</h3>
+                                <div className="w-[280px] h-[1px] bg-black"></div>
+                            </div>
                             <ul className="sub-list">
                                 {(assignmentsByDate[formatDateKey(day)] || []).map((assignment, idx) => (
                                     <li key={idx}>

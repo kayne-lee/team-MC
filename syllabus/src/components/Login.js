@@ -85,15 +85,15 @@ export default function Login() {
             </div>
 
             <div className="flex flex-row items-center px-[19px] justify-between w-full mt-[25px]">
-                <label class="flex items-center space-x-3">
+                <div className="flex flex-row gap-[6px] items-center">
                     <input 
                         type="checkbox" 
                         class="w-[20px] h-[20px] text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                    />
+                        />
                     <span class="text-[#BFA1E9] font-poppins text-[14px] font-medium leading-none">
                         Remember me
                     </span>
-                </label>
+                </div>
 
                 <span class="text-[#BFA1E9] font-poppins text-[14px] font-medium leading-none cursor-pointer">
                     Forgot Password?

@@ -229,3 +229,32 @@ li {
 .calendar-icon-container.blur-background label {
     filter: blur(5px);
 }
+
+.gradient-border {
+    position: relative;
+    border-radius: 45px; /* Rounded corners */
+    padding: 10px; /* Space between the content and border */
+    background: white; /* Background of the content */
+    z-index: 1; /* Ensure the content appears above the border */
+}
+
+.gradient-border::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 45px; /* Same border-radius as the parent */
+    padding: 10px; /* Adjust for your content alignment */
+    background: linear-gradient(
+        90deg,
+        #8338EC 0%,
+        #AE7DF1 25%,
+        #DECBF8 50%,
+        #985BEF 100%
+    );
+    -webkit-mask: linear-gradient(white 0%, white 100%); /* Fix for transparent areas */
+    mask: linear-gradient(white 0%, white 100%);
+    z-index: -1; /* Place gradient behind the content */
+}

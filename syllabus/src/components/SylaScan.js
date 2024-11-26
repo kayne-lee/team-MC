@@ -121,7 +121,7 @@ export default function SylaScan() {
             onChange={handleFileChange}
           />
         </div>
-        <div className="uploaded-syllabi">
+        <div className="uploaded-syllabi" hidden = {!showFetchDates && (jsonData.assignments.length == 0)}>
           <ul>
             {uploadedSyllabi.map((syllabus, index) => (
               <li key={index} className="syllabus-item">

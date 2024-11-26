@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/login.css'
 import Error from '../assets/error.png'
+import Google from "../assets/google_button.png"
 import { motion } from "framer-motion";
 
 export default function Login() {
@@ -112,6 +113,14 @@ export default function Login() {
                 <div className="text-[#F3F3F3] font-poppins text-[16px] font-bold leading-none">
                 SIGN IN
                 </div>
+            </div>
+            <div className="mt-[45px] flex flex-row gap-[24px] items-center text-[#F3F3F3]">
+                <div className="w-[189px] h-[1px] bg-white " />
+                <div>or sign in with</div>
+                <div className="w-[189px] h-[1px] bg-white " />
+            </div>
+            <div className="flex mt-[24px] justify-center items-center cursor-pointer">
+                <img src={Google} alt="" className="w-[30px]" />
             </div>
         </div>
     </div>

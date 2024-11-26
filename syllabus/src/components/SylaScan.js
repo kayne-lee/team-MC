@@ -29,7 +29,6 @@ export default function SylaScan() {
         setUploadedSyllabi([...uploadedSyllabi, selectedFile.name]);
         pdfToText(selectedFile)
           .then(text =>{
-              console.log(text)
               setInputText(text)
           })
           .catch(error => console.error("Failed to extract text from pdf"))

@@ -12,4 +12,5 @@ import java.util.List;
 public class Course {
     private String title;
     private List<Assignment> assignments;
+    private CourseInfo courseInfo;
 }

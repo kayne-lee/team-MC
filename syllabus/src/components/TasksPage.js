@@ -52,12 +52,19 @@ const TasksPage = () => {
                 // Flatten assignments and group by due date
                 const allAssignments = response.data.flatMap((userCourse) =>
                     userCourse.courses.flatMap((course) =>
-                        course.assignments.map((assignment) => ({
-                            title: assignment.title,
-                            course: course.title,
-                            weight: assignment.weight,
-                            dueDate: formatDateKey(new Date(assignment.dueDate)),
-                        }))
+                        course.assignments.map((assignment) => {
+                            const dueDate = new Date(assignment.dueDate);
+    
+                            // Adjust the date if it's off by a timezone or other issue
+                            dueDate.setDate(dueDate.getDate() - 1); // Subtract 1 day
+    
+                            return {
+                                title: assignment.title,
+                                course: course.title,
+                                weight: assignment.weight,
+                                dueDate: formatDateKey(dueDate),
+                            };
+                        })
                     )
                 );
 

@@ -82,22 +82,27 @@ const Classes = () => {
                             className={`course-card ${selectedCourse?.id === course.id ? "selected" : ""}`}
                             onClick={() => handleCourseSelect(course)}
                         >
+                            <div>
                             <img src={course.image} alt={course.title} className="course-image" />
+                            <h2 className="course-title">{course.title}</h2>
+                            </div>
                             <div className="course-details">
-                                <h2 className="course-title">{course.title}</h2>
+                                
                                 <p>
-                                    <strong>Instructor:</strong> {course.instructor}
+                                    <strong>Instructor:</strong><br></br> {course.instructor}
                                 </p>
                                 <p>
-                                    <strong>Email:</strong> {course.email}
+                                    <strong>Email:</strong><br></br> {course.email}
                                 </p>
                                 <p>
-                                    <strong>Office Location:</strong> {course.officeLocation}
+                                    <strong>Office Location:</strong><br></br> {course.officeLocation}
                                 </p>
                                 <p>
                                     <strong>Office Hours:</strong> {course.officeHours}
                                 </p>
                             </div>
+
+
                         </div>
                     ))
                 }
@@ -142,18 +147,14 @@ const Classes = () => {
                         <div>
                             {/* Meeting information Section */}
                             <div className="meeting-information-section">
-                                <h3>Meeting Information</h3>
                                 <p>
-                                    <strong>Instructor:</strong> {selectedCourse.instructor}
+                                    <strong>Instructor:</strong><br></br> {selectedCourse.instructor}<br></br>{selectedCourse.email}
                                 </p>
                                 <p>
-                                    <strong>Email:</strong> {selectedCourse.email}
+                                    <strong>Office Location:</strong><br></br> {selectedCourse.officeLocation}
                                 </p>
                                 <p>
-                                    <strong>Office Location:</strong> {selectedCourse.officeLocation}
-                                </p>
-                                <p>
-                                    <strong>Office Hours:</strong> {selectedCourse.officeHours}
+                                    <strong>Office Hours:</strong><br></br> {selectedCourse.officeHours}
                                 </p>
                             </div>
 

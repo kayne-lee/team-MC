@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/classes.css";
 
 const Classes = () => {
@@ -6,6 +6,8 @@ const Classes = () => {
     const [checkedAssignments, setCheckedAssignments] = useState({}); // Track checked assignments by course ID
 
     const courses = [
+        // TODO PLACEHOLDER DATA
+        // LATER REPLACE THESE WITH DATABASE CALLS
         {
             id: 1,
             title: "CISC 101",
@@ -36,6 +38,19 @@ const Classes = () => {
         },
     ];
 
+    // Set the first course as the default selected course
+    useEffect(() => {
+        if (courses.length > 0 && !selectedCourse) {
+            setSelectedCourse(courses[0]);
+            if (!checkedAssignments[courses[0].id]) {
+                setCheckedAssignments((prev) => ({
+                    ...prev,
+                    [courses[0].id]: {},
+                }));
+            }
+        }
+    }, [courses, selectedCourse]);
+
     const handleCourseSelect = (course) => {
         setSelectedCourse(course);
         if (!checkedAssignments[course.id]) {
@@ -60,30 +75,32 @@ const Classes = () => {
         <div className="courses-page">
             {/* Sidebar */}
             <div className="sidebar">
-                {courses.map((course) => (
-                    <div
-                        key={course.id}
-                        className={`course-card ${selectedCourse?.id === course.id ? "selected" : ""}`}
-                        onClick={() => handleCourseSelect(course)}
-                    >
-                        <img src={course.image} alt={course.title} className="course-image" />
-                        <div className="course-details">
-                            <h2>{course.title}</h2>
-                            <p>
-                                <strong>Instructor:</strong> {course.instructor}
-                            </p>
-                            <p>
-                                <strong>Email:</strong> {course.email}
-                            </p>
-                            <p>
-                                <strong>Office Location:</strong> {course.officeLocation}
-                            </p>
-                            <p>
-                                <strong>Office Hours:</strong> {course.officeHours}
-                            </p>
+                {
+                    courses.map((course) => (
+                        <div
+                            key={course.id}
+                            className={`course-card ${selectedCourse?.id === course.id ? "selected" : ""}`}
+                            onClick={() => handleCourseSelect(course)}
+                        >
+                            <img src={course.image} alt={course.title} className="course-image" />
+                            <div className="course-details">
+                                <h2>{course.title}</h2>
+                                <p>
+                                    <strong>Instructor:</strong> {course.instructor}
+                                </p>
+                                <p>
+                                    <strong>Email:</strong> {course.email}
+                                </p>
+                                <p>
+                                    <strong>Office Location:</strong> {course.officeLocation}
+                                </p>
+                                <p>
+                                    <strong>Office Hours:</strong> {course.officeHours}
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                }
                 {/* ADD COURSES BUTTON */}
                 <div className="add-course-card">
                     <div className="add-icon">
@@ -149,7 +166,7 @@ const Classes = () => {
                     </div>
                 ) : (
                     <div className="placeholder">
-                        <h2>Select a course to view details</h2>
+                        <h2>Add a course to see details</h2>
                     </div>
                 )}
             </div>

@@ -11,5 +11,6 @@ public class Assignment {
     private String title;
     private String weight;
     private String dueDate;
+    private String description;
 
 }

@@ -38,7 +38,7 @@ function Navbar({ activeTab, setActiveTab }) {
           }}
           animate={{
             left:
-              activeTab === 'Timeline'
+              activeTab === 'Classes'
                 ? '0'
                 : activeTab === 'Tasks'
                 ? '130.33px'
@@ -54,12 +54,12 @@ function Navbar({ activeTab, setActiveTab }) {
 
         {/* Tabs */}
         <div
-          onClick={() => handleTabClick('Timeline')}
+          onClick={() => handleTabClick('Classes')}
           className={`text-[17.675px] font-bold font-poppins leading-normal cursor-pointer z-10 ${
-            activeTab === 'Timeline' ? 'text-white' : 'text-[#4A4A4A]'
+            activeTab === 'Classes' ? 'text-white' : 'text-[#4A4A4A]'
           }`}
         >
-          Timeline
+          Classes
         </div>
         <div
           onClick={() => handleTabClick('Tasks')}

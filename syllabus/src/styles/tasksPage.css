@@ -2,7 +2,8 @@
 
 .parent {
     font-family: 'Lato', 'sans-serif', 'Arial';
-    min-height: calc(100vh - 114px);
+    height: calc(100vh - 114px);
+    overflow: hidden;
     padding-left: 60px;
 }
 

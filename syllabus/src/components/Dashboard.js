@@ -5,9 +5,9 @@ import TasksPage from './TasksPage'
 import Classes from './Classes'
 
 export default function Dashboard() {
-    const [activeTab, setActiveTab] = useState('SylaScan')
+    const [activeTab, setActiveTab] = useState('Classes')
   return (
-    <div className=" h-full flex flex-col">
+    <div className="dashboard flex flex-col">
         <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
         {activeTab === 'Tasks' && <TasksPage />}
         {activeTab === 'Classes' && <Classes />}

@@ -2,7 +2,7 @@
 
 .courses-page {
     display: flex;
-    min-height: 100vh;
+    height: calc(100vh - 114px);
     font-family: "Poppins", "Lato", "sans-serif";
 }
 
@@ -12,6 +12,7 @@
     overflow-y: auto;
     border-right: 2px solid #e0e0e0;
     background-color: #FFF;
+    height: calc(100vh - 154px);
 }
 
 .add-course-card {

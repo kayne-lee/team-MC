@@ -8,7 +8,7 @@ import MongoService from '../services/MongoService';
 import pdfToText from 'react-pdftotext';
 import loader from '../assets/loader3.gif';
 
-export default function SylaScan() {
+export default function SylaScan({ closeModal }) {
   const [uploadedSyllabi, setUploadedSyllabi] = useState([]);
   const [showFetchDates, setShowFetchDates] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
@@ -161,9 +161,14 @@ export default function SylaScan() {
   };
 
   return (
-    <div className="syllabus-puller">
+    <div className="">
       <div className="w-[988px] h-[540px] flex flex-col justify-center items-center bg-white rounded-[45px] border-[8px] border-[#8338EC] ">
-
+      <button
+          onClick={closeModal}
+          className="absolute top-[140px] right-[250px] text-3xl font-bold text-gray-500 hover:text-gray-700"
+        >
+          &times;
+        </button>
 
         {!hasError ? (
           <>

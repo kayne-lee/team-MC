@@ -37,7 +37,7 @@ function OpenAIService() {
                     resolve(responseText); // Resolve with the actual response text
                     })
                     .catch((error) => {
-                    console.error("Fetch error:", error);
+                    console.log("Fetch error:", error);
                     reject(error); // Reject the promise in case of errors
                     });
             });

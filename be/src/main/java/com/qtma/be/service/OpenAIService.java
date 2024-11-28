@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.qtma.be.model.Assignment;
 import com.qtma.be.model.Course;
+import com.qtma.be.model.CourseInfo;
 import com.qtma.be.model.OpenAIRequest;
 import com.qtma.be.model.UserCourse;
 import com.qtma.be.repository.UserCourseRepository;
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.Console;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,9 +54,10 @@ public class OpenAIService {
         messages.put(userMessage);
 
         JSONObject requestBody = new JSONObject();
-        requestBody.put("model", "gpt-3.5-turbo");
+        requestBody.put("model", "gpt-4o-mini");
         requestBody.put("messages", messages);
-        requestBody.put("max_tokens", 1000);
+        requestBody.put("messages", messages);
+        requestBody.put("temperature", 0.3);
 
         Request request = new Request.Builder()
                 .url(API_URL)
@@ -66,6 +69,7 @@ public class OpenAIService {
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful() && response.body() != null) {
                 String reply = response.body().string();
+            
                 ObjectMapper objectMapper = new ObjectMapper();
                 JsonNode jsonNode = objectMapper.readTree(reply);
 
@@ -85,14 +89,19 @@ public class OpenAIService {
                 String courseCode = resultObject.get("title").getAsString();
                 JsonArray assignmentsArray = resultObject.getAsJsonArray("assignments");
 
+                JsonElement courseInfo = resultObject.getAsJsonObject("courseInfo");
+
                 // Convert assignments into a Java List
                 List<Assignment> assignments = objectMapper.readValue(assignmentsArray.toString(), new TypeReference<List<Assignment>>() {});
+
+                Object courseInfoObject = objectMapper.readValue(courseInfo.toString(), new TypeReference<Object>() {});
 
                 // Create the final JSON object to return
                 Map<String, Object> result = new HashMap<>();
 
                 result.put("assignments", assignments);
                 result.put("title", courseCode);
+                result.put("courseInfo", courseInfoObject);
 
                 // Return the final JSON object
                 return objectMapper.convertValue(result, JsonNode.class);
@@ -107,18 +116,22 @@ public class OpenAIService {
     public JsonNode extractAssignments(String syllabusText) throws IOException {
         // Refine the prompt for stricter formatting
         String prompt = "Extract all assignments, tests, midterms, and exams from the following syllabus. " +
-                "Return the output as a **valid JSON object** with the keys 'title' and 'assignments'. " +
-                "The 'title' field should contain the course code, and the 'assignments' field should be an array of assessments. " +
-                "Each assessment should have the keys 'title', 'weight', and 'dueDate'. " +
-                "Ensure the response starts with '{' and ends with '}'. " +
-                "Example: {\"title\": \"COURSE_CODE\", \"assessments\": [{\"title\": \"ASSESSMENT_NAME\", \"weight\": \"WEIGHT\", \"dueDate\": \"2024-12-10T23:59\"}]} " +
+                "The output must be ONLY A **valid JSON object** that STARTS WITH { and ENDS WITH } with the keys 'title', 'courseInfo' and 'assignments'. Please do not write anything outside of the {} brackets." +
+                "The 'title' field should contain the course code, the 'courseInfo' field should be an object, and the 'assignments' field should be an array of assessments. " +
+                "The courseInfo object should have the fields 'instructorName', 'instructorEmail', 'officeHoursTime', 'officeHoursLocation', and 'category'" +
+                "The category field MUST BE ONE OF THE FOLLOWING OPTIONS: science, math, art, business, coding, other. Pick the option based on the text in the input." +
+                "Example: {\"instructorName\": \"NAME_HERE\", \"instructorEmail\": \"example@queesnu.ca\", \"officeHoursTime\": \"DAY_OF_WEEK at TIME_OF_DAY\", \"officeHoursLocation\": \"LOCATION\", \"category\": \"CATEGORY\"} " +
+                "If any of the above fields are missing for courseInfo, just leave them as an empty string." +
+                "Each assessment should have the keys 'title', 'weight', 'description' and 'dueDate'. " +
+                "Example: {\"title\": \"COURSE_CODE\", \"assessments\": [{\"title\": \"ASSESSMENT_NAME\", \"weight\": \"WEIGHT\", \"description\": \"SHORT DESCRIPTION\", \"dueDate\": \"2024-12-10T23:59\"}]} " +
                 "Additional requirements: " +
                 "1. If the time is not specified, assume the time is 11:59 PM on the given date. " +
                 "2. If a date is not specified, fill in December 1, 2024, with the assumed time of 11:59 PM. " +
-                "3. The semester is divided as follows: " +
+                "3. The description should be one sentence long max for each, and if you cannot find anything to describe the assessment, leave the field blank." +
+                "4. The semester is divided as follows: " +
                 "   - Week 1 to Week 6: From September 2, 2024 (Monday of Week 1) to October 7, 2024 (Monday of Week 6). " +
                 "   - Week 7 to Week 12: From October 21, 2024 (Monday of Week 7) to November 25, 2024 (Monday of Week 12). " +
-                "4. Ensure that the total weight of all assessments adds up to exactly 100%. If you see a Final Exam mentioned, make sure to include it as well. If you find NO ASSESSMENTS AT ALL, return an empty JSON." +
+                "5. Ensure that the total weight of all assessments adds up to exactly 100%. If you see a Final Exam mentioned, make sure to include it as well. If you find NO ASSESSMENTS AT ALL, return an empty JSON." +
                 "Use these rules to generate the JSON object. " +
                 "Input: " + syllabusText;
 
@@ -183,6 +196,15 @@ public class OpenAIService {
         Course course = new Course();
         course.setTitle(c.get("title").asText());
 
+        JsonNode courseNode = c.get("courseInfo");
+        CourseInfo courseInfo = new CourseInfo();
+        courseInfo.setInstructorName(courseNode.get("instructorName").asText());
+        courseInfo.setInstructorEmail(courseNode.get("instructorEmail").asText());
+        courseInfo.setOfficeHoursTime(courseNode.get("officeHoursTime").asText());
+        courseInfo.setOfficeHoursLocation(courseNode.get("officeHoursLocation").asText());
+        courseInfo.setCategory(courseNode.get("category").asText());
+        course.setCourseInfo(courseInfo);
+
         // Extract assignments from the JsonNode
         List<Assignment> assignments = new ArrayList<>();
         if (c.has("assignments") && c.get("assignments").isArray()) {
@@ -191,6 +213,7 @@ public class OpenAIService {
                 assignment.setTitle(assignmentNode.get("title").asText());
                 assignment.setWeight(assignmentNode.get("weight").asText());
                 assignment.setDueDate(assignmentNode.get("dueDate").asText());
+                assignment.setDescription(assignmentNode.get("description").asText());
                 assignments.add(assignment);
             }
         }

@@ -72,37 +72,53 @@ const Classes = () => {
             <div className="main-content">
                 {selectedCourse ? (
                     <div className="course-details-container">
-                        <h1>{selectedCourse.title}</h1>
-                        <div className="progress-section">
-                            <h3>Progress</h3>
-                            {/* Replace this with actual progress data */}
-                            <p>100% Completed</p>
+                    <h1>{selectedCourse.title}</h1>
+                
+                    {/* Progress Section */}
+                    <div className="progress-section">
+                        <span>✔ Homework 1</span>
+                        <span>100% Completed</span>
+                    </div>
+                
+                    {/* Assignments Section */}
+                    <div className="assignments-section">
+                        <h3>Assignments</h3>
+                        <ul>
+                            <li>
+                                Homework 1
+                                <span>5% - 9/23/24</span>
+                            </li>
+                            <li>
+                                Quiz 1
+                                <span>10% - 9/30/24</span>
+                            </li>
+                            <li>
+                                Midterm
+                                <span>20% - 10/31/24</span>
+                            </li>
+                            <li>
+                                Final Exam
+                                <span>40% - 12/20/24</span>
+                            </li>
+                        </ul>
+                    </div>
+                
+                    {/* Statistics Section */}
+                    <div className="statistics-section">
+                        <div>
+                            <h4>Uncompleted Tasks</h4>
+                            <p>9</p>
                         </div>
-                        <div className="assignments-section">
-                            <h3>Assignments</h3>
-                            {/* Replace this with dynamic assignments */}
-                            <ul>
-                                <li>Homework 1 - 5% - 9/23/24</li>
-                                <li>Quiz 1 - 10% - 9/23/24</li>
-                                <li>Midterm - 20% - 10/31/24</li>
-                                <li>Final Exam - 40% - 12/20/24</li>
-                            </ul>
+                        <div>
+                            <h4>Completed Tasks</h4>
+                            <p>1</p>
                         </div>
-                        <div className="statistics-section">
-                            <div>
-                                <h4>Uncompleted Tasks</h4>
-                                <p>9</p>
-                            </div>
-                            <div>
-                                <h4>Completed Tasks</h4>
-                                <p>1</p>
-                            </div>
-                            <div>
-                                <h4>Grade Calculator</h4>
-                                <p>100%</p>
-                            </div>
+                        <div>
+                            <h4>Grade Calculator</h4>
+                            <p>100%</p>
                         </div>
                     </div>
+                </div>
                 ) : (
                     <div className="placeholder">
                         <h2>Select a course to view details</h2>

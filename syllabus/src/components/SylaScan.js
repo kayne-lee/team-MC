@@ -3,7 +3,7 @@ import '../App.css';
 import fileIcon from '../assets/file_icon.png';
 import trashIcon from '../assets/trash.png';
 import OpenAIService from '../services/OpenAIService';
-import MongoService from '../services/MognoService';
+import MongoService from '../services/MongoService';
 
 import pdfToText from 'react-pdftotext'
 import loader from '../assets/loader3.gif'

@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap');
+
 .courses-page {
     display: flex;
     min-height: 100vh;
-    font-family: "Lato", sans-serif;
+    font-family: "Poppins", "Lato", "sans-serif";
 }
 
 .sidebar {
@@ -9,7 +11,7 @@
     padding: 20px;
     overflow-y: auto;
     border-right: 2px solid #e0e0e0;
-    background-color: #F3F3F3;
+    background-color: #FFF;
 }
 
 .add-course-card {
@@ -27,7 +29,7 @@
 }
 
 .add-course-card:hover {
-    transform: scale(1.05);
+    transform: scale(1.02);
 }
 
 .add-icon {
@@ -47,7 +49,7 @@
 
 .course-card {
     display: flex;
-    background: #fff;
+    background: #F3F3F3;
     margin-bottom: 15px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -64,10 +66,13 @@
     border: 3px solid #8338ec;
 }
 
+
 .course-image {
-    width: 80px;
-    height: 80px;
+    width: 251px;
+    height: 151px;
     object-fit: cover;
+    border-radius: 9.791px;
+    border: 1px solid #8B898D;
 }
 
 .course-details {
@@ -75,8 +80,18 @@
     flex: 1;
 }
 
+.course-title {
+    color: #000;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 125%;
+}
+
+
+/* COURSE DETAILS BOX (SOLO BOX ON THE RIGHT) */
 .main-content {
-    flex: 3;
+    flex: 1.5;
     padding: 40px;
     background-color: #FDFBFD;
 }

@@ -12,6 +12,39 @@
     background-color: #F3F3F3;
 }
 
+.add-course-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16.653px;
+    border: 1px solid #8B898D;
+    background: linear-gradient(123deg, rgba(227, 204, 255, 0.80) 9.3%, rgba(243, 243, 243, 0.60) 44.23%, rgba(222, 203, 248, 0.50) 92.46%);
+    margin-bottom: 15px;
+    height: 100px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.add-course-card:hover {
+    transform: scale(1.05);
+}
+
+.add-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border: 2px solid #8338ec;
+    border-radius: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #8338ec;
+    background: linear-gradient(145deg, #F6EDFF, #FFF);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
 .course-card {
     display: flex;
     background: #fff;

@@ -3,6 +3,7 @@ import "../styles/classes.css";
 
 const Classes = () => {
     const [selectedCourse, setSelectedCourse] = useState(null);
+    const [checkedAssignments, setCheckedAssignments] = useState({}); // Track checked assignments by course ID
 
     const courses = [
         {
@@ -13,6 +14,12 @@ const Classes = () => {
             officeLocation: "Goodwin 729",
             officeHours: "Wed 10:00 AM - 11:00 AM",
             image: "path/to/cisc101-image.jpg",
+            assignments: [
+                { id: 1, title: "Homework 1", weight: "5%", dueDate: "9/23/24" },
+                { id: 2, title: "Quiz 1", weight: "10%", dueDate: "9/30/24" },
+                { id: 3, title: "Midterm", weight: "20%", dueDate: "10/31/24" },
+                { id: 4, title: "Final Exam", weight: "40%", dueDate: "12/20/24" },
+            ],
         },
         {
             id: 2,
@@ -22,20 +29,31 @@ const Classes = () => {
             officeLocation: "Goodwin 729",
             officeHours: "Wed 10:00 AM - 11:00 AM",
             image: "path/to/math112-image.jpg",
-        },
-        {
-            id: 3,
-            title: "JAPN 100",
-            instructor: "Wendy Powley",
-            email: "wendy.powley@queensu.ca",
-            officeLocation: "Goodwin 729",
-            officeHours: "Wed 10:00 AM - 11:00 AM",
-            image: "path/to/japn100-image.jpg",
+            assignments: [
+                { id: 1, title: "Assignment 1", weight: "10%", dueDate: "9/23/24" },
+                { id: 2, title: "Test 1", weight: "20%", dueDate: "10/1/24" },
+            ],
         },
     ];
 
     const handleCourseSelect = (course) => {
         setSelectedCourse(course);
+        if (!checkedAssignments[course.id]) {
+            setCheckedAssignments((prev) => ({
+                ...prev,
+                [course.id]: {},
+            }));
+        }
+    };
+
+    const toggleAssignmentCheck = (courseId, assignmentId) => {
+        setCheckedAssignments((prev) => ({
+            ...prev,
+            [courseId]: {
+                ...prev[courseId],
+                [assignmentId]: !prev[courseId]?.[assignmentId], // Toggle checked state
+            },
+        }));
     };
 
     return (
@@ -66,59 +84,69 @@ const Classes = () => {
                         </div>
                     </div>
                 ))}
+                {/* ADD COURSES BUTTON */}
+                <div className="add-course-card">
+                    <div className="add-icon">
+                        <span>+</span>
+                    </div>
+                </div>
             </div>
 
             {/* Main Content */}
             <div className="main-content">
                 {selectedCourse ? (
                     <div className="course-details-container">
-                    <h1>{selectedCourse.title}</h1>
-                
-                    {/* Progress Section */}
-                    <div className="progress-section">
-                        <span>✔ Homework 1</span>
-                        <span>100% Completed</span>
-                    </div>
-                
-                    {/* Assignments Section */}
-                    <div className="assignments-section">
-                        <h3>Assignments</h3>
-                        <ul>
-                            <li>
-                                Homework 1
-                                <span>5% - 9/23/24</span>
-                            </li>
-                            <li>
-                                Quiz 1
-                                <span>10% - 9/30/24</span>
-                            </li>
-                            <li>
-                                Midterm
-                                <span>20% - 10/31/24</span>
-                            </li>
-                            <li>
-                                Final Exam
-                                <span>40% - 12/20/24</span>
-                            </li>
-                        </ul>
-                    </div>
-                
-                    {/* Statistics Section */}
-                    <div className="statistics-section">
-                        <div>
-                            <h4>Uncompleted Tasks</h4>
-                            <p>9</p>
+                        <h1>{selectedCourse.title}</h1>
+
+                        {/* Assignments Section */}
+                        <div className="assignments-section">
+                            <h3>Assignments</h3>
+                            <ul>
+                                {selectedCourse.assignments.map((assignment) => (
+                                    <li key={assignment.id}>
+                                        <input
+                                            type="checkbox"
+                                            checked={
+                                                checkedAssignments[selectedCourse.id]?.[assignment.id] || false
+                                            }
+                                            onChange={() =>
+                                                toggleAssignmentCheck(selectedCourse.id, assignment.id)
+                                            }
+                                        />
+                                        <span>
+                                            {assignment.title} - {assignment.weight} - {assignment.dueDate}
+                                        </span>
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
-                        <div>
-                            <h4>Completed Tasks</h4>
-                            <p>1</p>
-                        </div>
-                        <div>
-                            <h4>Grade Calculator</h4>
-                            <p>100%</p>
+
+                        {/* Statistics Section */}
+                        <div className="statistics-section">
+                            <div>
+                                <h4>Uncompleted Tasks</h4>
+                                <p>
+                                    {
+                                        selectedCourse.assignments.filter(
+                                            (a) =>
+                                                !checkedAssignments[selectedCourse.id]?.[a.id]
+                                        ).length
+                                    }
+                                </p>
+                            </div>
+                            <div>
+                                <h4>Completed Tasks</h4>
+                                <p>
+                                    {
+                                        selectedCourse.assignments.filter(
+                                            (a) =>
+                                                checkedAssignments[selectedCourse.id]?.[a.id]
+                                        ).length
+                                    }
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
                 ) : (
                     <div className="placeholder">
                         <h2>Select a course to view details</h2>

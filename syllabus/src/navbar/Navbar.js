@@ -29,19 +29,19 @@ function Navbar({ activeTab, setActiveTab }) {
       </div>
 
       {/* Tabs Container */}
-      <div className="w-[408px] h-[50px] rounded-[33px] bg-[#FDFBFD] flex flex-row justify-around items-center relative mr-[60px]">
+      <div className="w-[316px] h-[50px] rounded-[33px] bg-[#FDFBFD] flex flex-row justify-around items-center relative mr-[60px]">
         {/* Sliding Purple Highlight */}
         <motion.div
           className="absolute bottom-0 left-0 h-full bg-purple-600 rounded-[33px] z-0"
           style={{
-            width: '141px', // Highlight width
+            width: '169px', // Highlight width
           }}
           animate={{
             left:
-              activeTab === 'Timeline'
+              activeTab === 'Classes'
                 ? '0'
                 : activeTab === 'Tasks'
-                ? '130.33px'
+                ? '160.33px'
                 : '265px',
           }}
           transition={{
@@ -54,12 +54,12 @@ function Navbar({ activeTab, setActiveTab }) {
 
         {/* Tabs */}
         <div
-          onClick={() => handleTabClick('Timeline')}
+          onClick={() => handleTabClick('Classes')}
           className={`text-[17.675px] font-bold font-poppins leading-normal cursor-pointer z-10 ${
-            activeTab === 'Timeline' ? 'text-white' : 'text-[#4A4A4A]'
+            activeTab === 'Classes' ? 'text-white' : 'text-[#4A4A4A]'
           }`}
         >
-          Timeline
+          Classes
         </div>
         <div
           onClick={() => handleTabClick('Tasks')}
@@ -69,14 +69,7 @@ function Navbar({ activeTab, setActiveTab }) {
         >
           Tasks
         </div>
-        <div
-          onClick={() => handleTabClick('SylaScan')}
-          className={`text-[17.675px] font-bold font-poppins leading-normal cursor-pointer z-10 ${
-            activeTab === 'SylaScan' ? 'text-white' : 'text-[#4A4A4A]'
-          }`}
-        >
-          SylaScan
-        </div>
+
       </div>
       <div className="mr-[60px]">
         <img

@@ -1,42 +1,71 @@
 import React, { useState, useEffect } from "react";
+import OpenAIService from '../services/OpenAIService';
+import SylaScan from "./SylaScan";
 import "../styles/classes.css";
 
 const Classes = () => {
     const [selectedCourse, setSelectedCourse] = useState(null);
+    const [courses, setCourses] = useState([])
     const [checkedAssignments, setCheckedAssignments] = useState({}); // Track checked assignments by course ID
+    const openaiService = OpenAIService();
+    const [modalVisible, setModalVisible] = useState(false);
 
-    const courses = [
-        // TODO PLACEHOLDER DATA
-        // LATER REPLACE THESE WITH DATABASE CALLS
-        {
-            id: 1,
-            title: "CISC 101",
-            instructor: "Wendy Powley",
-            email: "wendy.powley@queensu.ca",
-            officeLocation: "Goodwin 729",
-            officeHours: "Wed 10:00 AM - 11:00 AM",
-            image: "/circuits.png",
-            assignments: [
-                { id: 1, title: "Homework 1", weight: "5%", dueDate: "9/23/24" },
-                { id: 2, title: "Quiz 1", weight: "10%", dueDate: "9/30/24" },
-                { id: 3, title: "Midterm", weight: "20%", dueDate: "10/31/24" },
-                { id: 4, title: "Final Exam", weight: "40%", dueDate: "12/20/24" },
-            ],
-        },
-        {
-            id: 2,
-            title: "MATH 112",
-            instructor: "Wendy Powley",
-            email: "wendy.powley@queensu.ca",
-            officeLocation: "Goodwin 729",
-            officeHours: "Wed 10:00 AM - 11:00 AM",
-            image: "/circuits.png",
-            assignments: [
-                { id: 1, title: "Assignment 1", weight: "10%", dueDate: "9/23/24" },
-                { id: 2, title: "Test 1", weight: "20%", dueDate: "10/1/24" },
-            ],
-        },
-    ];
+    // Function to handle opening the modal
+    const openModal = () => {
+        setModalVisible(true);
+        document.body.classList.add("blurred"); // Apply blur to body
+    };
+
+    // Function to handle closing the modal
+    const closeModal = () => {
+        setModalVisible(false);
+        document.body.classList.remove("blurred"); // Remove blur from body
+    };
+    //science, math, art, business, coding, other
+
+    useEffect(() => {
+        const myHeaders = new Headers();
+        const token = localStorage.getItem("jwt");
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", `Bearer ${token}`);
+
+        const requestOptions = {
+            method: "GET",
+            headers: myHeaders,
+            redirect: "follow"
+        };
+
+        fetch("http://localhost:8080/api/data/allCourses", requestOptions)
+            .then((response) => response.json()) // Parse the response as JSON
+            .then((res) => {
+                // Mapping the response to match the desired structure
+                const mappedCourses = res.map((course, index) => ({
+                    id: index + 1, // Assigning a unique id for each course
+                    title: course.title,
+                    instructor: course.instructor,
+                    email: course.email,
+                    officeLocation: course.officeLocation,
+                    officeHours: course.officeHours,
+                    image: `/courseImages/${course.category}.jpg`,
+                    assignments: course.assignments.map((assignment, idx) => ({
+                        id: idx + 1, // Assigning a unique id for each assignment
+                        title: assignment.title,
+                        weight: assignment.weight,
+                        dueDate: new Date(assignment.dueDate).toLocaleDateString('en-US', {
+                            year: '2-digit',
+                            month: 'numeric',
+                            day: 'numeric'
+                        }),
+                    })),
+                }));
+
+                setCourses(mappedCourses); // Set the state with the fetched and mapped courses
+                console.log(mappedCourses); // Log the courses for debugging
+            })
+            .catch((error) => {
+                console.error("Error fetching courses:", error);
+            });
+    }, []);
 
     // Set the first course as the default selected course
     useEffect(() => {
@@ -105,7 +134,7 @@ const Classes = () => {
                     ))
                 }
                 {/* ADD COURSES BUTTON */}
-                <div className="add-course-card">
+                <div className="add-course-card" onClick={openModal}>
                     <div className="add-icon">
                         <span>+</span>
                     </div>
@@ -205,6 +234,21 @@ const Classes = () => {
                     </div>
                 )}
             </div>
+            {modalVisible && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    {/* <div className="bg-white p-8 rounded-lg shadow-lg w-96 text-center">
+                        <h2 className="text-2xl font-semibold">Course Modal</h2>
+                        <p className="my-4">Enter course details here...</p>
+                        <button
+                            onClick={closeModal}
+                            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                        >
+                            Close
+                        </button>
+                    </div> */}
+                    <SylaScan closeModal={closeModal}/>
+                </div>
+            )}
         </div>
     );
 };

@@ -25,9 +25,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/data")
@@ -150,4 +152,70 @@ public class DataController {
             return List.of();
         }
     }
+
+    @GetMapping("/allCourses")
+    public List<Map<String, Object>> getAllCourses(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+
+        String token = null;
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            // Extract the token by removing the "Bearer " prefix
+            token = authorizationHeader.substring(7);
+        }
+
+        if (token != null && !jwtUtil.isTokenExpired(token)) {
+            String username = jwtUtil.extractUsername(token);
+            Optional<User> user = userService.findById(username);
+            
+            if (user.isPresent()) {
+                String email = user.get().getEmail();
+
+                // Fetch courses for the user from the database
+                Optional<UserCourse> userCourseOpt = userCourseRepository.findByEmail(email);
+                
+                if (userCourseOpt.isPresent()) {
+                    UserCourse userCourse = userCourseOpt.get(); // Extract the userCourse object
+
+                    // Convert the courses to the desired format
+                    return userCourse.getCourses().stream().map(course -> {
+                        Map<String, Object> courseMap = new HashMap<>();
+
+                        // Basic course info
+                        courseMap.put("id", course.getTitle().hashCode()); // Use course title hash as a placeholder ID
+                        courseMap.put("title", course.getTitle());
+                        courseMap.put("instructor", course.getCourseInfo().getInstructorName());
+                        courseMap.put("email", course.getCourseInfo().getInstructorEmail());
+                        courseMap.put("officeLocation", course.getCourseInfo().getOfficeHoursLocation());
+                        courseMap.put("officeHours", course.getCourseInfo().getOfficeHoursTime());
+                        courseMap.put("category", course.getCourseInfo().getCategory());
+
+                        // Assignments
+                        List<Map<String, Object>> assignments = course.getAssignments().stream().map(assignment -> {
+                            Map<String, Object> assignmentMap = new HashMap<>();
+                            assignmentMap.put("id", assignment.getTitle().hashCode()); // Use title hash for assignment ID
+                            assignmentMap.put("title", assignment.getTitle());
+                            assignmentMap.put("weight", assignment.getWeight());
+                            assignmentMap.put("dueDate", assignment.getDueDate().substring(0, 10)); // Extract just the date part
+                            return assignmentMap;
+                        }).collect(Collectors.toList());
+
+                        courseMap.put("assignments", assignments);
+
+                        return courseMap;
+                    }).collect(Collectors.toList());
+                } else {
+                    // Return an empty list if no courses are found
+                    return List.of();
+                }
+            } else {
+                // Return an empty list if the user is not found
+                return List.of();
+            }
+        } else {
+            // Return an empty list if the token is invalid or expired
+            return List.of();
+        }
+    }
+
+
 }

@@ -41,7 +41,24 @@ function OpenAIService() {
                     reject(error); // Reject the promise in case of errors
                     });
             });
-        }
+        },
+
+        getCourses() {
+            const myHeaders = new Headers();
+            const token = localStorage.getItem("jwt");
+            myHeaders.append("Content-Type", "application/json");
+            myHeaders.append("Authorization", `Bearer ${token}`);
+
+            const requestOptions = {
+            method: "GET",
+            headers: myHeaders,
+            redirect: "follow"
+            };
+
+            fetch("http://localhost:8080/api/data/allCourses", requestOptions)
+            .then((response) => response.text())
+            .catch((error) => console.error(error));
+                    }
     }
 
     return sv;

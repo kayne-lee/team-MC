@@ -99,7 +99,7 @@ const TasksPage = () => {
 
     return (
         <div
-            className={`parent min-h-screen ${isExpanded ? 'blur-background' : ''}`}
+            className={`parent ${isExpanded ? 'blur-background' : ''}`}
             onClick={(e) => {
                 if (!e.target.closest('#date-picker')) handleClose();
             }}

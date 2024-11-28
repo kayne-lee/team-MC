@@ -11,7 +11,7 @@ function Navbar({ activeTab, setActiveTab }) {
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
-  };
+  };//
 
   const handleLogout = () => {
     // Remove the JWT token from localStorage (or sessionStorage)

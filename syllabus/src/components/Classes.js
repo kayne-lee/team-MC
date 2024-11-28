@@ -115,6 +115,7 @@ const Classes = () => {
                     <div className="course-details-container">
                         <h1>{selectedCourse.title}</h1>
 
+                        <div className="course-details-container-inner">
                         {/* Assignments Section */}
                         <div className="assignments-section">
                             <h3>Assignments</h3>
@@ -137,33 +138,68 @@ const Classes = () => {
                                 ))}
                             </ul>
                         </div>
-
-                        {/* Statistics Section */}
-                        <div className="statistics-section">
-                            <div>
-                                <h4>Uncompleted Tasks</h4>
+                        {/* Flex that contains both meeting and stat sections */}
+                        <div>
+                            {/* Meeting information Section */}
+                            <div className="meeting-information-section">
+                                <h3>Meeting Information</h3>
                                 <p>
-                                    {
-                                        selectedCourse.assignments.filter(
-                                            (a) =>
-                                                !checkedAssignments[selectedCourse.id]?.[a.id]
-                                        ).length
-                                    }
+                                    <strong>Instructor:</strong> {selectedCourse.instructor}
+                                </p>
+                                <p>
+                                    <strong>Email:</strong> {selectedCourse.email}
+                                </p>
+                                <p>
+                                    <strong>Office Location:</strong> {selectedCourse.officeLocation}
+                                </p>
+                                <p>
+                                    <strong>Office Hours:</strong> {selectedCourse.officeHours}
                                 </p>
                             </div>
-                            <div>
-                                <h4>Completed Tasks</h4>
-                                <p>
-                                    {
-                                        selectedCourse.assignments.filter(
-                                            (a) =>
-                                                checkedAssignments[selectedCourse.id]?.[a.id]
-                                        ).length
-                                    }
-                                </p>
+
+                            {/* Statistics Section */}
+                            
+                            <div className="statistics-section">
+                                <div className="statistics-top">
+                                    <div className="statistics-inner-box">
+                                        <h4>Uncompleted Tasks</h4>
+                                        <p className="statistic-number">
+                                            {
+                                                selectedCourse.assignments.filter(
+                                                    (a) =>
+                                                        !checkedAssignments[selectedCourse.id]?.[a.id]
+                                                ).length
+                                            }
+                                        </p>
+                                    </div>
+                                    
+                                    <div>
+                                        <div className="statistics-inner-box">
+                                            <h4>Completed Tasks</h4>
+                                            <p className="statistic-number">
+                                                {
+                                                    selectedCourse.assignments.filter(
+                                                        (a) =>
+                                                            checkedAssignments[selectedCourse.id]?.[a.id]
+                                                    ).length
+                                                }
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className="statistics-bottom">
+                                    <div className="statistics-inner-box-bottom">
+                                        <h4>Grade Calculator</h4>
+                                        <p className="statistic-number">
+                                            100%
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
                 ) : (
                     <div className="placeholder">
                         <h2>Add a course to see details</h2>

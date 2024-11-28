@@ -15,7 +15,7 @@ const Classes = () => {
             email: "wendy.powley@queensu.ca",
             officeLocation: "Goodwin 729",
             officeHours: "Wed 10:00 AM - 11:00 AM",
-            image: "path/to/cisc101-image.jpg",
+            image: "/circuits.png",
             assignments: [
                 { id: 1, title: "Homework 1", weight: "5%", dueDate: "9/23/24" },
                 { id: 2, title: "Quiz 1", weight: "10%", dueDate: "9/30/24" },
@@ -30,7 +30,7 @@ const Classes = () => {
             email: "wendy.powley@queensu.ca",
             officeLocation: "Goodwin 729",
             officeHours: "Wed 10:00 AM - 11:00 AM",
-            image: "path/to/math112-image.jpg",
+            image: "/circuits.png",
             assignments: [
                 { id: 1, title: "Assignment 1", weight: "10%", dueDate: "9/23/24" },
                 { id: 2, title: "Test 1", weight: "20%", dueDate: "10/1/24" },
@@ -84,7 +84,7 @@ const Classes = () => {
                         >
                             <img src={course.image} alt={course.title} className="course-image" />
                             <div className="course-details">
-                                <h2>{course.title}</h2>
+                                <h2 className="course-title">{course.title}</h2>
                                 <p>
                                     <strong>Instructor:</strong> {course.instructor}
                                 </p>

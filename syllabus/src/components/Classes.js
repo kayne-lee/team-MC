@@ -101,8 +101,6 @@ const Classes = () => {
                                     <strong>Office Hours:</strong> {course.officeHours}
                                 </p>
                             </div>
-
-
                         </div>
                     ))
                 }

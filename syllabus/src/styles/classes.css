@@ -98,7 +98,7 @@
 
 .course-details-container {
     background: #F6EDFF;
-    padding: 30px;
+    padding: 30px;  
     border-radius: 20px;
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -106,10 +106,16 @@
     gap: 20px;
 }
 
+.course-details-container-inner {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+}
+
 .course-details-container h1 {
-    font-size: 24px;
+    font-size: 36px;
     font-weight: 800;
-    color: #8338EC;
+    color: #000;
 }
 
 .progress-section {
@@ -161,13 +167,38 @@
 
 .statistics-section {
     display: flex;
+    flex: 1;
+    flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    background: #fff;
     padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+
+.statistics-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 40px;
+    margin-bottom: 20px;
+}
+
+.statistics-inner-box{
+    border-radius: 25px;
+    border: 3px solid #8338EC;
+    background: #FFF;
+    padding: 10px;
+}
+
+.statistics-inner-box-bottom {
+    border-radius: 25px;
+    border: 3px solid #8338EC;
+    background: #FFF;
+    padding: 10px;
+    width: 340px;
+    
+}
+
+
 
 .statistics-section div {
     text-align: center;
@@ -179,7 +210,11 @@
 }
 
 .statistics-section p {
-    font-size: 24px;
+    font-size: 48px;
     font-weight: 800;
-    color: #8338EC;
+    background: linear-gradient(180deg, #8338EC 0%, #BFA1E9 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
+

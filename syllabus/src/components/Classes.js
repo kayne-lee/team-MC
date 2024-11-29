@@ -37,7 +37,7 @@ const Classes = () => {
             redirect: "follow"
         };
 
-        fetch("http://localhost:8080/api/data/allCourses", requestOptions)
+        fetch("http://35.183.132.114:8080/api/data/allCourses", requestOptions)
             .then((response) => response.json()) // Parse the response as JSON
             .then((res) => {
                 // Mapping the response to match the desired structure

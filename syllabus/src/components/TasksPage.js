@@ -45,7 +45,7 @@ const TasksPage = () => {
                 const token = localStorage.getItem('jwt');
                 if (!token) throw new Error('No token found.');
 
-                const response = await axios.get('http://localhost:8080/api/data/courses', {
+                const response = await axios.get('http://35.183.132.114:8080/api/data/courses', {
                     headers: { Authorization: `Bearer ${token}` },
                 });
 

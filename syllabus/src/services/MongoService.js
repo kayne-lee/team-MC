@@ -16,7 +16,7 @@ function MongoService() {
                         redirect: "follow"
                     };
                     
-                    fetch("http://localhost:8080/api/data/saveCourse", requestOptions)
+                    fetch("http://35.183.132.114:8080/api/data/saveCourse", requestOptions)
                     .then((response) => {
                     if (!response.ok) {
                         // Handle HTTP errors

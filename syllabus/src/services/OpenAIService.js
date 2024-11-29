@@ -18,7 +18,7 @@ function OpenAIService() {
                         redirect: "follow"
                     };
                     
-                    fetch("http://localhost:8080/api/data/openai", requestOptions)
+                    fetch("http://35.183.132.114:8080/api/data/openai", requestOptions)
                     .then((response) => {
                     if (!response.ok) {
                         // Handle HTTP errors
@@ -55,7 +55,7 @@ function OpenAIService() {
             redirect: "follow"
             };
 
-            fetch("http://localhost:8080/api/data/allCourses", requestOptions)
+            fetch("http://35.183.132.114:8080/api/data/allCourses", requestOptions)
             .then((response) => response.text())
             .catch((error) => console.error(error));
                     }

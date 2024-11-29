@@ -54,6 +54,8 @@ public class DatabaseService {
 
         task.setDueDate(c.get("dueDate").asText());
 
+        task.setDescription(c.get("description").asText());
+
         // Update the user's courses
         if (user.getRandomTasks() == null) {
             user.setRandomTasks(new ArrayList<>());

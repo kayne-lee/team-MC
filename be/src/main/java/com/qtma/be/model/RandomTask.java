@@ -15,5 +15,6 @@ public class RandomTask {
     
     public String title;
     public String dueDate;
+    public String description;
   
 }

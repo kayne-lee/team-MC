@@ -28,7 +28,7 @@ export default function Login() {
         redirect: "follow"
         };
 
-        fetch("http://localhost:8080/auth/login", requestOptions)
+        fetch("http://35.183.132.114:8080/auth/login", requestOptions)
             .then((response) => {
                 // Read the response body as text
                 return response.text().then((text) => {

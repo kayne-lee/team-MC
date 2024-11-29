@@ -3,14 +3,25 @@ import OpenAIService from '../services/OpenAIService';
 import { useNavigate } from 'react-router-dom';
 import SylaScan from "./SylaScan";
 import "../styles/classes.css";
+import info from "../assets/info.png"
 
 const Classes = () => {
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [courses, setCourses] = useState([])
     const [checkedAssignments, setCheckedAssignments] = useState({}); // Track checked assignments by course ID
-    const openaiService = OpenAIService();
     const [modalVisible, setModalVisible] = useState(false);
-    const navigate = useNavigate()
+    const [percentages, setPercentages] = useState({});
+
+    // Handle input change for percentage input
+    const handlePercentageChange = (e, assignmentId) => {
+      const value = e.target.value;
+      if (value >= 0 && value <= 100) {
+        setPercentages((prev) => ({
+          ...prev,
+          [assignmentId]: value,
+        }));
+      }
+    };
 
     // Function to handle opening the modal
     const openModal = () => {
@@ -23,7 +34,6 @@ const Classes = () => {
         setModalVisible(false);
         document.body.classList.remove("blurred"); // Remove blur from body
     };
-    //science, math, art, business, coding, other
 
     useEffect(() => {
         const myHeaders = new Headers();
@@ -62,7 +72,6 @@ const Classes = () => {
                 }));
 
                 setCourses(mappedCourses); // Set the state with the fetched and mapped courses
-                console.log(mappedCourses); // Log the courses for debugging
                 
 
             })
@@ -152,33 +161,59 @@ const Classes = () => {
             <div className="main-content">
                 {selectedCourse ? (
                     <div className="course-details-container">
-                        <div className="flex flex-row">
-                            <h1>{selectedCourse.title}</h1>
-                            <img src="../assets/info.png" alt="" className="w-[20px]"/>
+                        <div className="flex flex-row items-center gap-[10px]">
+                            <div class="text-black font-extrabold text-[35.398px] leading-normal font-inter">{selectedCourse.title}</div>
+                            <img src={info} alt="" className="w-[24px] h-[24px]"/>
                         </div>
                         
 
                         <div className="course-details-container-inner">
                         {/* Assignments Section */}
                         <div className="assignments-section">
-                            <h3>Assignments</h3>
-                            <ul>
-                                {selectedCourse.assignments.map((assignment) => (
-                                    <li key={assignment.id}>
+                        <ul>
+                            {selectedCourse.assignments.map((assignment) => {
+                                const isChecked = checkedAssignments[selectedCourse.id]?.[assignment.id] || false;
+                                const inputColor = isChecked ? 'border-purple-500 text-purple-500' : 'border-[#272627] text-[#272627]';
+                                const bgColor = isChecked ? 'bg-purple-100' : 'bg-white';
+
+                                return (
+                                <li key={assignment.id}>
+                                    <input
+                                    type="checkbox"
+                                    checked={isChecked}
+                                    onChange={() => toggleAssignmentCheck(selectedCourse.id, assignment.id)}
+                                    />
+                                    <div className="flex flex-row w-full ml-[15px] justify-between">
+                                    <div className="flex flex-col">
+                                        <div className={`text-[#333] font-bold text-[15.732px] leading-normal ${inputColor}`}>
+                                        {assignment.title}
+                                        </div>
+                                        <div className="flex flex-row justify-between text-[#8B898D] font-poppins font-bold text-[12.275px] leading-normal w-[107px]">
+                                        <div>{assignment.weight}</div>
+                                        <div>{assignment.dueDate}</div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        className={`flex ml-[20px] items-center border-[1.816px] rounded-[18.637px] ${inputColor} ${bgColor} w-[53px] h-[33px]`}
+                                    >
                                         <input
-                                            type="checkbox"
-                                            checked={
-                                                checkedAssignments[selectedCourse.id]?.[assignment.id] || false
-                                            }
-                                            onChange={() =>
-                                                toggleAssignmentCheck(selectedCourse.id, assignment.id)
-                                            }
+                                        className={`w-[calc(100%-20px)] h-full text-right border-none rounded-[18.637px] ${bgColor} focus:outline-none px-0`}
+                                        type="text"
+                                        value={percentages[assignment.id] || ''}
+                                        min="0"
+                                        max="100"
+                                        placeholder="_"
+                                        aria-label="Percentage"
+                                        onChange={(e) => handlePercentageChange(e, assignment.id)}
+                                        inputMode="numeric"
+                                        pattern="[0-9]*"
                                         />
-                                        <span>
-                                            {assignment.title} - {assignment.weight} - {assignment.dueDate}
-                                        </span>
-                                    </li>
-                                ))}
+                                        <span className="text-center font-poppins text-[14.526px] font-bold leading-normal">%</span>
+                                    </div>
+                                    </div>
+                                </li>
+                                );
+                            })}
                             </ul>
                         </div>
                         {/* Flex that contains both meeting and stat sections */}
@@ -247,16 +282,6 @@ const Classes = () => {
             </div>
             {modalVisible && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                    {/* <div className="bg-white p-8 rounded-lg shadow-lg w-96 text-center">
-                        <h2 className="text-2xl font-semibold">Course Modal</h2>
-                        <p className="my-4">Enter course details here...</p>
-                        <button
-                            onClick={closeModal}
-                            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                        >
-                            Close
-                        </button>
-                    </div> */}
                     <SylaScan closeModal={closeModal}/>
                 </div>
             )}

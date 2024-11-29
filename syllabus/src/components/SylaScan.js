@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../App.css';
 import fileIcon from '../assets/file_icon.png';
 import trashIcon from '../assets/trash.png';
+import { useNavigate } from 'react-router-dom';
 import OpenAIService from '../services/OpenAIService';
 import MongoService from '../services/MongoService';
 
@@ -28,6 +29,7 @@ export default function SylaScan({ closeModal }) {
   const [hasError, setHasError] = useState(false); // Error state
   const openaiService = OpenAIService();
   const mongoService = MongoService();
+  const [key, setKey] = useState(0); // 'key' will act as a force trigger
 
   const handleFileChange = (e) => {
     setShowSuccessMessage(false);
@@ -106,6 +108,7 @@ export default function SylaScan({ closeModal }) {
     setLoading(false);
     setShowFetchDates(false);
     setShowSuccessMessage(true);
+    window.location.reload();
   }
 
   const handleInputChange = (index, field, value, section) => {

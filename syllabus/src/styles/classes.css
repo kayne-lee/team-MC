@@ -11,7 +11,6 @@
     padding: 20px;
     overflow-y: auto;
     border-right: 2px solid #e0e0e0;
-    background-color: #FFF;
     height: calc(100vh - 154px);
 }
 
@@ -57,6 +56,8 @@
     overflow: hidden;
     cursor: pointer;
     transition: transform 0.2s ease;
+    padding: 19px;
+    width: 600px;
 }
 
 .course-card:hover {
@@ -69,17 +70,20 @@
 
 
 .course-image {
-    width: 220px;
-    height: 170px;
+    width: 251px;
+    height: 150px;
     object-fit: cover;
     border-radius: 9.791px;
-    border: 1px solid #8B898D;
+    /* border: 1px solid #8B898D; */
 }
 
 
 .course-details {
-    padding: 10px;
-    flex: 1;
+    /* padding: 10px; */
+    padding-left: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
 }
 
 .course-details p{
@@ -105,6 +109,14 @@
     flex: 1.5;
     padding: 40px;
     background-color: #FDFBFD;
+    h1 {
+        color: #000;
+        font-family: Poppins;
+        font-size: 35.398px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
 }
 
 .course-details-container {

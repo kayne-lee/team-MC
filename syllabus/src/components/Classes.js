@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import OpenAIService from '../services/OpenAIService';
+import { useNavigate } from 'react-router-dom';
 import SylaScan from "./SylaScan";
 import "../styles/classes.css";
 
@@ -9,6 +10,7 @@ const Classes = () => {
     const [checkedAssignments, setCheckedAssignments] = useState({}); // Track checked assignments by course ID
     const openaiService = OpenAIService();
     const [modalVisible, setModalVisible] = useState(false);
+    const navigate = useNavigate()
 
     // Function to handle opening the modal
     const openModal = () => {
@@ -61,6 +63,8 @@ const Classes = () => {
 
                 setCourses(mappedCourses); // Set the state with the fetched and mapped courses
                 console.log(mappedCourses); // Log the courses for debugging
+                
+
             })
             .catch((error) => {
                 console.error("Error fetching courses:", error);
@@ -112,23 +116,26 @@ const Classes = () => {
                             onClick={() => handleCourseSelect(course)}
                         >
                             <div>
-                            <img src={course.image} alt={course.title} className="course-image" />
-                            <h2 className="course-title">{course.title}</h2>
+                                <img src={course.image} alt={course.title} className="course-image" />
+                                <h2 className="course-title">{course.title}</h2>
                             </div>
                             <div className="course-details">
-                                
-                                <p>
-                                    <strong>Instructor:</strong><br></br> {course.instructor}
-                                </p>
-                                <p>
-                                    <strong>Email:</strong><br></br> {course.email}
-                                </p>
-                                <p>
-                                    <strong>Office Location:</strong><br></br> {course.officeLocation}
-                                </p>
-                                <p>
-                                    <strong>Office Hours:</strong> {course.officeHours}
-                                </p>
+                                <div className="flex flex-col">
+                                    <div class="text-black font-poppins text-sm font-bold leading-[125%]">Instructor:</div>
+                                    <div class="text-[#8B898D] font-poppins text-sm font-normal leading-[125%]">{course.instructor}</div>
+                                </div>
+                                <div className="flex flex-col">
+                                    <div class="text-black font-poppins text-sm font-bold leading-[125%]">Email:</div>
+                                    <div class="text-[#8B898D] font-poppins text-sm font-normal leading-[125%]">{course.email}</div>
+                                </div>
+                                <div className="flex flex-col">
+                                    <div class="text-black font-poppins text-sm font-bold leading-[125%]">Office Location:</div>
+                                    <div class="text-[#8B898D] font-poppins text-sm font-normal leading-[125%]">{course.officeLocation}</div>
+                                </div>
+                                <div className="flex flex-col">
+                                    <div class="text-black font-poppins text-sm font-bold leading-[125%]">Office Hours:</div>
+                                    <div class="text-[#8B898D] font-poppins text-sm font-normal leading-[125%]">{course.officeHours}</div>
+                                </div>
                             </div>
                         </div>
                     ))
@@ -145,7 +152,11 @@ const Classes = () => {
             <div className="main-content">
                 {selectedCourse ? (
                     <div className="course-details-container">
-                        <h1>{selectedCourse.title}</h1>
+                        <div className="flex flex-row">
+                            <h1>{selectedCourse.title}</h1>
+                            <img src="../assets/info.png" alt="" className="w-[20px]"/>
+                        </div>
+                        
 
                         <div className="course-details-container-inner">
                         {/* Assignments Section */}

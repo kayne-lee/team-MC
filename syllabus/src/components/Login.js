@@ -167,13 +167,13 @@ export default function Login() {
             
 
             <div className="mt-[45px] flex flex-row gap-[24px] items-center text-[#F3F3F3]">
-                <div className="w-[189px] h-[1px] bg-white " />
-                <div>or sign in with</div>
-                <div className="w-[189px] h-[1px] bg-white " />
+                <div className="w-[120px] h-[1px] bg-white " />
+                <div>Don't have an account? <a href="/signup">Signup</a></div>
+                <div className="w-[120px] h-[1px] bg-white " />
             </div>
-            <div className="flex mt-[24px] justify-center items-center cursor-pointer">
+            {/* <div className="flex mt-[24px] justify-center items-center cursor-pointer">
                 <img src={Google} alt="" className="w-[30px]" />
-            </div>
+            </div> */}
         </div>
     </div>
   </div>

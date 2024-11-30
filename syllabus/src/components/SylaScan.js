@@ -165,10 +165,10 @@ export default function SylaScan({ closeModal }) {
 
   return (
     <div className="">
-      <div className="w-[988px] h-[540px] flex flex-col justify-center items-center bg-white rounded-[45px] border-[8px] border-[#8338EC] ">
+      <div className=" relative w-[988px] h-[540px] flex flex-col justify-center items-center bg-white rounded-[45px] border-[8px] border-[#8338EC] ">
       <button
           onClick={closeModal}
-          className="absolute top-[140px] right-[250px] text-3xl font-bold text-gray-500 hover:text-gray-700"
+          className="absolute top-[25px] right-[25px] text-3xl font-bold text-gray-500 hover:text-gray-700"
         >
           &times;
         </button>

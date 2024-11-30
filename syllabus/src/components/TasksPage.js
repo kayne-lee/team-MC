@@ -161,8 +161,13 @@ const TasksPage = () => {
                                     >
                                         <div className="w-[7px] h-[7px] rounded-full bg-black mt-[6px]"></div>
                                         <div className="flex flex-wrap  max-w-[260px] break-words ml-[7px]">
+                                        {assignment.course === "Extra Task" ? (
+                                        <strong>{assignment.title}</strong>
+                                        ) : (
+                                        <>
                                             <strong>{assignment.title}</strong> - {assignment.course} ({assignment.weight})
-                                        </div>
+                                        </>
+                                        )}                                        </div>
                                         
                                     </div>
                                 ))}

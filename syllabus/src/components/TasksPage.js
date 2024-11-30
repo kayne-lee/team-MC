@@ -162,6 +162,7 @@ const TasksPage = () => {
             <div className="layout-container">
                 {/* Left Large Box (Today's Tasks) */}
                 <div
+                    style={{ cursor: "pointer" }}
                     className={`left-box ${isExpanded ? 'expanded' : ''}`}
                     onClick={handleExpand} // Prevent collapse on clicking the box
                 >

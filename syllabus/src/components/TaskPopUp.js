@@ -1,5 +1,6 @@
 import '../styles/tasksPopup.css';
 import React, { useState } from "react";
+import MongoService from '../services/MongoService';
 
 const TaskPopup = ({ onSave }) => {
     const [title, setTitle] = useState("Add Title");
@@ -7,7 +8,7 @@ const TaskPopup = ({ onSave }) => {
     const [time, setTime] = useState("2:00 PM");  // State for time
     const [date, setDate] = useState("2024-11-09"); 
     const [dateTime, setDateTime] = useState(""); // State to hold date and time
-
+    const mongoService = MongoService();
 
     // Close the popup if the backdrop (outside the content) is clicked
     const handleBackdropClick = (e) => {
@@ -18,16 +19,11 @@ const TaskPopup = ({ onSave }) => {
 
     const handleSave = async () => {
         try {
-            const response = await fetch("YOUR_BACKEND_ENDPOINT", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ title, description, time, date }),  // Include date in the request
-            });
-
-            if (!response.ok) throw new Error("Failed to save task");
-            console.log("Task saved successfully!");
+            const response = await mongoService.addRandomTask({
+                "title": title,
+                "dueDate": dateTime,
+                "description": description
+              })
 
             onSave(); // Close the popup
         } catch (error) {

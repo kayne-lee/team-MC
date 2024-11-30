@@ -12,6 +12,7 @@ import com.qtma.be.model.User;
 import com.qtma.be.model.UserCourse;
 import com.qtma.be.repository.UserCourseRepository;
 import com.qtma.be.service.OpenAIService;
+import com.qtma.be.service.DatabaseService;
 import com.qtma.be.service.UserService;
 import com.qtma.be.util.JwtUtil;
 import org.json.JSONArray;
@@ -47,6 +48,9 @@ public class DataController {
 
     @Autowired
     private OpenAIService openaiService;
+
+    @Autowired
+    private DatabaseService databaseSerivce;
 
     @Autowired
     private UserCourseRepository userCourseRepository;
@@ -118,6 +122,27 @@ public class DataController {
             Optional<User> user = userService.findById(username);
             
             openaiService.saveCourseData(user.get().getEmail(), course);
+            return true;
+            
+        } else {
+            return null;
+        }
+    }
+
+    @PostMapping("/addRandomTask")
+    public Boolean addRandomTask(@RequestBody JsonNode task, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+        String token = null;
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            // Extract the token by removing the "Bearer " prefix
+            token = authorizationHeader.substring(7);
+        }
+        if (token != null && !jwtUtil.isTokenExpired(token)) {
+        
+            String username = jwtUtil.extractUsername(token);
+            Optional<User> user = userService.findById(username);
+            
+            databaseSerivce.addRandomTask(user.get().getEmail(), task);
             return true;
             
         } else {

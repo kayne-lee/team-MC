@@ -17,6 +17,7 @@ public class UserCourse {
     private String id;
     private String email;
     private List<Course> courses;
+    private List<RandomTask> randomTasks;
 }
 
 

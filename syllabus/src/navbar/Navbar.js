@@ -79,7 +79,7 @@ function Navbar({ activeTab, setActiveTab }) {
           onClick={() => setShowProfileDropdown(!showProfileDropdown)}
         />
         {showProfileDropdown && (
-          <div className="absolute right-[60px] top-[75px] bg-white border border-[#ccc] rounded-[5px] shadow-[0_2px_5px_rgba(0,_0,_0,_0.1)] p-[10px]">
+          <div className="absolute right-[60px] top-[75px] z-10 bg-white border border-[#ccc] rounded-[5px] shadow-[0_2px_5px_rgba(0,_0,_0,_0.1)] p-[10px]">
             <p className="m-0 p-[10px_5px]">John Doe</p>
             <button className="bg-[#8338EC] text-white border-none py-[12px] px-[17px] cursor-pointer rounded-[25px]" onClick={handleLogout}>
               Sign Out

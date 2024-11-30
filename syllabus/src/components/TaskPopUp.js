@@ -43,7 +43,7 @@ const TaskPopup = ({ onSave }) => {
                     onBlur={() => title === "" && setTitle("Add Title")}
                 />
                 <div className="popup-fields">
-                    <div className="popup-row">
+                    <div className="popup-row mb-[15px]">
                         <div>
                         <input
                             type="datetime-local"

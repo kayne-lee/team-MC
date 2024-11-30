@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/data")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class DataController {
 
     private static final Logger logger = LoggerFactory.getLogger(DataController.class);

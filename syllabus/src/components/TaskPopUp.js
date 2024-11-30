@@ -4,45 +4,40 @@ import React, { useState } from "react";
 const TaskPopup = ({ onSave }) => {
     const [title, setTitle] = useState("Add Title");
     const [description, setDescription] = useState("");
-    const [time, setTime] = useState("2:00 PM");
-    const [currentDate, setCurrentDate] = useState(new Date());
+    const [time, setTime] = useState("2:00 PM");  // State for time
+    const [date, setDate] = useState("2024-11-09"); 
+    const [dateTime, setDateTime] = useState(""); // State to hold date and time
+
 
     // Close the popup if the backdrop (outside the content) is clicked
     const handleBackdropClick = (e) => {
         if (e.target === e.currentTarget) {
-            onSave();
+            onSave(); // Close the popup
         }
     };
 
-    const handleDateClick = (day) => {
-        const selectedDate = new Date(day);
-        selectedDate.setHours(0, 0, 0, 0);
-        selectedDate.setDate(selectedDate.getDate() + 1); 
-        setCurrentDate(selectedDate);
-      };
-
-      const handleSave = async () => {
+    const handleSave = async () => {
         try {
             const response = await fetch("YOUR_BACKEND_ENDPOINT", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ title, description, time, date: currentDate.toISOString() }),  // Use currentDate instead of date
+                body: JSON.stringify({ title, description, time, date }),  // Include date in the request
             });
-    
+
             if (!response.ok) throw new Error("Failed to save task");
             console.log("Task saved successfully!");
-    
-            onSave();
+
+            onSave(); // Close the popup
         } catch (error) {
             console.error(error);
             alert("Error saving task. Please try again.");
         }
-    };    
+    };
 
     return (
-        <div className="popup" onClick={handleBackdropClick}>
+        <div className="popup">
             <div className="popup-content">
                 <input
                     type="text"
@@ -53,22 +48,31 @@ const TaskPopup = ({ onSave }) => {
                 />
                 <div className="popup-fields">
                     <div className="popup-row">
+                        <div>
                         <input
+                            type="datetime-local"
+                            className="popup-pill"
+                            value={dateTime}
+                            onChange={(e) => setDateTime(e.target.value)} // Update date-time state
+                            />
+                        {/* <input
                             type="date"
                             className="popup-pill"
-                            value={currentDate.toISOString().split('T')[0]}
-                            onClick={(e) => e.stopPropagation()} // Update date state
-                            onChange={(e) => {
-                                e.stopPropagation(); // Ensure change event doesn’t propagate
-                                handleDateClick(e.target.value); // Handle the date change
-                            }}                        
-                        />
+                            value={date}
+                            onClick={(e) => e.stopPropagation()}
+                            onChange={(e) => setDate(e.target.value)} // Update date state
+                            />
+                        </div>
+                        <div>
+
                         <input
                             type="time"
                             className="popup-pill"
                             value={time}
+                            onClick={(e) => e.stopPropagation()}
                             onChange={(e) => setTime(e.target.value)} // Update time state
-                        />
+                            /> */}
+                        </div>
                     </div>
                     <label htmlFor="description" className="popup-label">Description</label>
                     <textarea

@@ -11,7 +11,7 @@ label {
     display: block;
     width: 40px;
     height: 40px;
-    background: url('../assets/Calendar.png') no-repeat;
+    /* background: url('../assets/Calendar.png') no-repeat; */
     background-size: contain;
 }
 
@@ -31,6 +31,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     color: transparent;
     background: transparent;
 }
+
 /* Layout container */
 .layout-container {
     display: flex;
@@ -38,9 +39,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     padding: 20px;
     min-height: 663px;
     max-height: calc(100vh - 234px);
-    /* TODO maybe change this */
     justify-content: center; 
-    
 }
 
 .nav {
@@ -49,39 +48,38 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 /* Scrollbar for modern browsers */
 ::-webkit-scrollbar {
-    width: 6px; /* Narrow scrollbar width */
-    height: 6px; /* Narrow scrollbar height for horizontal bars */
+    width: 6px;
+    height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-    background: transparent; /* Invisible track */
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.4); /* Thumb for visibility */
-    border-radius: 10px; /* Rounded thumb for a clean look */
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.6); /* Slightly darker thumb on hover */
+    background: rgba(0, 0, 0, 0.6);
 }
 
 /* Hide arrows for WebKit-based browsers */
 ::-webkit-scrollbar-button {
-    display: none; /* Completely hide the scrollbar arrows */
-    background: transparent; /* Invisible track */
+    display: none;
+    background: transparent;
     width: 0;
 }
 
 /* For Firefox */
 .left-box.expanded {
-    scrollbar-width: thin; /* Narrow scrollbar width */
-    scrollbar-color: rgba(0, 0, 0, 0.4) transparent; /* Invisible track and visible thumb */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.4) transparent;
 }
 
-
 .left-box.expanded {
-    z-index: 10; /* Ensure it overlays the blurred background */
+    z-index: 10;
     background: radial-gradient(123.37% 145% at 29.41% 3.92%, #8338EC 49.11%, #BFA1E9 96.5%);
     border-radius: 20px;
     padding: 40px;
@@ -93,19 +91,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 /* Blur the background when the left-box is expanded */
 .blur-background .right-grid,
-.blur-background .header{
-    filter: blur(5px); /* Blurs the background */
-    pointer-events: none; /* Prevent interaction with background elements */
+.blur-background .header {
+    filter: blur(5px);
+    pointer-events: none;
     transition: filter 0.3s ease;
 }
 
-/* Add additional padding for content when expanded */
 .left-box.expanded .task-list {
     padding: 20px;
 }
 
-
-/* Left Box */
 .left-box {
     flex: 1;
     background: radial-gradient(123.37% 145% at 29.41% 3.92%, #8338EC 49.11%, #BFA1E9 96.5%);
@@ -121,6 +116,37 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     transition: all 0.3s ease;
 }
 
+/* Task Switching Animations */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateX(10%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-10%);
+    }
+}
+
+.switching {
+    animation: fadeOut 0.3s forwards;
+}
+
+.switching-new {
+    animation: fadeIn 0.3s forwards;
+}
+
 .left-box h2 {
     margin-bottom: 5px;
 }
@@ -131,20 +157,19 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     list-style: disc;
 }
 
-
 /* Right Grid */
 .right-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Three equal-width columns */
-    grid-template-rows: auto auto; /* Two rows with heights based on content */
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto auto;
     gap: 50px;
-    white-space: nowrap; /* Prevent wrapping */
-    padding-bottom: 10px; /* Add padding for better scrolling experience */
+    white-space: nowrap;
+    padding-bottom: 10px;
     padding-right: 10px;
 }
 
 .no-scrollbar::-webkit-scrollbar {
-    display: none; /* Hide scrollbar */
+    display: none;
 }
 
 /* Grid Boxes */
@@ -164,7 +189,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     list-style: disc;
     margin: 0;
 }
-
 
 /* Header Styling */
 .header {
@@ -215,7 +239,6 @@ li {
 
 .sub-list {
     color: #000;
-    /* font-family: Inter; */
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
@@ -233,10 +256,10 @@ li {
 
 .gradient-border {
     position: relative;
-    border-radius: 45px; /* Rounded corners */
-    padding: 10px; /* Space between the content and border */
-    background: white; /* Background of the content */
-    z-index: 1; /* Ensure the content appears above the border */
+    border-radius: 45px;
+    padding: 10px;
+    background: white;
+    z-index: 1;
 }
 
 .gradient-border::before {
@@ -246,16 +269,66 @@ li {
     left: 0;
     right: 0;
     bottom: 0;
-    border-radius: 45px; /* Same border-radius as the parent */
-    padding: 10px; /* Adjust for your content alignment */
-    background: linear-gradient(
-        90deg,
-        #8338EC 0%,
-        #AE7DF1 25%,
-        #DECBF8 50%,
-        #985BEF 100%
-    );
-    -webkit-mask: linear-gradient(white 0%, white 100%); /* Fix for transparent areas */
+    border-radius: 45px;
+    padding: 10px;
+    background: linear-gradient(90deg, #8338EC 0%, #AE7DF1 25%, #DECBF8 50%, #985BEF 100%);
+    -webkit-mask: linear-gradient(white 0%, white 100%);
     mask: linear-gradient(white 0%, white 100%);
-    z-index: -1; /* Place gradient behind the content */
+    z-index: -1;
+}
+
+.new-task-button {
+    width: 123px;
+    position: relative;
+    height: 35px;
+    text-align: left;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.new-task-button-inner {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0%;
+    right: 0%;
+    bottom: 0%;
+    left: 0%;
+}
+
+.frame-child {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border-radius: 45px;
+    background-color: #fcfcfc;
+    border: 3px solid #fff;
+    box-sizing: border-box;
+    width: 123px;
+    height: 35px;
+}
+
+.new-task {
+    position: absolute;
+    top: 17.14%;
+    left: 28.46%;
+    font-weight: 500;
+    background: linear-gradient(93.15deg, #8338ec, #bfa1e9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.plus-icon {
+    position: absolute;
+    height: 45.712%;
+    width: 13.008%;
+    top: 22.86%;
+    right: 74.8%;
+    bottom: 10%;
+    left: 10%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
 }

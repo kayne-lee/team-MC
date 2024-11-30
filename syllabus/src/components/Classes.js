@@ -185,7 +185,7 @@ const Classes = () => {
                                     />
                                     <div className="flex flex-row w-full ml-[15px] justify-between">
                                     <div className="flex flex-col">
-                                        <div className={`text-[#333] font-bold text-[15.732px] leading-normal ${inputColor}`}>
+                                        <div className={`text-[#333] font-bold text-[15.732px] max-w-[120px] leading-normal ${inputColor}`}>
                                         {assignment.title}
                                         </div>
                                         <div className="flex flex-row justify-between text-[#8B898D] font-poppins font-bold text-[12.275px] leading-normal w-[107px]">

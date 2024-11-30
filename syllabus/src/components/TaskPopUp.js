@@ -5,7 +5,7 @@ const TaskPopup = ({ onSave }) => {
     const [title, setTitle] = useState("Add Title");
     const [description, setDescription] = useState("");
     const [time, setTime] = useState("2:00 PM");
-    const [date, setDate] = useState("2024-11-09");
+    const [currentDate, setCurrentDate] = useState(new Date());
 
     // Close the popup if the backdrop (outside the content) is clicked
     const handleBackdropClick = (e) => {
@@ -14,25 +14,32 @@ const TaskPopup = ({ onSave }) => {
         }
     };
 
-    const handleSave = async () => {
+    const handleDateClick = (day) => {
+        const selectedDate = new Date(day);
+        selectedDate.setHours(0, 0, 0, 0);
+        selectedDate.setDate(selectedDate.getDate() + 1); 
+        setCurrentDate(selectedDate);
+      };
+
+      const handleSave = async () => {
         try {
             const response = await fetch("YOUR_BACKEND_ENDPOINT", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ title, description, time, date }),  // Include date in the request
+                body: JSON.stringify({ title, description, time, date: currentDate.toISOString() }),  // Use currentDate instead of date
             });
-
+    
             if (!response.ok) throw new Error("Failed to save task");
             console.log("Task saved successfully!");
-
+    
             onSave();
         } catch (error) {
             console.error(error);
             alert("Error saving task. Please try again.");
         }
-    };
+    };    
 
     return (
         <div className="popup" onClick={handleBackdropClick}>
@@ -49,8 +56,12 @@ const TaskPopup = ({ onSave }) => {
                         <input
                             type="date"
                             className="popup-pill"
-                            value={date}
-                            onChange={(e) => setDate(e.target.value)} // Update date state
+                            value={currentDate.toISOString().split('T')[0]}
+                            onClick={(e) => e.stopPropagation()} // Update date state
+                            onChange={(e) => {
+                                e.stopPropagation(); // Ensure change event doesn’t propagate
+                                handleDateClick(e.target.value); // Handle the date change
+                            }}                        
                         />
                         <input
                             type="time"

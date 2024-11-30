@@ -32,6 +32,7 @@ export default function Login() {
                 // Read the response body as text
                 return response.text().then((text) => {
                 if (!response.ok) {
+                    console.log(response);
                     setMessage(text);
                     
                 } else {
@@ -48,6 +49,43 @@ export default function Login() {
                 console.error("Error:", error.message); // Log the error message from the server
             });
       };
+
+      const handleSignup = async (e) => {
+        e.preventDefault(); 
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+    
+        const raw = JSON.stringify({
+            email: email,
+            password: password,
+        });
+    
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow",
+        };
+    
+        try {
+            // TODO idk something wrong w endpoint maybe?
+            // error 400 when existing email, error 403 otherwise
+            const response = await fetch("http://35.183.132.114:8080/auth/signup", requestOptions);
+            const text = await response.text();
+    
+            if (!response.ok) {
+                console.log("Response error:", response.status, response.statusText);
+                setMessage(text);
+            } else {
+                setMessage("Signup successful! Please log in."); 
+                navigate("/login"); 
+            }
+        } catch (error) {
+            setMessage("Network error, please try again later");
+            console.error("Error:", error.message);
+        }
+    };
+    
     
   return (
     <div className="h-screen flex">
@@ -105,14 +143,29 @@ export default function Login() {
                     There was a problem with the user details entered.  Please try again
                 </div>
             )}
-            <div
-                onClick={handleLogin}
-                className="w-full h-[45px] signin flex justify-center items-center rounded-[50px] mt-[29px] hover:bg-[#DECBF8] cursor-pointer"
-            >
-                <div className="text-[#F3F3F3] font-poppins text-[16px] font-bold leading-none">
-                SIGN IN
+            <div className="flex flex-row gap-10">
+                <div
+                    onClick={handleLogin}
+                    className="w-full h-[45px] signin flex justify-center items-center rounded-[50px] mt-[29px] hover:bg-[#DECBF8] cursor-pointer"
+                >
+                    <div className="text-[#F3F3F3] font-poppins text-[16px] font-bold leading-none">
+                    LOG IN
+                    </div>
+                    
                 </div>
+                <div
+                    onClick={handleSignup}
+                    className="w-full h-[45px] signin flex justify-center items-center rounded-[50px] mt-[29px] hover:bg-[#DECBF8] cursor-pointer"
+                >
+                    <div className="text-[#F3F3F3] font-poppins text-[16px] font-bold leading-none">
+                    SIGN UP
+                    </div>
             </div>
+
+
+            </div>
+            
+
             <div className="mt-[45px] flex flex-row gap-[24px] items-center text-[#F3F3F3]">
                 <div className="w-[189px] h-[1px] bg-white " />
                 <div>or sign in with</div>

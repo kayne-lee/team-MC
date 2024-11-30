@@ -153,13 +153,20 @@ const TasksPage = () => {
                                 <h3 className="date-header mb-[7px]">{formatDisplayDate(day)}</h3>
                                 <div className="w-[320px] h-[1px] bg-black"></div>
                             </div>
-                            <ul className="sub-list">
+                            <div className="h-[300px] overflow-y-scroll sub-list flex flex-col gap-[15px]"> {/* Main container */}
                                 {(assignmentsByDate[formatDateKey(day)] || []).map((assignment, idx) => (
-                                    <li key={idx} className="flex items-center before:content-[''] before:w-1.5 before:h-1.5 before:mr-3 before:bg-black before:rounded-full">
-                                        <strong>{assignment.title}</strong> - {assignment.course} ({assignment.weight})
-                                    </li>
+                                    <div 
+                                        key={idx} 
+                                        className="flex flex-wrap flex-row"
+                                    >
+                                        <div className="w-[7px] h-[7px] rounded-full bg-black mt-[6px]"></div>
+                                        <div className="flex flex-wrap  max-w-[260px] break-words ml-[7px]">
+                                            <strong>{assignment.title}</strong> - {assignment.course} ({assignment.weight})
+                                        </div>
+                                        
+                                    </div>
                                 ))}
-                            </ul>
+                            </div>
                         </div>
                     ))}
                 </div>

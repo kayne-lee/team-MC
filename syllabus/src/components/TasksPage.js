@@ -1,4 +1,5 @@
 import '../styles/tasksPage.css';
+import '../styles/tasksPopup.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import TaskPopup from './TaskPopUp';

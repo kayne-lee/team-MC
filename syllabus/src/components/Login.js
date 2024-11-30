@@ -6,8 +6,8 @@ import Google from "../assets/google_button.png"
 import { motion } from "framer-motion";
 
 export default function Login() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('john.doe1@gmail.com');
+    const [password, setPassword] = useState('password123');
     const [message, setMessage] = useState('');
     const navigate = useNavigate()
 
@@ -106,6 +106,7 @@ export default function Login() {
                 </div>
                 <input
                 type="email"
+                defaultValue="john.doe1@gmail.com"
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full h-[40px] rounded-[25px] pb-[5px] px-[23px] bg-[#F3F3F3] text-[#333] focus:outline-none"
                 />
@@ -117,6 +118,7 @@ export default function Login() {
                 </div>
                 <input
                 type="password"
+                defaultValue="password123"
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full h-[40px] rounded-[25px] pb-[5px] px-[23px] bg-[#F3F3F3] text-[#333] focus:outline-none"
                 />
@@ -153,14 +155,15 @@ export default function Login() {
                     </div>
                     
                 </div>
-                <div
+                {/* <div
+                    hidden = {true}
                     onClick={handleSignup}
                     className="w-full h-[45px] signin flex justify-center items-center rounded-[50px] mt-[29px] hover:bg-[#DECBF8] cursor-pointer"
                 >
                     <div className="text-[#F3F3F3] font-poppins text-[16px] font-bold leading-none">
                     SIGN UP
                     </div>
-            </div>
+            </div> */}
 
 
             </div>

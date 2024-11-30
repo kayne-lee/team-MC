@@ -11,6 +11,7 @@ const TasksPage = () => {
     const [upcomingDays, setUpcomingDays] = useState([]);
     const [assignmentsByDate, setAssignmentsByDate] = useState({});
     const [showPopup, setShowPopup] = useState(false);
+    const [randomTaskAdded, setRandomTaskAdded] = useState({});
     const togglePopup = () => setShowPopup(!showPopup);
 
     // Format a date as YYYY-MM-DD (to match the API data)
@@ -78,7 +79,7 @@ const TasksPage = () => {
                     acc[assignment.dueDate].push(assignment);
                     return acc;
                 }, {});
-
+                console.log("GROUPED ASSIGNMENTS!:", groupedAssignments)
                 setAssignmentsByDate(groupedAssignments);
             } catch (error) {
                 console.error('Error fetching assignments:', error);
@@ -87,6 +88,36 @@ const TasksPage = () => {
 
         fetchAssignments();
     }, []);
+
+    const handleSave = (data) => {
+        console.log("POPUPDATA", data)
+        const date = data["dueDate"].split("T")[0];
+        var tempAssignments = assignmentsByDate;
+        console.log(tempAssignments[date]);
+        if (date in tempAssignments){
+            tempAssignments[date].push({
+                "course":"Extra Task",
+                "dueDate":date,
+                "title":data["title"],
+                "weight":""
+            })
+        } else{
+            tempAssignments[date] = [{
+                "course":"Extra Task",
+                "dueDate":date,
+                "title":data["title"],
+                "weight":""
+            }]
+        }
+
+            
+        console.log(tempAssignments)
+        console.log(date);
+        setRandomTaskAdded(data); // Update the state with the data from the popup
+        setAssignmentsByDate(tempAssignments);
+        setShowPopup(false); // Close the popup
+
+    };
 
     const handleExpand = (event) => {
         event.stopPropagation(); // Prevent event from propagating to the parent
@@ -177,16 +208,15 @@ const TasksPage = () => {
                             </div>
                             <div className="sub-list flex flex-col gap-[15px]"> {/* Main container */}
                                 {(assignmentsByDate[formatDateKey(day)] || []).map((assignment, idx) => (
-                                    <div 
-                                        key={idx} 
-                                        className="flex flex-row"
-                                    >
-                                        <div className="w-[5px] h-[5px] bg-black rounded-full mt-[7px]"/>
-                                        <div className="ml-[5px] flex flex-wrap items-center max-w-[260px] break-words">
-                                            <strong>{assignment.title}</strong>&nbsp;- {assignment.course} ({assignment.weight})
-                                        </div>
-                                        
-                                    </div>
+                                    <li key={idx} className="flex items-center before:content-[''] before:w-1.5 before:h-1.5 before:mr-3 before:bg-black before:rounded-full">
+                                        {assignment.course === "Extra Task" ? (
+                                        <strong>{assignment.title}</strong>
+                                        ) : (
+                                        <>
+                                            <strong>{assignment.title}</strong> - {assignment.course} ({assignment.weight})
+                                        </>
+                                        )}
+                                    </li>
                                 ))}
                             </div>
 
@@ -196,7 +226,7 @@ const TasksPage = () => {
                 </div>
             </div>
 
-            {showPopup && <TaskPopup onSave={() => setShowPopup(false)} />}
+            {showPopup && <TaskPopup onSave={handleSave} />}
 
         </div>
     );

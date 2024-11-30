@@ -10,7 +10,7 @@ label {
     display: block;
     width: 40px;
     height: 40px;
-    background: url('../assets/Calendar.png') no-repeat;
+    /* background: url('../assets/Calendar.png') no-repeat; */
     background-size: contain;
 }
 

@@ -106,7 +106,7 @@ const TasksPage = () => {
                 <h1 className="header">Upcoming Tasks</h1>
 
                 <div id="date-picker-wrapper" style={{ position: 'relative' }}>
-                    <div className={`calendar-icon-container ${isExpanded ? 'blur-background' : ''}`}>
+                    {/* <div className={`calendar-icon-container ${isExpanded ? 'blur-background' : ''}`}>
                         <label htmlFor="date-picker" tabIndex="0"></label>
                     </div>
                     <input
@@ -119,7 +119,19 @@ const TasksPage = () => {
                             e.stopPropagation(); // Ensure change event doesn’t propagate
                             handleDateClick(e.target.value); // Handle the date change
                         }}
-                    />
+                    /> */}
+                     <div className="popup-row">
+                        <input
+                            type="date"
+                            className="popup-pill"
+                            value={currentDate.toISOString().split('T')[0]}
+                            onClick={(e) => e.stopPropagation()} // Update date state
+                            onChange={(e) => {
+                                e.stopPropagation(); // Ensure change event doesn’t propagate
+                                handleDateClick(e.target.value); // Handle the date change
+                            }}                        
+                        />
+                    </div>
                 </div>
 
                 {/* Add Task Button */}

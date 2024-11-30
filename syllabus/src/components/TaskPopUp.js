@@ -25,7 +25,11 @@ const TaskPopup = ({ onSave }) => {
                 "description": description
               })
 
-            onSave(); // Close the popup
+            onSave({
+                "title": title,
+                "dueDate": dateTime,
+                "description": description
+              }); // Close the popup
         } catch (error) {
             console.error(error);
             alert("Error saving task. Please try again.");

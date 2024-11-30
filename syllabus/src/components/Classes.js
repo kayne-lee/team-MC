@@ -44,10 +44,10 @@ const Classes = () => {
         const requestOptions = {
             method: "GET",
             headers: myHeaders,
-            redirect: "follow"
+            redirect: "follow",
         };
 
-        fetch("http://35.183.132.114:8080/api/data/allCourses", requestOptions)
+        fetch("https://api.nucleusapp.ca:8443/api/data/allCourses", requestOptions)
             .then((response) => response.json()) // Parse the response as JSON
             .then((res) => {
                 // Mapping the response to match the desired structure

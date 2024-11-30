@@ -1,12 +1,16 @@
 import '../styles/tasksPage.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import TaskPopup from './TaskPopUp';
+import plusIcon from '../assets/plus.png';
 
 const TasksPage = () => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [currentDate, setCurrentDate] = useState(new Date());
     const [upcomingDays, setUpcomingDays] = useState([]);
     const [assignmentsByDate, setAssignmentsByDate] = useState({});
+    const [showPopup, setShowPopup] = useState(false);
+    const togglePopup = () => setShowPopup(!showPopup);
 
     // Format a date as YYYY-MM-DD (to match the API data)
     const formatDateKey = (date) => date.toISOString().split('T')[0];
@@ -117,6 +121,21 @@ const TasksPage = () => {
                         }}
                     />
                 </div>
+
+                {/* Add Task Button */}
+                <button
+                className="new-task-button"
+                onClick={togglePopup}
+                >
+                <div class="new-task-button">
+                    <div class="new-task-button-inner">
+                        <div class="frame-child">
+                        </div>
+                    </div>
+                    <div class="new-task">New Task</div>
+                    <img class="plus-icon" alt="" src={plusIcon}/>
+                </div>
+                </button>
             </div>
             
             {/* Layout Container */}
@@ -157,6 +176,9 @@ const TasksPage = () => {
                     ))}
                 </div>
             </div>
+
+            {showPopup && <TaskPopup onSave={() => setShowPopup(false)} />}
+
         </div>
     );
 };

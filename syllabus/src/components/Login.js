@@ -6,8 +6,8 @@ import Google from "../assets/google_button.png"
 import { motion } from "framer-motion";
 
 export default function Login() {
-    const [email, setEmail] = useState('john.doe1@gmail.com');
-    const [password, setPassword] = useState('password123');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
     const navigate = useNavigate()
 

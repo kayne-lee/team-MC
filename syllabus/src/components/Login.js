@@ -106,7 +106,7 @@ export default function Login() {
                 </div>
                 <input
                 type="email"
-                defaultValue="john.doe1@gmail.com"
+                defaultValue=""
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full h-[40px] rounded-[25px] pb-[5px] px-[23px] bg-[#F3F3F3] text-[#333] focus:outline-none"
                 />
@@ -118,7 +118,7 @@ export default function Login() {
                 </div>
                 <input
                 type="password"
-                defaultValue="password123"
+                defaultValue=""
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full h-[40px] rounded-[25px] pb-[5px] px-[23px] bg-[#F3F3F3] text-[#333] focus:outline-none"
                 />

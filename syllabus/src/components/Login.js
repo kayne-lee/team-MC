@@ -27,7 +27,7 @@ export default function Login() {
         body: raw,
         redirect: "follow"
         };
-        fetch("https://api.nucleusapp.ca:8443/auth/login", requestOptions)
+        fetch("http://localhost:8080/auth/login", requestOptions)
             .then((response) => {
                 // Read the response body as text
                 return response.text().then((text) => {

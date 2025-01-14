@@ -16,7 +16,7 @@ function MongoService() {
                         redirect: "follow"
                     };
                     
-                    fetch("https://api.nucleusapp.ca:8443/api/data/addRandomTask", requestOptions)
+                    fetch("http://localhost:8080/api/data/addRandomTask", requestOptions)
                     .then((response) => {
                     if (!response.ok) {
                         // Handle HTTP errors

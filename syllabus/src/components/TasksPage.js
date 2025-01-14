@@ -1,7 +1,7 @@
 import '../styles/tasksPage.css';
 import '../styles/tasksPopup.css';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios, { all } from 'axios';
 import TaskPopup from './TaskPopUp';
 import plusIcon from '../assets/plus.png';
 
@@ -51,29 +51,57 @@ const TasksPage = () => {
                 const token = localStorage.getItem('jwt');
                 if (!token) throw new Error('No token found.');
 
-                const response = await axios.get('https://api.nucleusapp.ca:8443/api/data/courses', {
+                const response = await axios.get('http://localhost:8080/api/data/courses', {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-
-                // Flatten assignments and group by due date
-                const allAssignments = response.data.flatMap((userCourse) =>
-                    userCourse.courses.flatMap((course) =>
-                        course.assignments.map((assignment) => {
-                            const dueDate = new Date(assignment.dueDate);
+                console.log("RES",response.data[0])
+                var randomTasks = []
+                var allAssignments = []
+                if (response.data[0].randomTasks) {
+                
+                    var randomTasks = response.data.flatMap((userTask =>
+                        userTask.randomTasks.flatMap((task) => {
+                      
+                            const dueDate = new Date(task.dueDate);
     
                             // Adjust the date if it's off by a timezone or other issue
                             dueDate.setDate(dueDate.getDate() - 1); // Subtract 1 day
     
                             return {
-                                title: assignment.title,
-                                course: course.title,
-                                weight: assignment.weight,
+                                title: task.title,
+                                description: task.description,
                                 dueDate: formatDateKey(dueDate),
+                                course:"Extra Task"
                             };
+                            
                         })
-                    )
-                );
-
+                    ));
+                }
+         
+                // Flatten assignments and group by due date
+                if (response.data[0].courses != null) {
+                    
+                    var allAssignments = response.data.flatMap((userCourse) =>
+                        userCourse.courses.flatMap((course) =>
+                            course.assignments.map((assignment) => {
+                                const dueDate = new Date(assignment.dueDate);
+        
+                                // Adjust the date if it's off by a timezone or other issue
+                                dueDate.setDate(dueDate.getDate() - 1); // Subtract 1 day
+        
+                                return {
+                                    title: assignment.title,
+                                    course: course.title,
+                                    weight: assignment.weight,
+                                    dueDate: formatDateKey(dueDate),
+                                };
+                            })
+                        )
+                    );
+                }
+            
+                 allAssignments = [ ...randomTasks, ...allAssignments ];
+               
                 const groupedAssignments = allAssignments.reduce((acc, assignment) => {
                     if (!acc[assignment.dueDate]) acc[assignment.dueDate] = [];
                     acc[assignment.dueDate].push(assignment);
@@ -85,38 +113,41 @@ const TasksPage = () => {
                 console.error('Error fetching assignments:', error);
             }
         };
-
-        fetchAssignments();
+        if (Object.keys(assignmentsByDate).length == 0){
+            fetchAssignments();
+        }
+      
     }, []);
 
     const handleSave = (data) => {
-        console.log("POPUPDATA", data)
-        const date = data["dueDate"].split("T")[0];
-        var tempAssignments = assignmentsByDate;
-        console.log(tempAssignments[date]);
-        if (date in tempAssignments){
-            tempAssignments[date].push({
-                "course":"Extra Task",
-                "dueDate":date,
-                "title":data["title"],
-                "weight":""
-            })
-        } else{
-            tempAssignments[date] = [{
-                "course":"Extra Task",
-                "dueDate":date,
-                "title":data["title"],
-                "weight":""
-            }]
-        }
-
+       
+        if (data["dueDate"]) {
+            const date = data["dueDate"].split("T")[0];
+            var tempAssignments = assignmentsByDate;
             
-        console.log(tempAssignments)
-        console.log(date);
-        setRandomTaskAdded(data); // Update the state with the data from the popup
-        setAssignmentsByDate(tempAssignments);
-        setShowPopup(false); // Close the popup
+            if (date in tempAssignments){
+                tempAssignments[date].push({
+                    "course":"Extra Task",
+                    "dueDate":date,
+                    "title":data["title"],
+                    "weight":""
+                })
+            } else{
+                tempAssignments[date] = [{
+                    "course":"Extra Task",
+                    "dueDate":date,
+                    "title":data["title"],
+                    "weight":""
+                }]
+            }
 
+                
+         
+            setRandomTaskAdded(data); // Update the state with the data from the popup
+            setAssignmentsByDate(tempAssignments);
+ 
+        }
+        setShowPopup(false); // Close the popup
     };
 
     const handleExpand = (event) => {
@@ -191,7 +222,13 @@ const TasksPage = () => {
                         <ul className="main-list list-none">
                             {(assignmentsByDate[formatDateKey(currentDate)] || []).map((assignment, index) => (
                                 <li key={index} className="flex items-center before:content-[''] before:w-2.5 before:h-2.5 before:mr-3 before:bg-white before:rounded-full">
-                                    <strong>{assignment.title}</strong> - {assignment.course} ({assignment.weight})
+                                    {assignment.course === "Extra Task" ? (
+                                        <strong>{assignment.title}</strong>
+                                        ) : (
+                                        <>
+                                            <strong>{assignment.title}</strong> - {assignment.course} ({assignment.weight})
+                                        </>
+                                        )}
                                 </li>
                             ))}
                         </ul>

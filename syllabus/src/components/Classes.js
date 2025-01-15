@@ -47,7 +47,7 @@ const Classes = () => {
             redirect: "follow",
         };
 
-        fetch("https://api.nucleusapp.ca:8443/api/data/allCourses", requestOptions)
+        fetch("https://api.nucleusapp.ca/api/data/allCourses", requestOptions)
             .then((response) => response.json()) // Parse the response as JSON
             .then((res) => {
                 // Mapping the response to match the desired structure

@@ -51,7 +51,7 @@ const TasksPage = () => {
                 const token = localStorage.getItem('jwt');
                 if (!token) throw new Error('No token found.');
 
-                const response = await axios.get('https://api.nucleusapp.ca:8443/api/data/courses', {
+                const response = await axios.get('https://api.nucleusapp.ca/api/data/courses', {
                     headers: { Authorization: `Bearer ${token}` },
                 });
 

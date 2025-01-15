@@ -16,7 +16,7 @@ function MongoService() {
                         redirect: "follow"
                     };
                     
-                    fetch("https://api.nucleusapp.ca:8443/api/data/addRandomTask", requestOptions)
+                    fetch("https://api.nucleusapp.ca/api/data/addRandomTask", requestOptions)
                     .then((response) => {
                     if (!response.ok) {
                         // Handle HTTP errors
@@ -52,7 +52,7 @@ function MongoService() {
                         redirect: "follow"
                     };
                     
-                    fetch("https://api.nucleusapp.ca:8443/api/data/saveCourse", requestOptions)
+                    fetch("https://api.nucleusapp.ca/api/data/saveCourse", requestOptions)
                     .then((response) => {
                     if (!response.ok) {
                         // Handle HTTP errors

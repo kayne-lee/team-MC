@@ -22,11 +22,8 @@ COPY --from=build /app/target/be-0.0.1-SNAPSHOT.jar app.jar
 # Copy the keystore file into the container (make sure keystore.p12 is in the same directory as Dockerfile)
 COPY keystore.p12 /app/keystore.p12
 
-# # Expose port 8443 for the SSL application
-# EXPOSE 8443
-
 # Expose port 8443 for the SSL application
 EXPOSE 8080
 
-# Command to run the JAR file (Java application with SSL enabled)
-CMD ["java", "-Dserver.ssl.key-store=/app/keystore.p12", "-Dserver.ssl.key-store-password=9621", "-Dserver.ssl.key-store-type=PKCS12", "-jar", "app.jar"]
+# Command to run the application
+ENTRYPOINT ["java", "-jar", "app.jar"]

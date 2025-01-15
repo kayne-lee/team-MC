@@ -18,7 +18,7 @@ function OpenAIService() {
                         redirect: "follow"
                     };
                     
-                    fetch("https://api.nucleusapp.ca:8443/api/data/openai", requestOptions)
+                    fetch("https://api.nucleusapp.ca/api/data/openai", requestOptions)
                     .then((response) => {
                     if (!response.ok) {
                         // Handle HTTP errors
@@ -55,7 +55,7 @@ function OpenAIService() {
             redirect: "follow"
             };
 
-            fetch("https://api.nucleusapp.ca:8443/api/data/allCourses", requestOptions)
+            fetch("https://api.nucleusapp.ca/api/data/allCourses", requestOptions)
             .then((response) => response.text())
             .catch((error) => console.error(error));
                     }

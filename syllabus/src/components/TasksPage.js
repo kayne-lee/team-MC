@@ -1,7 +1,7 @@
 import '../styles/tasksPage.css';
 import '../styles/tasksPopup.css';
 import { useState, useEffect } from 'react';
-import axios, { all } from 'axios';
+import axios from 'axios';
 import TaskPopup from './TaskPopUp';
 import plusIcon from '../assets/plus.png';
 
@@ -11,7 +11,6 @@ const TasksPage = () => {
     const [upcomingDays, setUpcomingDays] = useState([]);
     const [assignmentsByDate, setAssignmentsByDate] = useState({});
     const [showPopup, setShowPopup] = useState(false);
-    const [randomTaskAdded, setRandomTaskAdded] = useState({});
     const togglePopup = () => setShowPopup(!showPopup);
 
     // Format a date as YYYY-MM-DD (to match the API data)
@@ -51,103 +50,72 @@ const TasksPage = () => {
                 const token = localStorage.getItem('jwt');
                 if (!token) throw new Error('No token found.');
 
-                const response = await axios.get('http://localhost:8080/api/data/courses', {
+                const response = await axios.get('https://api.nucleusapp.ca:8443/api/data/courses', {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-                console.log("RES",response.data[0])
-                var randomTasks = []
-                var allAssignments = []
-                if (response.data[0].randomTasks) {
-                
-                    var randomTasks = response.data.flatMap((userTask =>
-                        userTask.randomTasks.flatMap((task) => {
-                      
-                            const dueDate = new Date(task.dueDate);
+
+                // Flatten assignments and group by due date
+                const allAssignments = response.data.flatMap((userCourse) =>
+                    userCourse.courses.flatMap((course) =>
+                        course.assignments.map((assignment) => {
+                            const dueDate = new Date(assignment.dueDate);
     
                             // Adjust the date if it's off by a timezone or other issue
                             dueDate.setDate(dueDate.getDate() - 1); // Subtract 1 day
     
                             return {
-                                title: task.title,
-                                description: task.description,
+                                title: assignment.title,
+                                course: course.title,
+                                weight: assignment.weight,
                                 dueDate: formatDateKey(dueDate),
-                                course:"Extra Task"
                             };
-                            
                         })
-                    ));
-                }
-         
-                // Flatten assignments and group by due date
-                if (response.data[0].courses != null) {
-                    
-                    var allAssignments = response.data.flatMap((userCourse) =>
-                        userCourse.courses.flatMap((course) =>
-                            course.assignments.map((assignment) => {
-                                const dueDate = new Date(assignment.dueDate);
-        
-                                // Adjust the date if it's off by a timezone or other issue
-                                dueDate.setDate(dueDate.getDate() - 1); // Subtract 1 day
-        
-                                return {
-                                    title: assignment.title,
-                                    course: course.title,
-                                    weight: assignment.weight,
-                                    dueDate: formatDateKey(dueDate),
-                                };
-                            })
-                        )
-                    );
-                }
-            
-                 allAssignments = [ ...randomTasks, ...allAssignments ];
-               
+                    )
+                );
+
                 const groupedAssignments = allAssignments.reduce((acc, assignment) => {
                     if (!acc[assignment.dueDate]) acc[assignment.dueDate] = [];
                     acc[assignment.dueDate].push(assignment);
                     return acc;
                 }, {});
-                console.log("GROUPED ASSIGNMENTS!:", groupedAssignments)
+
                 setAssignmentsByDate(groupedAssignments);
             } catch (error) {
                 console.error('Error fetching assignments:', error);
             }
         };
-        if (Object.keys(assignmentsByDate).length == 0){
-            fetchAssignments();
-        }
-      
+
+        fetchAssignments();
     }, []);
 
     const handleSave = (data) => {
-       
-        if (data["dueDate"]) {
-            const date = data["dueDate"].split("T")[0];
-            var tempAssignments = assignmentsByDate;
-            
-            if (date in tempAssignments){
-                tempAssignments[date].push({
-                    "course":"Extra Task",
-                    "dueDate":date,
-                    "title":data["title"],
-                    "weight":""
-                })
-            } else{
-                tempAssignments[date] = [{
-                    "course":"Extra Task",
-                    "dueDate":date,
-                    "title":data["title"],
-                    "weight":""
-                }]
-            }
-
-                
-         
-            setRandomTaskAdded(data); // Update the state with the data from the popup
-            setAssignmentsByDate(tempAssignments);
- 
+        console.log("POPUPDATA", data)
+        const date = data["dueDate"].split("T")[0];
+        var tempAssignments = assignmentsByDate;
+        console.log(tempAssignments[date]);
+        if (date in tempAssignments){
+            tempAssignments[date].push({
+                "course":"Extra Task",
+                "dueDate":date,
+                "title":data["title"],
+                "weight":""
+            })
+        } else{
+            tempAssignments[date] = [{
+                "course":"Extra Task",
+                "dueDate":date,
+                "title":data["title"],
+                "weight":""
+            }]
         }
+
+            
+        console.log(tempAssignments)
+        console.log(date);
+        setRandomTaskAdded(data); // Update the state with the data from the popup
+        setAssignmentsByDate(tempAssignments);
         setShowPopup(false); // Close the popup
+
     };
 
     const handleExpand = (event) => {
@@ -172,41 +140,52 @@ const TasksPage = () => {
             }}
         >
             {/* Page Header */}
-            <div className="flex flex-row items-center justify-between gap-[10px] ">
-                <div className="flex flex-row items-center gap-[30px]">
-                    <h1 className="header">Upcoming Tasks</h1>
+            <div className="flex flex-row items-center gap-[10px]">
+                <h1 className="header">Upcoming Tasks</h1>
 
-                    <div id="date-picker-wrapper" style={{ position: 'relative' }}>
-                        <div className="popup-row">
-                            <input
-                                type="date"
-                                className="popup-pill w-[100px]"
-                                value={currentDate.toISOString().split('T')[0]}
-                                onClick={(e) => e.stopPropagation()} // Update date state
-                                onChange={(e) => {
-                                    e.stopPropagation(); // Ensure change event doesn’t propagate
-                                    handleDateClick(e.target.value); // Handle the date change
-                                }}                        
-                            />
-                        </div>
+                <div id="date-picker-wrapper" style={{ position: 'relative' }}>
+                    {/* <div className={`calendar-icon-container ${isExpanded ? 'blur-background' : ''}`}>
+                        <label htmlFor="date-picker" tabIndex="0"></label>
+                    </div>
+                    <input
+                        type="date"
+                        className="form-control"
+                        id="date-picker"
+                        value={currentDate.toISOString().split('T')[0]}
+                        onClick={(e) => e.stopPropagation()} // Prevent the date input click from propagating
+                        onChange={(e) => {
+                            e.stopPropagation(); // Ensure change event doesn’t propagate
+                            handleDateClick(e.target.value); // Handle the date change
+                        }}
+                    /> */}
+                     <div className="popup-row">
+                        <input
+                            type="date"
+                            className="popup-pill"
+                            value={currentDate.toISOString().split('T')[0]}
+                            onClick={(e) => e.stopPropagation()} // Update date state
+                            onChange={(e) => {
+                                e.stopPropagation(); // Ensure change event doesn’t propagate
+                                handleDateClick(e.target.value); // Handle the date change
+                            }}                        
+                        />
                     </div>
                 </div>
 
-
                 {/* Add Task Button */}
-                    <button
-                        className="new-task-button mr-[60px]"
-                        onClick={togglePopup}
-                    >
-                        <div class="new-task-button">
-                            <div class="new-task-button-inner">
-                                <div class="frame-child">
-                                </div>
-                            </div>
-                            <div class="new-task">New Task</div>
-                            <img class="plus-icon" alt="" src={plusIcon}/>
+                <button
+                className="new-task-button"
+                onClick={togglePopup}
+                >
+                <div class="new-task-button">
+                    <div class="new-task-button-inner">
+                        <div class="frame-child">
                         </div>
-                    </button>
+                    </div>
+                    <div class="new-task">New Task</div>
+                    <img class="plus-icon" alt="" src={plusIcon}/>
+                </div>
+                </button>
             </div>
             
             {/* Layout Container */}
@@ -222,13 +201,7 @@ const TasksPage = () => {
                         <ul className="main-list list-none">
                             {(assignmentsByDate[formatDateKey(currentDate)] || []).map((assignment, index) => (
                                 <li key={index} className="flex items-center before:content-[''] before:w-2.5 before:h-2.5 before:mr-3 before:bg-white before:rounded-full">
-                                    {assignment.course === "Extra Task" ? (
-                                        <strong>{assignment.title}</strong>
-                                        ) : (
-                                        <>
-                                            <strong>{assignment.title}</strong> - {assignment.course} ({assignment.weight})
-                                        </>
-                                        )}
+                                    <strong>{assignment.title}</strong> - {assignment.course} ({assignment.weight})
                                 </li>
                             ))}
                         </ul>
@@ -243,27 +216,26 @@ const TasksPage = () => {
                                 <h3 className="date-header mb-[7px]">{formatDisplayDate(day)}</h3>
                                 <div className="w-[320px] h-[1px] bg-black"></div>
                             </div>
-                            <div className="sub-list flex flex-col gap-[15px]"> {/* Main container */}
+                            <ul className="sub-list">
                                 {(assignmentsByDate[formatDateKey(day)] || []).map((assignment, idx) => (
-                                    <li key={idx} className="flex items-center before:content-[''] before:w-1.5 before:h-1.5 before:mr-3 before:bg-black before:rounded-full">
-                                        {assignment.course === "Extra Task" ? (
-                                        <strong>{assignment.title}</strong>
-                                        ) : (
-                                        <>
-                                            <strong>{assignment.title}</strong> - {assignment.course} ({assignment.weight})
-                                        </>
-                                        )}
-                                    </li>
+                                    <div 
+                                        key={idx} 
+                                        className="flex flex-row"
+                                    >
+                                        <div className="w-[5px] h-[5px] bg-black rounded-full mt-[7px]"/>
+                                        <div className="ml-[5px] flex flex-wrap items-center max-w-[260px] break-words">
+                                            <strong>{assignment.title}</strong>&nbsp;- {assignment.course} ({assignment.weight})
+                                        </div>
+                                        
+                                    </div>
                                 ))}
-                            </div>
-
+                            </ul>
                         </div>
-
                     ))}
                 </div>
             </div>
 
-            {showPopup && <TaskPopup onSave={handleSave} />}
+            {showPopup && <TaskPopup onSave={() => setShowPopup(false)} />}
 
         </div>
     );

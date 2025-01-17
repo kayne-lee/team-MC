@@ -36,7 +36,7 @@ export default function Signup() {
                 body: raw,
                 redirect: "follow"
                 };
-                fetch("https://api.nucleusapp.ca:8443/auth/signup", requestOptions)
+                fetch("https://api.nucleusapp.ca/auth/signup", requestOptions)
                     .then((response) => {
                         // Read the response body as text
                         return response.text().then((text) => {
@@ -58,7 +58,7 @@ export default function Signup() {
                             body: raw,
                             redirect: "follow"
                             };
-                            fetch("https://api.nucleusapp.ca:8443/auth/login", requestOptions)
+                            fetch("https://api.nucleusapp.ca/auth/login", requestOptions)
                                 .then((response) => {
                                     // Read the response body as text
                                     return response.text().then((text) => {

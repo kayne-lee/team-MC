@@ -13,6 +13,7 @@ const TasksPage = () => {
     const [showPopup, setShowPopup] = useState(false);
     const [randomTaskAdded, setRandomTaskAdded] = useState({});
     const togglePopup = () => setShowPopup(!showPopup);
+    const apiURL = process.env.REACT_APP_NUCLEUS_API;
 
     // Format a date as YYYY-MM-DD (to match the API data)
     // const formatDateKey = (date) => date.toISOString().split('T')[0];
@@ -58,7 +59,7 @@ const TasksPage = () => {
                 const token = localStorage.getItem('jwt');
                 if (!token) throw new Error('No token found.');
 
-                const response = await axios.get('https://api.nucleusapp.ca/api/data/courses', {
+                const response = await axios.get(`${apiURL}/api/data/courses`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 console.log("RES",response.data[0])

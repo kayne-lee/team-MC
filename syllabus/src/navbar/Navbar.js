@@ -11,6 +11,7 @@ function Navbar({ activeTab, setActiveTab }) {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
+  const apiURL = process.env.REACT_APP_NUCLEUS_API;
 
   // Fetch user data
   useEffect(() => {
@@ -32,7 +33,7 @@ function Navbar({ activeTab, setActiveTab }) {
       };
 
       try {
-        const response = await fetch("https://api.nucleusapp.ca/api/data/user", requestOptions);
+        const response = await fetch(`${apiURL}/api/data/user`, requestOptions);
         if (!response.ok) {
           throw new Error(`Error: ${response.status} - ${response.statusText}`);
         }

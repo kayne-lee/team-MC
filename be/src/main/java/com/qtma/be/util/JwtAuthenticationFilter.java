@@ -2,6 +2,9 @@ package com.qtma.be.util;
 
 import com.qtma.be.model.User;
 import com.qtma.be.service.UserService;
+
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,25 +38,39 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String username = null;
         String jwt = null;
 
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            jwt = authorizationHeader.substring(7); // Remove "Bearer " prefix
-            username = jwtUtil.extractUsername(jwt);
-        }
+        try {
+            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+                jwt = authorizationHeader.substring(7); // Remove "Bearer " prefix
+                username = jwtUtil.extractUsername(jwt); // This might throw an exception
+            }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            Optional<User> userOptional = userService.findByEmail(username);
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                Optional<User> userOptional = userService.findByEmail(username);
 
-            if (userOptional.isPresent()) {
-                User user = userOptional.get();
-                if (jwtUtil.validateToken(jwt, user)) {
-                    UsernamePasswordAuthenticationToken authenticationToken =
-                            new UsernamePasswordAuthenticationToken(user, null);
-                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                if (userOptional.isPresent()) {
+                    User user = userOptional.get();
+                    if (jwtUtil.validateToken(jwt, user)) { // This might throw an exception
+                        UsernamePasswordAuthenticationToken authenticationToken =
+                                new UsernamePasswordAuthenticationToken(user, null);
+                        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                    }
                 }
             }
+        } catch (ExpiredJwtException e) {
+            // Handle expired token
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Token is expired");
+            return; // Stop further processing
+        } 
+        catch (Exception e) {
+            // Catch all other exceptions
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("An error occurred: " + e.getMessage());
+            return; // Stop further processing
         }
 
+        // Continue the filter chain if no errors occur
         filterChain.doFilter(request, response);
     }
 }

@@ -1,4 +1,5 @@
 function OpenAIService() {
+    const apiURL = process.env.REACT_APP_NUCLEUS_API;
     let sv = {
         openAICall(inputText) {
             return new Promise((resolve, reject) => {
@@ -18,7 +19,7 @@ function OpenAIService() {
                         redirect: "follow"
                     };
                     
-                    fetch("https://api.nucleusapp.ca/api/data/openai", requestOptions)
+                    fetch(`${apiURL}/api/data/openai`, requestOptions)
                     .then((response) => {
                     if (!response.ok) {
                         // Handle HTTP errors
@@ -28,7 +29,6 @@ function OpenAIService() {
                     return response.json(); // Use .json() if you expect JSON data
                     })
                     .then((responseText) => {
-                    console.log("Response Text:", responseText);
                     // for (const obj of responseText.assignments) {
                     //     console.log(obj)
                     //     obj.weight = parseFloat(obj.weight.replace('%', ''))
@@ -55,7 +55,7 @@ function OpenAIService() {
             redirect: "follow"
             };
 
-            fetch("https://api.nucleusapp.ca/api/data/allCourses", requestOptions)
+            fetch(`${apiURL}/api/data/allCourses`, requestOptions)
             .then((response) => response.text())
             .catch((error) => console.error(error));
                     }

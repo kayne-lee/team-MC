@@ -12,6 +12,8 @@ const Classes = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [percentages, setPercentages] = useState({});
     const navigate = useNavigate();
+    const apiUrl = process.env.REACT_APP_NUCLEUS_API; // This will get the value from .env file
+
 
     // Handle input change for percentage input
     const handlePercentageChange = (e, assignmentId) => {
@@ -48,7 +50,7 @@ const Classes = () => {
             redirect: "follow",
         };
 
-        fetch("https://api.nucleusapp.ca/api/data/allCourses", requestOptions)
+        fetch(`${apiUrl}/api/data/allCourses`, requestOptions)
             .then((response) => {
                 // Check if the response status is 401 (Unauthorized - token expired)
                 if (response.status === 401) {

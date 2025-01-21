@@ -1,4 +1,5 @@
 function MongoService() {
+    const apiURL = process.env.REACT_APP_NUCLEUS_API;
     let sv = {
         addRandomTask(jsonData) {
             return new Promise((resolve, reject) => {
@@ -16,7 +17,7 @@ function MongoService() {
                         redirect: "follow"
                     };
                     
-                    fetch("https://api.nucleusapp.ca/api/data/addRandomTask", requestOptions)
+                    fetch(`${apiURL}/api/data/addRandomTask`, requestOptions)
                     .then((response) => {
                     if (!response.ok) {
                         // Handle HTTP errors
@@ -52,7 +53,7 @@ function MongoService() {
                         redirect: "follow"
                     };
                     
-                    fetch("https://api.nucleusapp.ca/api/data/saveCourse", requestOptions)
+                    fetch(`${apiURL}/api/data/saveCourse`, requestOptions)
                     .then((response) => {
                     if (!response.ok) {
                         // Handle HTTP errors

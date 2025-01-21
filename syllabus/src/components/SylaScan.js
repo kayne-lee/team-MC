@@ -40,7 +40,6 @@ export default function SylaScan({ closeModal }) {
       setUploadedSyllabi([...uploadedSyllabi, selectedFile.name]);
       pdfToText(selectedFile)
         .then(text => {
-          console.log(text);
           setInputText(text);
         })
         .catch(error => {
@@ -84,7 +83,6 @@ export default function SylaScan({ closeModal }) {
     });
     setLoading(true);
     const data = await openaiService.openAICall(inputText);
-    console.log(data);
     setJsonData(data);
     setLoading(false);
   }

@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import '../styles/login.css'
 import Error from '../assets/error.png'
-import Google from "../assets/google_button.png"
-import { motion } from "framer-motion";
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
     const navigate = useNavigate()
+    const apiUrl = process.env.REACT_APP_NUCLEUS_API; // This will get the value from .env file
+
 
     const handleLogin = async (e) => {
         e.preventDefault(); 
@@ -27,7 +27,7 @@ export default function Login() {
         body: raw,
         redirect: "follow"
         };
-        fetch("https://api.nucleusapp.ca/auth/login", requestOptions)
+        fetch(`${apiUrl}/auth/login`, requestOptions)
             .then((response) => {
                 // Read the response body as text
                 return response.text().then((text) => {
@@ -40,7 +40,6 @@ export default function Login() {
                     localStorage.setItem("jwt", text);
                     navigate("/");
                 }
-                console.log(text)
                 
                 });
             })

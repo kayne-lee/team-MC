@@ -2,7 +2,7 @@
 FROM maven:3.8.1-openjdk-17-slim AS build
 
 # Set the working directory inside the container
-WORKDIR /app
+WORKDIR /
 
 # Copy your project files into the container
 COPY . .
@@ -13,14 +13,9 @@ RUN mvn clean package -DskipTests
 # Use OpenJDK base image for the final runtime environment
 FROM openjdk:17-jdk-slim
 
-# Set the working directory inside the container
-WORKDIR /app
 
 # Copy the packaged JAR from the build stage
-COPY --from=build /app/target/be-0.0.1-SNAPSHOT.jar app.jar
-
-# Copy the keystore file into the container (make sure keystore.p12 is in the same directory as Dockerfile)
-COPY keystore.p12 /app/keystore.p12
+COPY --from=build /target/be-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose port 8443 for the SSL application
 EXPOSE 8080

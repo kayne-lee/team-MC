@@ -32,7 +32,7 @@ function Navbar({ activeTab, setActiveTab }) {
       };
 
       try {
-        const response = await fetch("https://api.nucleusapp.ca:8443/api/data/user", requestOptions);
+        const response = await fetch("https://api.nucleusapp.ca/api/data/user", requestOptions);
         if (!response.ok) {
           throw new Error(`Error: ${response.status} - ${response.statusText}`);
         }

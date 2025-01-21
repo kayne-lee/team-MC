@@ -11,10 +11,8 @@ const TaskPopup = ({ onSave }) => {
     const mongoService = MongoService();
 
     // Close the popup if the backdrop (outside the content) is clicked
-    const handleBackdropClick = (e) => {
-        if (e.target === e.currentTarget) {
-            onSave(); // Close the popup
-        }
+    const handleCancel = (e) => {
+        onSave({});
     };
 
     const handleSave = async () => {
@@ -39,6 +37,7 @@ const TaskPopup = ({ onSave }) => {
     return (
         <div className="popup">
             <div className="popup-content">
+                
                 <input
                     type="text"
                     className="popup-title"
@@ -84,6 +83,7 @@ const TaskPopup = ({ onSave }) => {
                     ></textarea>
                 </div>
                 <button onClick={handleSave} className="popup-save-btn">Save</button>
+                <button onClick={handleCancel} className="popup-save-btn">Cancel</button>
             </div>
         </div>
     );

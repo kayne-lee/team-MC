@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import OpenAIService from '../services/OpenAIService';
-import { useNavigate } from 'react-router-dom';
 import SylaScan from "./SylaScan";
 import "../styles/classes.css";
 import info from "../assets/info.png"

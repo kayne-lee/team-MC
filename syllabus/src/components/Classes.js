@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import SylaScan from "./SylaScan";
 import "../styles/classes.css";
 import info from "../assets/info.png"
+import { useNavigate } from 'react-router-dom';
 
 const Classes = () => {
     const [selectedCourse, setSelectedCourse] = useState(null);
@@ -11,6 +12,7 @@ const Classes = () => {
     const [checkedAssignments, setCheckedAssignments] = useState({}); // Track checked assignments by course ID
     const [modalVisible, setModalVisible] = useState(false);
     const [percentages, setPercentages] = useState({});
+    const navigate = useNavigate();
 
     // Handle input change for percentage input
     const handlePercentageChange = (e, assignmentId) => {

@@ -48,7 +48,20 @@ const Classes = () => {
         };
 
         fetch("https://api.nucleusapp.ca/api/data/allCourses", requestOptions)
-            .then((response) => response.json()) // Parse the response as JSON
+            .then((response) => {
+                // Check if the response status is 401 (Unauthorized - token expired)
+                if (response.status === 401) {
+                    return response.json().then((data) => {
+                        if (data.message === "Token is expired") {
+                            localStorage.removeItem('jwt'); // or sessionStorage.removeItem('jwtToken');
+
+                            // Navigate to the login page
+                            navigate("/login");
+                        }
+                    });
+                }
+                return response.json(); // If status is not 401, parse as JSON
+            })
             .then((res) => {
                 // Mapping the response to match the desired structure
                 const mappedCourses = res.map((course, index) => ({

@@ -27,6 +27,7 @@ export default function Login() {
         body: raw,
         redirect: "follow"
         };
+        console.log(apiUrl)
         fetch(`${apiUrl}/auth/login`, requestOptions)
             .then((response) => {
                 // Read the response body as text

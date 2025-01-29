@@ -4,6 +4,7 @@ import SylaScan from "./SylaScan";
 import "../styles/classes.css";
 import info from "../assets/info.png"
 import { useNavigate } from 'react-router-dom';
+import GoogleService from "../services/GoogleService";
 
 const Classes = () => {
     const [selectedCourse, setSelectedCourse] = useState(null);
@@ -12,9 +13,32 @@ const Classes = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [percentages, setPercentages] = useState({});
     const navigate = useNavigate();
+    const googleService = GoogleService();
     const apiUrl = process.env.REACT_APP_NUCLEUS_API; // This will get the value from .env file
+    var access_token = localStorage.getItem("access_token");
 
+    useEffect(() => {
+        access_token = localStorage.getItem("access_token");
+      }, []);
 
+    const handleGoogleAuth = () => {
+
+        const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+          `client_id=${process.env.REACT_APP_CLIENT_ID}` +
+          `&redirect_uri=${encodeURIComponent('https://www.nucleusapp.ca/api/auth/callback/google')}` +
+          `&response_type=code` +
+          `&scope=${encodeURIComponent('openid email profile https://www.googleapis.com/auth/calendar')}` +
+          `&access_type=offline`;
+      
+        window.location.href = authUrl;
+    
+      };
+    function convertDate(inputDate) {
+        let [month, day, year] = inputDate.split("/");
+        year = parseInt(year, 10) < 100 ? `20${year}` : year;
+
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    }
     // Handle input change for percentage input
     const handlePercentageChange = (e, assignmentId) => {
       const value = e.target.value;
@@ -84,6 +108,7 @@ const Classes = () => {
                             month: 'numeric',
                             day: 'numeric'
                         }),
+                        description: assignment.description
                     })),
                 }));
 
@@ -108,7 +133,23 @@ const Classes = () => {
             }
         }
     }, [courses, selectedCourse]);
-
+    const uploadToCalendar = async () => {
+        if (!access_token) {
+            handleGoogleAuth()
+        }
+        else {
+            console.log(courses)
+            for (const course of courses) {
+               
+                for (const assignment of course.assignments) {
+            
+                    const calDate = convertDate(assignment.dueDate)
+                    await googleService.createCalendarEvent(calDate, assignment.title, assignment.weight, assignment.description, course.title)
+                }
+            }
+        }
+        
+    }
     const handleCourseSelect = (course) => {
         setSelectedCourse(course);
         if (!checkedAssignments[course.id]) {
@@ -177,9 +218,11 @@ const Classes = () => {
             <div className="main-content">
                 {selectedCourse ? (
                     <div className="course-details-container">
-                        <div className="flex flex-row items-center gap-[10px]">
-                            <div class="text-black font-extrabold text-[35.398px] leading-normal font-inter">{selectedCourse.title}</div>
-                            <img src={info} alt="" className="w-[24px] h-[24px]"/>
+                        <div className="flex flex-row items-center justify-between gap-[10px] w-full">
+                            <div className="flex flex-row items-center gap-[10px]">
+                                <div class="text-black font-extrabold text-[35.398px] leading-normal font-inter">{selectedCourse.title}</div>
+                                <img src={info} alt="" className="w-[24px] h-[24px]"/>
+                            </div>
                         </div>
                         
 
@@ -236,6 +279,8 @@ const Classes = () => {
                         <div>
                             {/* Meeting information Section */}
                             <div className="meeting-information-section">
+                                
+                              
                                 <p>
                                     <strong>Instructor:</strong><br></br> {selectedCourse.instructor}<br></br>{selectedCourse.email}
                                 </p>
@@ -295,6 +340,14 @@ const Classes = () => {
                         <h2>Add a course to see details</h2>
                     </div>
                 )}
+                <div className="flex justify-center mt-4">
+                    <button
+                        onClick={uploadToCalendar}
+                        className="bg-white text-black border border-gray-300 rounded-lg px-6 py-3 shadow-md hover:bg-gray-100 transition duration-200"
+                    >
+                        {access_token ? "Upload to Calendar" : "Connect Google Calendar"}
+                    </button>
+                </div>
             </div>
             {modalVisible && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">

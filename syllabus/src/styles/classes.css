@@ -108,6 +108,7 @@
     flex: 1.5;
     display: flex;
     justify-content: center;
+    flex-direction: column;
     
     align-items: center;
     padding: 20px;

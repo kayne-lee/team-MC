@@ -2,17 +2,29 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import '../styles/login.css'
 import Error from '../assets/error.png'
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import GoogleService from '../services/GoogleService';
+
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
     const navigate = useNavigate()
+    const googleService = GoogleService();
     const apiUrl = process.env.REACT_APP_NUCLEUS_API; // This will get the value from .env file
 
+    const googleResponse = async (res) => {
+        console.log(res)
+        // await googleService.getAuthCode(process.env.REACT_APP_CLIENT_ID, process.env.REACT_APP_CLIENT_SECRET, res.credential)
+    }
+    const errorResponse = async (err) => {
+        console.log(err)
+    }
 
     const handleLogin = async (e) => {
         e.preventDefault(); 
+       
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
@@ -38,6 +50,7 @@ export default function Login() {
                 } else {
                     setMessage('')
                     localStorage.setItem("jwt", text);
+                    localStorage.removeItem('access_token'); // Clean up
                     navigate("/");
                 }
                 
@@ -49,7 +62,7 @@ export default function Login() {
             });
       };
 
-      const handleSignup = async (e) => {
+    const handleSignup = async (e) => {
         e.preventDefault(); 
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -138,6 +151,8 @@ export default function Login() {
                     Forgot Password?
                 </span>
             </div>
+            <br></br>
+            
             {message && (
                 <div className="text-[#FB9393] font-poppins text-[14px] font-bold leading-none flex flex-row items-center justify-center mt-[23px]">
                     <img src={Error} alt="" className="w-[29px] h-[29px] mr-[5px]"/>
@@ -146,14 +161,34 @@ export default function Login() {
             )}
             <div className="flex flex-row gap-10">
                 <div
-                    onClick={handleLogin}
-                    className="w-full h-[45px] signin flex justify-center items-center rounded-[50px] mt-[29px] hover:bg-[#DECBF8] cursor-pointer"
+                    onClick={email.length > 0 && password.length > 0 ? handleLogin : undefined}
+                    style={{
+                        width: "100%",
+                        height: "45px",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        borderRadius: "50px",
+                        marginTop: "9px",
+                        cursor:
+                          !(email.length > 0 && password.length) > 0 ? "not-allowed" : "pointer",
+                        backgroundColor:
+                          !(email.length > 0 && password.length) > 0 ? "gray" : "#ba95ed",
+                        color: !(email.length > 0 && password.length > 0) ? "gray" : "inherit",
+                      }}
+                    
                 >
                     <div className="text-[#F3F3F3] font-poppins text-[16px] font-bold leading-none">
-                    LOG IN
+                    LOGIN
                     </div>
                     
                 </div>
+                </div>
+                {/* <div className="m-[10px] flex flex-row justify-center items-center gap-[24px] text-[#F3F3F3]">
+                    <div className="w-[120px] h-[1px] bg-white" />
+                    <div>OR</div>
+                    <div className="w-[120px] h-[1px] bg-white" /> */}
+
                 {/* <div
                     hidden = {true}
                     onClick={handleSignup}
@@ -163,11 +198,7 @@ export default function Login() {
                     SIGN UP
                     </div>
             </div> */}
-
-
-            </div>
-            
-
+                {/* </div> */}
             <div className="mt-[45px] flex flex-row gap-[24px] items-center text-[#F3F3F3]">
                 <div className="w-[120px] h-[1px] bg-white " />
                 <div>Don't have an account? <a href="/signup">Signup</a></div>

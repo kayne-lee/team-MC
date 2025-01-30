@@ -120,17 +120,18 @@ public class OpenAIService {
                 "The 'title' field should contain the course code, the 'courseInfo' field should be an object, and the 'assignments' field should be an array of assessments. " +
                 "The courseInfo object should have the fields 'instructorName', 'instructorEmail', 'officeHoursTime', 'officeHoursLocation', and 'category'" +
                 "The category field MUST BE ONE OF THE FOLLOWING OPTIONS: science, math, art, business, coding, other. Pick the option based on the text in the input." +
+                "We are in the year 2025." +
                 "Example: {\"instructorName\": \"NAME_HERE\", \"instructorEmail\": \"example@queesnu.ca\", \"officeHoursTime\": \"DAY_OF_WEEK at TIME_OF_DAY\", \"officeHoursLocation\": \"LOCATION\", \"category\": \"CATEGORY\"} " +
                 "If any of the above fields are missing for courseInfo, just leave them as an empty string." +
                 "Each assessment should have the keys 'title', 'weight', 'description' and 'dueDate'. " +
-                "Example: {\"title\": \"COURSE_CODE\", \"assessments\": [{\"title\": \"ASSESSMENT_NAME\", \"weight\": \"WEIGHT\", \"description\": \"SHORT DESCRIPTION\", \"dueDate\": \"2024-12-10T23:59\"}]} " +
+                "Example: {\"title\": \"COURSE_CODE\", \"assessments\": [{\"title\": \"ASSESSMENT_NAME\", \"weight\": \"WEIGHT\", \"description\": \"SHORT DESCRIPTION\", \"dueDate\": \"2025-12-10T23:59\"}]} " +
                 "Additional requirements: " +
                 "1. If the time is not specified, assume the time is 11:59 PM on the given date. " +
                 "2. If a date is not specified, fill in December 1, 2024, with the assumed time of 11:59 PM. " +
                 "3. The description should be one sentence long max for each, and if you cannot find anything to describe the assessment, leave the field blank." +
                 "4. The semester is divided as follows: " +
-                "   - Week 1 to Week 6: From September 2, 2024 (Monday of Week 1) to October 7, 2024 (Monday of Week 6). " +
-                "   - Week 7 to Week 12: From October 21, 2024 (Monday of Week 7) to November 25, 2024 (Monday of Week 12). " +
+                "   - Week 1 to Week 6: From January 6, 2025 (Monday of Week 1) to February 10, 2025 (Monday of Week 6). " +
+                "   - Week 7 to Week 12: From February 24, 2025 (Monday of Week 7) to March 31, 2025 (Monday of Week 12). " +
                 "5. Ensure that the total weight of all assessments adds up to exactly 100%. If you see a Final Exam mentioned, make sure to include it as well. If you find NO ASSESSMENTS AT ALL, return an empty JSON." +
                 "Use these rules to generate the JSON object. " +
                 "Input: " + syllabusText;

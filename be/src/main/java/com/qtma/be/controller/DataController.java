@@ -221,6 +221,7 @@ public class DataController {
                             assignmentMap.put("title", assignment.getTitle());
                             assignmentMap.put("weight", assignment.getWeight());
                             assignmentMap.put("dueDate", assignment.getDueDate().substring(0, 10)); // Extract just the date part
+                            assignmentMap.put("description", assignment.getDescription());
                             return assignmentMap;
                         }).collect(Collectors.toList());
 

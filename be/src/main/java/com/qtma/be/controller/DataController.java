@@ -180,11 +180,9 @@ public class DataController {
 
     @GetMapping("/allCourses")
     public List<Map<String, Object>> getAllCourses(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
-
         String token = null;
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            // Extract the token by removing the "Bearer " prefix
             token = authorizationHeader.substring(7);
         }
 
@@ -195,18 +193,16 @@ public class DataController {
             if (user.isPresent()) {
                 String email = user.get().getEmail();
 
-                // Fetch courses for the user from the database
                 Optional<UserCourse> userCourseOpt = userCourseRepository.findByEmail(email);
                 
                 if (userCourseOpt.isPresent()) {
-                    UserCourse userCourse = userCourseOpt.get(); // Extract the userCourse object
+                    UserCourse userCourse = userCourseOpt.get();
 
-                    // Convert the courses to the desired format
                     return userCourse.getCourses().stream().map(course -> {
                         Map<String, Object> courseMap = new HashMap<>();
 
                         // Basic course info
-                        courseMap.put("id", course.getTitle().hashCode()); // Use course title hash as a placeholder ID
+                        courseMap.put("id", course.getTitle().hashCode());
                         courseMap.put("title", course.getTitle());
                         courseMap.put("instructor", course.getCourseInfo().getInstructorName());
                         courseMap.put("email", course.getCourseInfo().getInstructorEmail());
@@ -214,14 +210,16 @@ public class DataController {
                         courseMap.put("officeHours", course.getCourseInfo().getOfficeHoursTime());
                         courseMap.put("category", course.getCourseInfo().getCategory());
 
-                        // Assignments
+                        // Assignments with grades and completion status
                         List<Map<String, Object>> assignments = course.getAssignments().stream().map(assignment -> {
                             Map<String, Object> assignmentMap = new HashMap<>();
-                            assignmentMap.put("id", assignment.getTitle().hashCode()); // Use title hash for assignment ID
+                            assignmentMap.put("id", assignment.getTitle().hashCode());
                             assignmentMap.put("title", assignment.getTitle());
                             assignmentMap.put("weight", assignment.getWeight());
-                            assignmentMap.put("dueDate", assignment.getDueDate().substring(0, 10)); // Extract just the date part
+                            assignmentMap.put("dueDate", assignment.getDueDate().substring(0, 10));
                             assignmentMap.put("description", assignment.getDescription());
+                            assignmentMap.put("grade", assignment.getGrade());
+                            assignmentMap.put("isCompleted", assignment.isCompleted());
                             return assignmentMap;
                         }).collect(Collectors.toList());
 
@@ -230,15 +228,12 @@ public class DataController {
                         return courseMap;
                     }).collect(Collectors.toList());
                 } else {
-                    // Return an empty list if no courses are found
                     return List.of();
                 }
             } else {
-                // Return an empty list if the user is not found
                 return List.of();
             }
         } else {
-            // Return an empty list if the token is invalid or expired
             return List.of();
         }
     }
@@ -282,6 +277,52 @@ public class DataController {
                 }
             } catch (Exception e) {
                 logger.error("Error updating grades: ", e);
+                return ResponseEntity.status(500).body(null);
+            }
+        }
+        
+        return ResponseEntity.status(401).body(null);
+    }
+
+    @PostMapping("/updateCompletionStatus")
+    public ResponseEntity<Map<String, Boolean>> updateCompletionStatus(
+            @RequestBody List<Map<String, Object>> completionUpdates,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+        
+        String token = null;
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            token = authorizationHeader.substring(7);
+        }
+
+        if (token != null && !jwtUtil.isTokenExpired(token)) {
+            try {
+                String username = jwtUtil.extractUsername(token);
+                Optional<User> user = userService.findById(username);
+                
+                if (user.isPresent()) {
+                    String email = user.get().getEmail();
+                    Map<String, Boolean> results = new HashMap<>();
+
+                    for (Map<String, Object> update : completionUpdates) {
+                        String courseTitle = (String) update.get("courseTitle");
+                        String assignmentTitle = (String) update.get("assignmentTitle");
+                        boolean isCompleted = (boolean) update.get("isCompleted");
+
+                        boolean updated = databaseSerivce.updateAssignmentCompletion(
+                            email, 
+                            courseTitle, 
+                            assignmentTitle, 
+                            isCompleted
+                        );
+
+                        String key = courseTitle + "-" + assignmentTitle;
+                        results.put(key, updated);
+                    }
+
+                    return ResponseEntity.ok(results);
+                }
+            } catch (Exception e) {
+                logger.error("Error updating completion status: ", e);
                 return ResponseEntity.status(500).body(null);
             }
         }

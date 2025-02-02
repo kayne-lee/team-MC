@@ -13,6 +13,7 @@ export default function Login() {
     const navigate = useNavigate()
     const googleService = GoogleService();
     const apiUrl = process.env.REACT_APP_NUCLEUS_API; // This will get the value from .env file
+    const [isLoading, setIsLoading] = useState(false);
 
     const googleResponse = async (res) => {
         console.log(res)
@@ -24,6 +25,7 @@ export default function Login() {
 
     const handleLogin = async (e) => {
         e.preventDefault(); 
+        setIsLoading(true); // Start loading
        
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -59,6 +61,9 @@ export default function Login() {
             .catch((error) => {
                 setMessage('Network error, please try again later')
                 console.error("Error:", error.message); // Log the error message from the server
+            })
+            .finally(() => {
+                setIsLoading(false); // Stop loading regardless of outcome
             });
       };
 

@@ -100,4 +100,33 @@ public class DatabaseService {
             return false;
         }
     }
+
+    public boolean updateAssignmentCompletion(String email, String courseTitle, String assignmentTitle, boolean isCompleted) {
+        try {
+            Optional<UserCourse> userCourseOpt = userCourseRepository.findByEmail(email);
+            
+            if (userCourseOpt.isPresent()) {
+                UserCourse userCourse = userCourseOpt.get();
+                
+                // Find the course
+                for (Course course : userCourse.getCourses()) {
+                    if (course.getTitle().equals(courseTitle)) {
+                        // Find the assignment
+                        for (Assignment assignment : course.getAssignments()) {
+                            if (assignment.getTitle().equals(assignmentTitle)) {
+                                // Update the completion status
+                                assignment.setCompleted(isCompleted);
+                                userCourseRepository.save(userCourse);
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            logger.error("Error updating assignment completion status: ", e);
+            return false;
+        }
+    }
 }

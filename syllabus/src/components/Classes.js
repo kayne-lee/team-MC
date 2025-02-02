@@ -12,6 +12,9 @@ const Classes = () => {
     const [checkedAssignments, setCheckedAssignments] = useState({}); // Track checked assignments by course ID
     const [modalVisible, setModalVisible] = useState(false);
     const [percentages, setPercentages] = useState({});
+    const [modifiedGrades, setModifiedGrades] = useState({});
+    const [isSaving, setIsSaving] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
     const navigate = useNavigate();
     const googleService = GoogleService();
     const apiUrl = process.env.REACT_APP_NUCLEUS_API; // This will get the value from .env file
@@ -40,14 +43,21 @@ const Classes = () => {
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
     }
     // Handle input change for percentage input
-    const handlePercentageChange = (e, assignmentId) => {
-      const value = e.target.value;
-      if (value >= 0 && value <= 100) {
-        setPercentages((prev) => ({
-          ...prev,
-          [assignmentId]: value,
-        }));
-      }
+    const handlePercentageChange = (e, courseTitle, assignmentTitle) => {
+        const value = e.target.value;
+        const uniqueId = `${courseTitle}-${assignmentTitle}`;
+        
+        if (value >= 0 && value <= 100) {
+            setPercentages((prev) => ({
+                ...prev,
+                [uniqueId]: value,
+            }));
+            
+            setModifiedGrades(prev => ({
+                ...prev,
+                [uniqueId]: true
+            }));
+        }
     };
 
     // Function to handle opening the modal
@@ -90,6 +100,7 @@ const Classes = () => {
                 return response.json(); // If status is not 401, parse as JSON
             })
             .then((res) => {
+                console.log(res)
                 // Mapping the response to match the desired structure
                 const mappedCourses = res.map((course, index) => ({
                     id: index + 1, // Assigning a unique id for each course
@@ -108,7 +119,9 @@ const Classes = () => {
                             month: 'numeric',
                             day: 'numeric'
                         }),
-                        description: assignment.description
+                        description: assignment.description,
+                        grade: assignment.grade,
+                        isCompleted: assignment.isCompleted
                     })),
                 }));
 
@@ -125,18 +138,20 @@ const Classes = () => {
             });
     }, []);
 
-    // Set the first course as the default selected course
+    // When courses are loaded, set initial checked state based on completionStatus
     useEffect(() => {
-        if (courses.length > 0 && !selectedCourse) {
-            setSelectedCourse(courses[0]);
-            if (!checkedAssignments[courses[0].id]) {
-                setCheckedAssignments((prev) => ({
-                    ...prev,
-                    [courses[0].id]: {},
-                }));
-            }
-        }
-    }, [courses, selectedCourse]);
+        const initialCheckedState = {};
+        
+        courses.forEach(course => {
+            initialCheckedState[course.id] = {};
+            course.assignments.forEach(assignment => {
+                initialCheckedState[course.id][assignment.id] = assignment.isCompleted || false;
+            });
+        });
+        
+        setCheckedAssignments(initialCheckedState);
+    }, [courses]);
+
     const uploadToCalendar = async () => {
         if (!access_token) {
             handleGoogleAuth()
@@ -165,14 +180,150 @@ const Classes = () => {
         }
     };
 
-    const toggleAssignmentCheck = (courseId, assignmentId) => {
+    const toggleAssignmentCheck = async (courseId, assignmentId, courseTitle, assignmentTitle) => {
+        // Get the new checked state (opposite of current state)
+        const newCheckedState = !checkedAssignments[courseId]?.[assignmentId];
+        
+        // Update local state first for immediate UI feedback
         setCheckedAssignments((prev) => ({
             ...prev,
             [courseId]: {
                 ...prev[courseId],
-                [assignmentId]: !prev[courseId]?.[assignmentId], // Toggle checked state
+                [assignmentId]: newCheckedState,
             },
         }));
+
+        try {
+            const token = localStorage.getItem("jwt");
+            const response = await fetch(`${apiUrl}/api/data/updateCompletionStatus`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify([{
+                    courseTitle: courseTitle,
+                    assignmentTitle: assignmentTitle,
+                    isCompleted: newCheckedState
+                }])
+            });
+            console.log(JSON.stringify([{
+                courseTitle: courseTitle,
+                assignmentTitle: assignmentTitle,
+                isCompleted: newCheckedState
+            }]))
+
+            if (!response.ok) {
+                // If the request fails, revert the checkbox state
+                setCheckedAssignments((prev) => ({
+                    ...prev,
+                    [courseId]: {
+                        ...prev[courseId],
+                        [assignmentId]: !newCheckedState,
+                    },
+                }));
+                throw new Error('Failed to update completion status');
+            }
+        } catch (error) {
+            console.error('Error updating completion status:', error);
+            // Optional: Show error message to user
+            alert('Failed to update completion status. Please try again.');
+        }
+    };
+
+    // Update handleSaveGrades to include loading states
+    const handleSaveGrades = async () => {
+        const gradeUpdates = [];
+        
+        // Collect all modified grades
+        courses.forEach(course => {
+            course.assignments.forEach(assignment => {
+                // Create a unique identifier that includes both course and assignment
+                const uniqueId = `${course.title}-${assignment.title}`;
+                
+                if (modifiedGrades[uniqueId] && percentages[uniqueId]) {
+                    gradeUpdates.push({
+                        courseTitle: course.title,
+                        assignmentTitle: assignment.title,
+                        grade: parseFloat(percentages[uniqueId])
+                    });
+                }
+            });
+        });
+
+        if (gradeUpdates.length === 0) {
+            alert('No grades to update');
+            return;
+        }
+
+        try {
+            setIsSaving(true);
+            const token = localStorage.getItem("jwt");
+            const response = await fetch(`${apiUrl}/api/data/updateGrades`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(gradeUpdates)
+            });
+            console.log(gradeUpdates)
+
+            if (!response.ok) {
+                throw new Error('Failed to update grades');
+            }
+            
+
+            const results = await response.json();
+            console.log(results)
+            // Clear modified grades tracking after successful save
+            setModifiedGrades({});
+            
+            // Show success state
+            setIsSaving(false);
+            setShowSuccess(true);
+            setTimeout(() => {
+                setShowSuccess(false);
+            }, 1500); // Show checkmark for 1.5 seconds
+            
+        } catch (error) {
+            console.error('Error saving grades:', error);
+            setIsSaving(false);
+            alert('Failed to save grades. Please try again.');
+        }
+    };
+
+    const calculateGrade = (course) => {
+        if (!course || !course.assignments) return 0;
+
+        // Filter for completed assignments only
+        const completedAssignments = course.assignments.filter(
+            assignment => checkedAssignments[course.id]?.[assignment.id]
+        );
+
+        if (completedAssignments.length === 0) return 0;
+
+        // Calculate total weight of completed assignments
+        const totalCompletedWeight = completedAssignments.reduce((sum, assignment) => {
+            // Remove the % symbol and convert to float
+            const weight = parseFloat(assignment.weight.replace('%', ''));
+            return sum + weight;
+        }, 0);
+
+        if (totalCompletedWeight === 0) return 0;
+
+        // Calculate weighted sum of grades
+        let weightedSum = 0;
+        completedAssignments.forEach(assignment => {
+            const weight = parseFloat(assignment.weight.replace('%', ''));
+            const grade = percentages[`${course.title}-${assignment.title}`] || assignment.grade || 0;
+            
+            // Adjust weight relative to total completed weight
+            const adjustedWeight = (weight / totalCompletedWeight) * 100;
+            weightedSum += (grade * adjustedWeight) / 100;
+        });
+
+        return weightedSum.toFixed(1);
     };
 
     return (
@@ -236,16 +387,20 @@ const Classes = () => {
                         <div className="assignments-section">
                         <ul>
                             {selectedCourse.assignments.map((assignment) => {
-                                const isChecked = checkedAssignments[selectedCourse.id]?.[assignment.id] || false;
-                                const inputColor = isChecked ? 'border-purple-500 text-purple-500' : 'border-[#272627] text-[#272627]';
-                                const bgColor = isChecked ? 'bg-purple-100' : 'bg-white';
+                                const inputColor = checkedAssignments[selectedCourse.id]?.[assignment.id] ? 'border-purple-500 text-purple-500' : 'border-[#272627] text-[#272627]';
+                                const bgColor = checkedAssignments[selectedCourse.id]?.[assignment.id] ? 'bg-purple-100' : 'bg-white';
 
                                 return (
                                 <li key={assignment.id}>
                                     <input
                                     type="checkbox"
-                                    checked={isChecked}
-                                    onChange={() => toggleAssignmentCheck(selectedCourse.id, assignment.id)}
+                                    checked={checkedAssignments[selectedCourse.id]?.[assignment.id] || false}
+                                    onChange={() => toggleAssignmentCheck(
+                                        selectedCourse.id, 
+                                        assignment.id,
+                                        selectedCourse.title,
+                                        assignment.title
+                                    )}
                                     />
                                     <div className="flex flex-row w-full ml-[15px] justify-between">
                                     <div className="flex flex-col">
@@ -261,14 +416,14 @@ const Classes = () => {
                                         className={`flex ml-[20px] items-center border-[1.816px] rounded-[18.637px] ${inputColor} ${bgColor} w-[53px] h-[33px]`}
                                     >
                                         <input
-                                        className={`w-[calc(100%-20px)] h-full text-right border-none rounded-[18.637px] ${bgColor} focus:outline-none px-0`}
-                                        type="text"
-                                        value={percentages[assignment.id] || ''}
+                                        className={`w-[calc(100%-15px)] h-full text-right border-none rounded-[18.637px] ${bgColor} focus:outline-none px-0`}
+                                        type="number"
+                                        value={percentages[`${selectedCourse.title}-${assignment.title}`] || ''}
                                         min="0"
                                         max="100"
-                                        placeholder="_"
+                                        placeholder={assignment.grade}
                                         aria-label="Percentage"
-                                        onChange={(e) => handlePercentageChange(e, assignment.id)}
+                                        onChange={(e) => handlePercentageChange(e, selectedCourse.title, assignment.title)}
                                         inputMode="numeric"
                                         pattern="[0-9]*"
                                         />
@@ -332,7 +487,7 @@ const Classes = () => {
                                     <div className="statistics-inner-box-bottom">
                                         <h4>Grade Calculator</h4>
                                         <p className="statistic-number">
-                                            100%
+                                            {selectedCourse ? `${calculateGrade(selectedCourse)}%` : '0%'}
                                         </p>
                                     </div>
                                 </div>
@@ -345,7 +500,44 @@ const Classes = () => {
                         <h2>Add a course to see details</h2>
                     </div>
                 )}
-                <div className="flex justify-center mt-4">
+                <div className="flex justify-center gap-4 mt-4">
+                    <button
+                        onClick={handleSaveGrades}
+                        disabled={Object.keys(modifiedGrades).length === 0 || isSaving}
+                        className={`
+                            relative flex items-center justify-center
+                            w-32 h-12 rounded-lg px-6 py-3 shadow-md
+                            transition duration-200
+                            ${isSaving || showSuccess 
+                                ? 'bg-purple-500 text-white cursor-not-allowed'
+                                : Object.keys(modifiedGrades).length === 0
+                                    ? 'bg-purple-300 text-white cursor-not-allowed'
+                                    : 'bg-purple-500 text-white hover:bg-purple-600'
+                            }
+                        `}
+                    >
+                        {isSaving ? (
+                            <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
+                        ) : showSuccess ? (
+                            <svg 
+                                className="w-6 h-6 text-white animate-scale-check" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24"
+                            >
+                                <path 
+                                    strokeLinecap="round" 
+                                    strokeLinejoin="round" 
+                                    strokeWidth={2} 
+                                    d="M5 13l4 4L19 7" 
+                                />
+                            </svg>
+                        ) : (
+                            'Save Grades'
+                        )}
+                    </button>
+                    
+                    {/* Existing Calendar button */}
                     <button
                         onClick={uploadToCalendar}
                         className="bg-white text-black border border-gray-300 rounded-lg px-6 py-3 shadow-md hover:bg-gray-100 transition duration-200"

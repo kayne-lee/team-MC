@@ -22,7 +22,7 @@ const Classes = () => {
       }, []);
 
     const handleGoogleAuth = () => {
-
+        console.log("ID", process.env.REACT_APP_CLIENT_ID)
         const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
           `client_id=${process.env.REACT_APP_CLIENT_ID}` +
           `&redirect_uri=${encodeURIComponent('https://www.nucleusapp.ca/api/auth/callback/google')}` +
@@ -151,6 +151,7 @@ const Classes = () => {
                     await googleService.createCalendarEvent(calDate, assignment.title, assignment.weight, assignment.description, course.title)
                 }
             }
+            alert('Calendar Upload Complete')
         }
         
     }

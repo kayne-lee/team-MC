@@ -183,10 +183,13 @@ export default function Login() {
                       }}
                     
                 >
-                    <div className="text-[#F3F3F3] font-poppins text-[16px] font-bold leading-none">
-                    LOGIN
-                    </div>
-                    
+                    {isLoading ? (
+                        <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                    ) : (
+                        <div className="text-[#F3F3F3] font-poppins text-[16px] font-bold leading-none">
+                        LOGIN
+                        </div>
+                    )}
                 </div>
                 </div>
                 {/* <div className="m-[10px] flex flex-row justify-center items-center gap-[24px] text-[#F3F3F3]">

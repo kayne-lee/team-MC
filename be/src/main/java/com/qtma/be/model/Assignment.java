@@ -12,5 +12,5 @@ public class Assignment {
     private String weight;
     private String dueDate;
     private String description;
-
+    private float grade;
 }

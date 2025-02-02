@@ -118,6 +118,10 @@ const Classes = () => {
             })
             .catch((error) => {
                 console.error("Error fetching courses:", error);
+                localStorage.removeItem('jwt'); // or sessionStorage.removeItem('jwtToken');
+
+                // Navigate to the login page
+                navigate("/login");
             });
     }, []);
 

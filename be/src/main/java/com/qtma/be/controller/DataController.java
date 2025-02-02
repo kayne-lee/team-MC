@@ -243,5 +243,50 @@ public class DataController {
         }
     }
 
+    @PostMapping("/updateGrades")
+    public ResponseEntity<Map<String, Boolean>> updateGrades(
+            @RequestBody List<Map<String, Object>> gradeUpdates,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+        
+        String token = null;
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            token = authorizationHeader.substring(7);
+        }
+
+        if (token != null && !jwtUtil.isTokenExpired(token)) {
+            try {
+                String username = jwtUtil.extractUsername(token);
+                Optional<User> user = userService.findById(username);
+                
+                if (user.isPresent()) {
+                    String email = user.get().getEmail();
+                    Map<String, Boolean> results = new HashMap<>();
+
+                    for (Map<String, Object> update : gradeUpdates) {
+                        String courseTitle = (String) update.get("courseTitle");
+                        String assignmentTitle = (String) update.get("assignmentTitle");
+                        float grade = ((Number) update.get("grade")).floatValue();
+
+                        boolean updated = databaseSerivce.updateAssignmentGrade(
+                            email, 
+                            courseTitle, 
+                            assignmentTitle, 
+                            grade
+                        );
+
+                        String key = courseTitle + "-" + assignmentTitle;
+                        results.put(key, updated);
+                    }
+
+                    return ResponseEntity.ok(results);
+                }
+            } catch (Exception e) {
+                logger.error("Error updating grades: ", e);
+                return ResponseEntity.status(500).body(null);
+            }
+        }
+        
+        return ResponseEntity.status(401).body(null);
+    }
 
 }

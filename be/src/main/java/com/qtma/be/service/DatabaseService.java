@@ -19,6 +19,8 @@ import com.qtma.be.util.JwtUtil;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,19 +32,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Optional;
 @Service
 public class DatabaseService {
 
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseService.class.getName());
+
     @Autowired
-    private UserCourseRepository userRepository;
+    private UserCourseRepository userCourseRepository;
 
     @Autowired
     private JwtUtil jwtUtil;
 
     public void addRandomTask(String email, JsonNode c) {
         // Find the user by email or create a new user if not found
-        UserCourse user = userRepository.findByEmail(email).orElseGet(() -> {
+        UserCourse user = userCourseRepository.findByEmail(email).orElseGet(() -> {
             UserCourse newUser = new UserCourse();
             newUser.setEmail(email);
             return newUser;
@@ -65,6 +69,35 @@ public class DatabaseService {
         user.getRandomTasks().add(task);
 
         // Save the user back to MongoDB
-        userRepository.save(user);
+        userCourseRepository.save(user);
+    }
+
+    public boolean updateAssignmentGrade(String email, String courseTitle, String assignmentTitle, float grade) {
+        try {
+            Optional<UserCourse> userCourseOpt = userCourseRepository.findByEmail(email);
+            
+            if (userCourseOpt.isPresent()) {
+                UserCourse userCourse = userCourseOpt.get();
+                
+                // Find the course
+                for (Course course : userCourse.getCourses()) {
+                    if (course.getTitle().equals(courseTitle)) {
+                        // Find the assignment
+                        for (Assignment assignment : course.getAssignments()) {
+                            if (assignment.getTitle().equals(assignmentTitle)) {
+                                // Update the grade
+                                assignment.setGrade(grade);
+                                userCourseRepository.save(userCourse);
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            logger.error("Error updating assignment grade: ", e);
+            return false;
+        }
     }
 }

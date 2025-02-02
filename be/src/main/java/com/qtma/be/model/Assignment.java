@@ -13,4 +13,5 @@ public class Assignment {
     private String dueDate;
     private String description;
     private float grade;
+    private boolean completed;
 }

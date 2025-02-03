@@ -5,6 +5,13 @@
     height: calc(100vh - 114px);
     overflow: hidden;
     padding-left: 60px;
+    background: white;
+}
+
+body {
+    background: white;
+    margin: 0;
+    padding: 0;
 }
 
 label {
@@ -35,11 +42,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Layout container */
 .layout-container {
     display: flex;
-    gap: 50px;
-    padding: 20px;
+    gap: 20px;
+    padding: 20px px; /* Equal padding on left and right */
     min-height: 663px;
     max-height: calc(100vh - 234px);
-    justify-content: center; 
+    width: calc(100% - 120px); /* Account for both left and right padding */
+    background: white;
 }
 
 .nav {
@@ -80,7 +88,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .left-box.expanded {
     z-index: 10;
-    background: radial-gradient(123.37% 145% at 29.41% 3.92%, #8338EC 49.11%, #BFA1E9 96.5%);
+    background: white;
     border-radius: 20px;
     padding: 40px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
@@ -103,9 +111,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .left-box {
     flex: 1;
-    background: radial-gradient(123.37% 145% at 29.41% 3.92%, #8338EC 49.11%, #BFA1E9 96.5%);
+    background: white;
     box-shadow: 8px 11px 4px 0px rgba(0, 0, 0, 0.25);
-    color: white;
+    color: #333;
     border-radius: 45px;
     padding: 30px;
     display: flex;
@@ -160,12 +168,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Right Grid */
 .right-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: auto auto;
-    gap: 50px;
-    white-space: nowrap;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0;
+    width: 100%;
     padding-bottom: 10px;
-    padding-right: 10px;
+    overflow-x: hidden;
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -175,13 +182,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Grid Boxes */
 .grid-box {
     background: white;
-    border-radius: 45px;
     padding: 20px;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    display: flex;
-    flex-direction: column;
-    width: 393px;
-    height: 296px;
+    border-right: 1px solid #e0e0e0;
+    border-radius: 0;
+    min-width: 0; /* Allow content to shrink */
+}
+
+/* Remove border from last column */
+.grid-box:last-child {
+    border-right: none;
 }
 
 .grid-box ul {
@@ -229,12 +238,12 @@ li {
 }
 
 .date-header {
-    color: #000;
-    text-align: center;
-    font-size: 16px;
-    font-style: normal;
+    color: #333;
+    font-family: Poppins;
+    font-size: 19.7px;
     font-weight: 700;
     line-height: normal;
+    margin-bottom: 15px;
 }
 
 .sub-list {

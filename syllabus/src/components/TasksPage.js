@@ -219,33 +219,10 @@ const TasksPage = () => {
             
             {/* Layout Container */}
             <div className="layout-container">
-                {/* Left Large Box (Today's Tasks) */}
-                <div
-                    style={{ cursor: "pointer" }}
-                    className={`left-box ${isExpanded ? 'expanded' : ''}`}
-                    onClick={handleExpand} // Prevent collapse on clicking the box
-                >
-                    <div class="text-white font-poppins text-[26px] font-extrabold leading-normal">{formatDisplayDate(currentDate)}</div>
-                    <div className="task-list">
-                        <ul className="main-list list-none">
-                            {(assignmentsByDate[formatDateKey(currentDate)] || []).map((assignment, index) => (
-                                <li key={index} className="flex items-center before:content-[''] before:w-2.5 before:h-2.5 before:mr-3 before:bg-white before:rounded-full">
-                                    {assignment.course === "Extra Task" ? (
-                                        <strong>{assignment.title}</strong>
-                                        ) : (
-                                        <>
-                                            <strong>{assignment.title}</strong> - {assignment.course} ({assignment.weight})
-                                        </>
-                                        )}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
 
                 {/* Right Grid of Boxes (Next 6 Days) */}
                 <div className="right-grid overflow-y-auto  no-scrollbar">
-                    {upcomingDays.slice(1).map((day, index) => (
+                    {upcomingDays.map((day, index) => (
                         <div className="grid-box" key={index}>
                             <div className="flex justify-center items-center flex-col mb-[10px]">
                                 <h3 className="date-header mb-[7px]">{formatDisplayDate(day)}</h3>

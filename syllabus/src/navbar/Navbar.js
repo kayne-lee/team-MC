@@ -62,7 +62,7 @@ function Navbar({ activeTab, setActiveTab }) {
   };
 
   return (
-    <div className="h-[114px] w-full flex flex-row justify-between items-center">
+    <div className="h-[114px] w-full flex bg-white flex-row justify-between items-center">
       {/* Logo */}
       <div>
         <img src={nucleus} alt="Nucleus Logo" className="w-[141px] ml-[60px]" />

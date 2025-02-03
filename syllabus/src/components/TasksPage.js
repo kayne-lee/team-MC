@@ -192,7 +192,7 @@ const TasksPage = () => {
                                 value={currentDate.toISOString().split('T')[0]}
                                 onClick={(e) => e.stopPropagation()} // Update date state
                                 onChange={(e) => {
-                                    e.stopPropagation(); // Ensure change event doesn’t propagate
+                                    e.stopPropagation(); // Ensure change event doesn't propagate
                                     handleDateClick(e.target.value); // Handle the date change
                                 }}                        
                             />
@@ -228,22 +228,25 @@ const TasksPage = () => {
                                 <h3 className="date-header mb-[7px]">{formatDisplayDate(day)}</h3>
                                 <div className="w-[320px] h-[1px] bg-black"></div>
                             </div>
-                            <div className="sub-list flex flex-col gap-[15px]"> {/* Main container */}
+                            <div className="sub-list flex flex-col gap-[15px]">
                                 {(assignmentsByDate[formatDateKey(day)] || []).map((assignment, idx) => (
-                                    <li key={idx} className="flex items-center before:content-[''] before:w-1.5 before:h-1.5 before:mr-3 before:bg-black before:rounded-full">
-                                        {assignment.course === "Extra Task" ? (
-                                        <strong>{assignment.title}</strong>
-                                        ) : (
-                                        <>
-                                            <strong>{assignment.title}</strong> - {assignment.course} ({assignment.weight})
-                                        </>
-                                        )}
-                                    </li>
+                                    <div key={idx} className="task-tile">
+                                        <div className="task-content">
+                                            {assignment.course === "Extra Task" ? (
+                                                <strong>{assignment.title}</strong>
+                                            ) : (
+                                                <>
+                                                    <strong>{assignment.title}</strong>
+                                                    <div className="task-details">
+                                                        {assignment.course} {assignment.weight && `(${assignment.weight})`}
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
                                 ))}
                             </div>
-
                         </div>
-
                     ))}
                 </div>
             </div>

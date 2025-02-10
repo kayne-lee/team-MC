@@ -98,7 +98,7 @@ public class NotificationUtil {
                             String phoneNumber = user.getPhone();
                             if (phoneNumber != null) {
                                 // Prepare the notification message
-                                String message = "Reminder: Your assignment '" + assignment.getTitle() + 
+                                String message = "Reminder: Your assignment '" + assignment.getTitle() + course.getTitle() +
                                                     "' is due in " + notificationDaysBefore + " days!";
                                 // Send SMS via Twilio
                                 twilioService.sendSms(phoneNumber, message);

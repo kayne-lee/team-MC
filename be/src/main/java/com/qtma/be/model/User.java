@@ -26,4 +26,9 @@ public class User {
     private String password;
     private List<String> friends;
     private int streak;
+    private String googleEmail;
+
+    public void setgoogleEmail(String googleEmail) {
+        this.googleEmail = googleEmail;
+    }
 }

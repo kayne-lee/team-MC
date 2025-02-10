@@ -15,14 +15,6 @@ export default function Login() {
     const apiUrl = process.env.REACT_APP_NUCLEUS_API; // This will get the value from .env file
     const [isLoading, setIsLoading] = useState(false);
 
-    const googleResponse = async (res) => {
-        console.log(res)
-        // await googleService.getAuthCode(process.env.REACT_APP_CLIENT_ID, process.env.REACT_APP_CLIENT_SECRET, res.credential)as
-    }
-    const errorResponse = async (err) => {
-        console.log(err)
-    }
-
     const handleLogin = async (e) => {
         e.preventDefault(); 
         setIsLoading(true); // Start loading
@@ -101,6 +93,18 @@ export default function Login() {
             setMessage("Network error, please try again later");
             console.error("Error:", error.message);
         }
+    };
+
+    const handleGoogleLogin = async (e) => {
+        localStorage.setItem("googleLogin", true);
+        const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+        `client_id=${process.env.REACT_APP_CLIENT_ID}` +
+        `&redirect_uri=${encodeURIComponent('http://localhost:3000/api/auth/callback/google')}` +
+        `&response_type=code` +
+        `&scope=${encodeURIComponent('openid email profile https://www.googleapis.com/auth/calendar')}` +
+        `&access_type=offline`;
+    
+        window.location.href = authUrl;
     };
     
     
@@ -192,11 +196,19 @@ export default function Login() {
                     )}
                 </div>
                 </div>
-                {/* <div className="m-[10px] flex flex-row justify-center items-center gap-[24px] text-[#F3F3F3]">
+                <div className="m-[10px] flex flex-row justify-center items-center gap-[24px] text-[#F3F3F3]">
                     <div className="w-[120px] h-[1px] bg-white" />
                     <div>OR</div>
-                    <div className="w-[120px] h-[1px] bg-white" /> */}
-
+                    <div className="w-[120px] h-[1px] bg-white" />
+                    
+                </div>
+                <button
+                        // onClick={uploadToCalendar}
+                        className="bg-white border border-gray-3 rounded-[20px] px-6 py-3 shadow-md hover:bg-gray-100 transition duration-200 text-[#BFA1E9] font-poppins text-[16px] font-bold leading-none"
+                        onClick={handleGoogleLogin}
+                    >
+                        Login With Google
+                </button>
                 {/* <div
                     hidden = {true}
                     onClick={handleSignup}

@@ -45,7 +45,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/**").permitAll()
                         .requestMatchers("/api/data/**").permitAll()
-                        .requestMatchers("/auth/signup", "/auth/login").permitAll() // Permit signup and login  
+                        .requestMatchers("/auth/signup", "/auth/login", "/auth/googlelogin").permitAll() // Permit signup and login  
                         .anyRequest().authenticated() // All other requests require authentication
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless session management

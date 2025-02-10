@@ -1,4 +1,9 @@
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
+
 function MongoService() {
+    const navigate = useNavigate()
     const apiURL = process.env.REACT_APP_NUCLEUS_API;
     let sv = {
         addRandomTask(jsonData) {
@@ -36,6 +41,37 @@ function MongoService() {
                     reject(error); // Reject the promise in case of errors
                     });
             });
+        },
+        async googleLoginUser(email,firstName,lastName) {
+           
+            let data = JSON.stringify({
+                "googleEmail": email,
+                "password": "test123",
+                "email": email,
+                "firstName": firstName,
+                "lastName": lastName
+              });
+              
+              let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: `${apiURL}/auth/googlelogin`,
+                headers: { 
+                  'Content-Type': 'application/json'
+                },
+                data : data
+              };
+              
+              axios.request(config)
+              .then((response) => {
+             
+                localStorage.removeItem("googleLogin");
+                localStorage.setItem("jwt", response.data);
+                navigate("/");
+              })
+              .catch((error) => {
+                console.log(error);
+              });
         },
         saveCourseInfo(jsonData) {
             return new Promise((resolve, reject) => {

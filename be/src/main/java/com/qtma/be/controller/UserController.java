@@ -4,6 +4,9 @@ import com.qtma.be.model.User;
 import com.qtma.be.service.UserService;
 
 import com.qtma.be.util.JwtUtil;
+import com.qtma.be.util.NotificationUtil;
+import com.twilio.rest.api.v2010.account.Notification;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +31,9 @@ public class UserController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private NotificationUtil notificationUtil;
 
     @Autowired
     private AuthenticationManager authenticationManager;

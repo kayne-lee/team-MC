@@ -27,4 +27,5 @@ public class User {
     private List<String> friends;
     private int streak;
     private int notificationCount;
+    private String phone;
 }

@@ -4,6 +4,7 @@
     display: flex;
     height: calc(100vh - 114px);
     font-family: "Poppins", "Lato", "sans-serif";
+    background: white;
 }
 
 .sidebar {
@@ -20,7 +21,7 @@
     align-items: center;
     border-radius: 16.653px;
     border: 1px solid #8B898D;
-    background: linear-gradient(123deg, rgba(227, 204, 255, 0.80) 9.3%, rgba(243, 243, 243, 0.60) 44.23%, rgba(222, 203, 248, 0.50) 92.46%);
+    background: white;
     margin-bottom: 15px;
     height: 100px;
     cursor: pointer;
@@ -43,7 +44,7 @@
     font-size: 24px;
     font-weight: bold;
     color: #8338ec;
-    background: linear-gradient(145deg, #F6EDFF, #FFF);
+    background: white;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 

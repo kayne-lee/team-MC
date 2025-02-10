@@ -168,8 +168,15 @@ const TasksPage = () => {
     };
 
     const formatDisplayDate = (date) => {
-        const options = { weekday: 'long', month: 'long', day: 'numeric' };
-        return date.toLocaleDateString('en-US', options);
+        // Create short day names
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        
+        // Get day name and date
+        const dayName = days[date.getDay()];
+        const dayNumber = date.getDate();
+        
+        // Return formatted string
+        return `${dayName} ${dayNumber}`;
     };
 
     return (
@@ -225,7 +232,9 @@ const TasksPage = () => {
                     {upcomingDays.map((day, index) => (
                         <div className="grid-box" key={index}>
                             <div className="flex justify-center items-center flex-col mb-[10px]">
-                                <h3 className="date-header mb-[7px]">{formatDisplayDate(day)}</h3>
+                                <div className="date-header">
+                                    {formatDisplayDate(day)}
+                                </div>
                                 <div className="w-[320px] h-[1px] bg-black"></div>
                             </div>
                             <div className="sub-list flex flex-col gap-[15px]">

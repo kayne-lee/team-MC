@@ -253,15 +253,16 @@ const TasksPage = () => {
                                 {(assignmentsByDate[formatDateKey(day)] || []).map((assignment, idx) => (
                                     <div key={idx} className="task-tile">
                                         <div className="task-content">
-                                            {assignment.course === "Extra Task" ? (
-                                                <strong>{assignment.title}</strong>
-                                            ) : (
-                                                <>
-                                                    <strong>{assignment.title}</strong>
-                                                    <div className="task-details">
-                                                        {assignment.course} {assignment.weight && `(${assignment.weight})`}
-                                                    </div>
-                                                </>
+                                            <div>
+                                                <div className="task-details">
+                                                    <span>{assignment.course}</span>
+                                                </div>
+                                                <div className="task-title">{assignment.title}</div>
+                                            </div>
+                                            {assignment.weight && (
+                                                <div className="weight-container">
+                                                    <span className="weight-badge">{assignment.weight}</span>
+                                                </div>
                                             )}
                                         </div>
                                     </div>

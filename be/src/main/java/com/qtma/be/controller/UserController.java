@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired
@@ -41,16 +42,20 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody User loginRequest) {
         Optional<User> userOpt = userService.findByEmail(loginRequest.getEmail());
+
         if (userOpt.isEmpty()) {
-            return ResponseEntity.badRequest().body("Invalid credentials");
+            // If the user is not found, return a 404 NOT FOUND response
+            return ResponseEntity.badRequest().body("User not found");
         }
 
         User user = userOpt.get();
+
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            // If the password does not match, return a 400 BAD REQUEST response
             return ResponseEntity.badRequest().body("Invalid credentials");
         }
 
-
+        // Return the JWT token if the login is successful
         return ResponseEntity.ok(jwtUtil.generateToken(user));
     }
 }

@@ -1,0 +1,336 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;800&display=swap');
+
+.parent {
+    font-family: 'Lato', 'sans-serif', 'Arial';
+    height: calc(100vh - 114px);
+    overflow: hidden;
+    padding-left: 60px;
+}
+
+label {
+    display: block;
+    width: 40px;
+    height: 40px;
+    /* background: url('../assets/Calendar.png') no-repeat; */
+    background-size: contain;
+}
+
+.form-control {
+    margin-top: -1em;
+    opacity: 0;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    height: auto;
+    color: transparent;
+    background: transparent;
+}
+
+/* Layout container */
+.layout-container {
+    display: flex;
+    gap: 50px;
+    padding: 20px;
+    min-height: 663px;
+    max-height: calc(100vh - 234px);
+    justify-content: center; 
+}
+
+.nav {
+    z-index: 9999;
+}
+
+/* Scrollbar for modern browsers */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+/* Hide arrows for WebKit-based browsers */
+::-webkit-scrollbar-button {
+    display: none;
+    background: transparent;
+    width: 0;
+}
+
+/* For Firefox */
+.left-box.expanded {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.4) transparent;
+}
+
+.left-box.expanded {
+    z-index: 10;
+    background: radial-gradient(123.37% 145% at 29.41% 3.92%, #8338EC 49.11%, #BFA1E9 96.5%);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+    transition: all 0.3s ease;
+    max-width: 50vw;
+}
+
+/* Blur the background when the left-box is expanded */
+.blur-background .right-grid,
+.blur-background .header {
+    filter: blur(5px);
+    pointer-events: none;
+    transition: filter 0.3s ease;
+}
+
+.left-box.expanded .task-list {
+    padding: 20px;
+}
+
+.left-box {
+    flex: 1;
+    background: radial-gradient(123.37% 145% at 29.41% 3.92%, #8338EC 49.11%, #BFA1E9 96.5%);
+    box-shadow: 8px 11px 4px 0px rgba(0, 0, 0, 0.25);
+    color: white;
+    border-radius: 45px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    max-width: 459px;
+    flex-shrink: 0;
+    width: 459px;
+    transition: all 0.3s ease;
+}
+
+/* Task Switching Animations */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateX(10%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-10%);
+    }
+}
+
+.switching {
+    animation: fadeOut 0.3s forwards;
+}
+
+.switching-new {
+    animation: fadeIn 0.3s forwards;
+}
+
+.left-box h2 {
+    margin-bottom: 5px;
+}
+
+.task-list ul {
+    margin: 0 0 10px;
+    padding-left: 20px;
+    list-style: disc;
+}
+
+/* Right Grid */
+.right-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto auto;
+    gap: 50px;
+    white-space: nowrap;
+    padding-bottom: 10px;
+    padding-right: 10px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Grid Boxes */
+.grid-box {
+    background: white;
+    border-radius: 45px;
+    padding: 20px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    width: 393px;
+    height: 296px;
+}
+
+.grid-box ul {
+    padding-left: 20px;
+    list-style: disc;
+    margin: 0;
+}
+
+/* Header Styling */
+.header {
+    color: #000;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    text-align: left;
+}
+
+.main-date-header {
+    color: #FFF;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+}
+
+.main-task-header {
+    color: #FFF;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.main-list {
+    color: #FFF;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+li {
+    list-style-type: none;
+}
+
+.date-header {
+    color: #000;
+    text-align: center;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.sub-list {
+    color: #000;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-left: 10px;
+    overflow: scroll;
+    gap: 10px;
+}
+
+.calendar-icon-container {
+    display: inline-block;
+}
+
+.calendar-icon-container.blur-background label {
+    filter: blur(5px);
+}
+
+.gradient-border {
+    position: relative;
+    border-radius: 45px;
+    padding: 10px;
+    background: white;
+    z-index: 1;
+}
+
+.gradient-border::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 45px;
+    padding: 10px;
+    background: linear-gradient(90deg, #8338EC 0%, #AE7DF1 25%, #DECBF8 50%, #985BEF 100%);
+    -webkit-mask: linear-gradient(white 0%, white 100%);
+    mask: linear-gradient(white 0%, white 100%);
+    z-index: -1;
+}
+
+.new-task-button {
+    width: 123px;
+    position: relative;
+    height: 35px;
+    text-align: left;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.new-task-button-inner {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0%;
+    right: 0%;
+    bottom: 0%;
+    left: 0%;
+}
+
+.frame-child {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border-radius: 45px;
+    background-color: #fcfcfc;
+    border: 3px solid #fff;
+    box-sizing: border-box;
+    width: 123px;
+    height: 35px;
+}
+
+.new-task {
+    position: absolute;
+    top: 17.14%;
+    left: 28.46%;
+    font-weight: 500;
+    background: linear-gradient(93.15deg, #8338ec, #bfa1e9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.plus-icon {
+    position: absolute;
+    height: 45.712%;
+    width: 13.008%;
+    top: 22.86%;
+    right: 74.8%;
+    bottom: 10%;
+    left: 10%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+}

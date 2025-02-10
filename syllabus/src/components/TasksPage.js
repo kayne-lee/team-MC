@@ -179,6 +179,18 @@ const TasksPage = () => {
         return `${dayName} ${dayNumber}`;
     };
 
+    const formatHeaderDate = (date) => {
+        const months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        
+        const month = months[date.getMonth()];
+        const year = date.getFullYear();
+        
+        return `${month} ${year}`;
+    };
+
     return (
         <div
             className={`parent ${isExpanded ? 'blur-background' : ''}`}
@@ -189,7 +201,7 @@ const TasksPage = () => {
             {/* Page Header */}
             <div className="flex flex-row items-center justify-between gap-[10px] ">
                 <div className="flex flex-row items-center gap-[30px]">
-                    <h1 className="header">Upcoming Tasks</h1>
+                    <h1 className="header">{formatHeaderDate(currentDate)}</h1>
 
                     <div id="date-picker-wrapper" style={{ position: 'relative' }}>
                         <div className="popup-row">

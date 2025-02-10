@@ -7,10 +7,13 @@ import profile from './assets/profile.png';
 
 function Navbar({ activeTab, setActiveTab }) {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
+    if (tab === 'Classes') {
+      navigate('/'); // Navigate to classes page when 'Classes' is clicked
+    }
   };
 
   const handleLogout = () => {
@@ -18,7 +21,7 @@ function Navbar({ activeTab, setActiveTab }) {
     localStorage.removeItem('jwt'); // or sessionStorage.removeItem('jwtToken');
 
     // Navigate to the login page
-    navigate("/login");
+    navigate('/login');
   };
 
   return (
@@ -29,20 +32,20 @@ function Navbar({ activeTab, setActiveTab }) {
       </div>
 
       {/* Tabs Container */}
-      <div className="w-[316px] h-[50px] rounded-[33px] bg-[#FDFBFD] flex flex-row justify-around items-center relative mr-[60px]">
+      <div className="w-[420px] h-[50px] rounded-[33px] bg-[#FDFBFD] flex flex-row justify-around items-center relative mr-[60px]">
         {/* Sliding Purple Highlight */}
         <motion.div
           className="absolute bottom-0 left-0 h-full bg-purple-600 rounded-[33px] z-0"
           style={{
-            width: '169px', // Highlight width
+            width: '140px', // Highlight width
           }}
           animate={{
             left:
-              activeTab === 'Classes'
+              activeTab === 'List'
                 ? '0'
-                : activeTab === 'Tasks'
-                ? '160.33px'
-                : '265px',
+                : activeTab === 'Week'
+                ? '140px'
+                : '280px', // Adjust position if needed for "Classes"
           }}
           transition={{
             type: 'spring',
@@ -54,6 +57,22 @@ function Navbar({ activeTab, setActiveTab }) {
 
         {/* Tabs */}
         <div
+          onClick={() => handleTabClick('List')}
+          className={`text-[17.675px] font-bold font-poppins leading-normal cursor-pointer z-10 ${
+            activeTab === 'List' ? 'text-white' : 'text-[#4A4A4A]'
+          }`}
+        >
+          List
+        </div>
+        <div
+          onClick={() => handleTabClick('Week')}
+          className={`text-[17.675px] font-bold font-poppins leading-normal cursor-pointer z-10 ${
+            activeTab === 'Week' ? 'text-white' : 'text-[#4A4A4A]'
+          }`}
+        >
+          Week
+        </div>
+        <div
           onClick={() => handleTabClick('Classes')}
           className={`text-[17.675px] font-bold font-poppins leading-normal cursor-pointer z-10 ${
             activeTab === 'Classes' ? 'text-white' : 'text-[#4A4A4A]'
@@ -61,16 +80,9 @@ function Navbar({ activeTab, setActiveTab }) {
         >
           Classes
         </div>
-        <div
-          onClick={() => handleTabClick('Tasks')}
-          className={`text-[17.675px] font-bold font-poppins leading-normal cursor-pointer z-10 ${
-            activeTab === 'Tasks' ? 'text-white' : 'text-[#4A4A4A]'
-          }`}
-        >
-          Tasks
-        </div>
-
       </div>
+
+      {/* Profile */}
       <div className="mr-[60px]">
         <img
           src={profile}
@@ -81,7 +93,10 @@ function Navbar({ activeTab, setActiveTab }) {
         {showProfileDropdown && (
           <div className="absolute right-[60px] top-[75px] z-10 bg-white border border-[#ccc] rounded-[5px] shadow-[0_2px_5px_rgba(0,_0,_0,_0.1)] p-[10px]">
             <p className="m-0 p-[10px_5px]">John Doe</p>
-            <button className="bg-[#8338EC] text-white border-none py-[12px] px-[17px] cursor-pointer rounded-[25px]" onClick={handleLogout}>
+            <button
+              className="bg-[#8338EC] text-white border-none py-[12px] px-[17px] cursor-pointer rounded-[25px]"
+              onClick={handleLogout}
+            >
               Sign Out
             </button>
           </div>

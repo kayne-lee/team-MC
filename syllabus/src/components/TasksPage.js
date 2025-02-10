@@ -247,7 +247,6 @@ const TasksPage = () => {
                                 <div className="date-header">
                                     {formatDisplayDate(day)}
                                 </div>
-                                <div className="w-[320px] h-[1px] bg-black"></div>
                             </div>
                             <div className="sub-list flex flex-col gap-[15px]">
                                 {(assignmentsByDate[formatDateKey(day)] || []).map((assignment, idx) => (

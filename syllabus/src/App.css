@@ -1,14 +1,9 @@
-.app {
-  background: linear-gradient(180deg, #FDFBFD 0%, #E3CCFF 55%, #FDFBFD 100%);
-
-}
-
 .syllabus-puller {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-
+  min-height: 100vh;
+  background-color: #f9f9f9;
   overflow-y: auto;
   padding-bottom: 20px;
 }
@@ -43,10 +38,6 @@
   background: white;
   width: 100%;
   max-width: 600px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
 .upload-button {
@@ -72,8 +63,10 @@
   width: 80%;
   margin: 20px 0;
   max-width: 600px;
+  background: white;
   border-radius: 10px;
   padding: 20px 20px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .uploaded-syllabi h2 {
@@ -84,12 +77,10 @@
 
 .syllabus-item {
   display: flex;
-  flex-direction: row;
-  gap: 10px;
   justify-content: space-between;
   align-items: center;
   padding: 10px 15px;
-  background-color: #DECBF8;
+  background-color: #f9f9f9;
   border-radius: 5px;
   margin-bottom: 10px;
   font-size: 16px;
@@ -108,5 +99,3 @@
   object-fit: contain;
   cursor: pointer;
 }
-
-

@@ -1,93 +1,49 @@
 import React, { useState } from 'react';
 import './Navbar.css';
 import nucleus from './assets/nucleus.png';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import profile from './assets/profile.png';
 
-function Navbar({ activeTab, setActiveTab }) {
+function Navbar() {
+  const [activeTab, setActiveTab] = useState('SylaScan');
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
-  const navigate = useNavigate()
-
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-  };
-
-  const handleLogout = () => {
-    // Remove the JWT token from localStorage (or sessionStorage)
-    localStorage.removeItem('jwt'); // or sessionStorage.removeItem('jwtToken');
-
-    // Navigate to the login page
-    navigate("/login");
-  };
 
   return (
-    <div className="h-[114px] w-full flex flex-row justify-between items-center">
-      {/* Logo */}
-      <div>
-        <img src={nucleus} alt="" className="w-[141px] ml-[60px]" />
+    <nav className="navbar">
+      <div className="logo">
+      <img src={nucleus} alt="Logo" className="logo-icon"/> 
       </div>
-
-      {/* Tabs Container */}
-      <div className="w-[316px] h-[50px] rounded-[33px] bg-[#FDFBFD] flex flex-row justify-around items-center relative mr-[60px]">
-        {/* Sliding Purple Highlight */}
-        <motion.div
-          className="absolute bottom-0 left-0 h-full bg-purple-600 rounded-[33px] z-0"
-          style={{
-            width: '169px', // Highlight width
-          }}
-          animate={{
-            left:
-              activeTab === 'Classes'
-                ? '0'
-                : activeTab === 'Tasks'
-                ? '160.33px'
-                : '265px',
-          }}
-          transition={{
-            type: 'spring',
-            stiffness: 300, // Adjust the stiffness for smoothness
-            damping: 25,     // Adjust the damping for smoothness
-            duration: 0.3    // Explicit duration for the animation (in seconds)
-          }}
-        />
-
-        {/* Tabs */}
-        <div
-          onClick={() => handleTabClick('Classes')}
-          className={`text-[17.675px] font-bold font-poppins leading-normal cursor-pointer z-10 ${
-            activeTab === 'Classes' ? 'text-white' : 'text-[#4A4A4A]'
-          }`}
+      <ul className="nav-links">
+        <li
+          className={activeTab === 'Timeline' ? 'active' : ''}
+          onClick={() => setActiveTab('Timeline')}
         >
-          Classes
-        </div>
-        <div
-          onClick={() => handleTabClick('Tasks')}
-          className={`text-[17.675px] font-bold font-poppins leading-normal cursor-pointer z-10 ${
-            activeTab === 'Tasks' ? 'text-white' : 'text-[#4A4A4A]'
-          }`}
+          Timeline
+        </li>
+        <li
+          className={activeTab === 'Tasks' ? 'active' : ''}
+          onClick={() => setActiveTab('Tasks')}
         >
           Tasks
-        </div>
-
-      </div>
-      <div className="mr-[60px]">
-        <img
-          src={profile}
-          alt="Profile"
-          className="w-[40px] h-[40px] cursor-pointer"
+        </li>
+        <li
+          className={activeTab === 'SylaScan' ? 'active' : ''}
+          onClick={() => setActiveTab('SylaScan')}
+        >
+          SylaScan
+        </li>
+      </ul>
+      <div className="profile">
+          <img src={profile} alt="Profile" className="profile-icon"
           onClick={() => setShowProfileDropdown(!showProfileDropdown)}
         />
         {showProfileDropdown && (
-          <div className="absolute right-[60px] top-[75px] z-10 bg-white border border-[#ccc] rounded-[5px] shadow-[0_2px_5px_rgba(0,_0,_0,_0.1)] p-[10px]">
-            <p className="m-0 p-[10px_5px]">John Doe</p>
-            <button className="bg-[#8338EC] text-white border-none py-[12px] px-[17px] cursor-pointer rounded-[25px]" onClick={handleLogout}>
-              Sign Out
-            </button>
+          <div className="profile-dropdown">
+            <p>Michael Curry</p>
+            <button>Sign Out</button>
           </div>
         )}
       </div>
-    </div>
+    </nav>
   );
 }
 

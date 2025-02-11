@@ -81,7 +81,7 @@ export default function Signup() {
         <div className="h-screen flex flex-col sm:flex-row">
             {/* Left Section */}
             <div className="w-full sm:w-1/2 flex flex-col justify-center items-center relative">
-                <div className="absolute top-[43px] left-[63px]">
+                <div className="absolute top-[43px] left-[33px]">
                     <img src="/nucleus.png" alt="" className="w-[141px]" />
                 </div>
             </div>
@@ -89,7 +89,7 @@ export default function Signup() {
             {/* Right Section (Signup Form) */}
             <div className="w-full sm:w-1/2 flex flex-col justify-center items-center h-full right-login px-[33px] sm:px-[0px]">
                 <div className="flex justify-start w-full sm:w-[78%] flex-col mt-[100px]">
-                    <div className="md:text-[#F5F5F5] text-[#8338EC] px-[6px] sm:px-[12px] font-poppins text-[35px] sm:text-[50px] font-bold leading-normal mb-[19px]">Welcome Back</div>
+                    <div className="md:text-[#F5F5F5] text-[#8338EC] px-[6px] sm:px-[12px] font-poppins text-[35px] sm:text-[50px] font-bold leading-normal mb-[19px]">Create an Account</div>
                     <div className="w-full h-[77px] rounded-[20px] bg-[#F3F3F3]">
                             <div className="mt-[11px] ml-[23px] text-[#BFA1E9] font-[700] font-poppins text-[16px]">
                                 First Name
@@ -165,7 +165,7 @@ export default function Signup() {
 
                         <div className="mt-[45px] flex items-center sm:text-[#F3F3F3] text-[#8338EC] gap-4">
                             <div className="flex-1 h-[1px] sm:bg-white bg-[#8338EC]" />
-                            <div className="whitespace-nowrap">Already have an account? <a href="/signup" className="text-blue-400 underline">Login</a></div>
+                            <div className="whitespace-nowrap">Already have an account? <a href="/login" className="text-blue-400 underline">Login</a></div>
                             <div className="flex-1 h-[1px] sm:bg-white bg-[#8338EC]" />
                         </div>
                     </div>

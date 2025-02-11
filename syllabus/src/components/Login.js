@@ -49,7 +49,7 @@ export default function Login() {
         <div className="h-screen flex flex-col sm:flex-row">
             {/* Left Section */}
             <div className="w-full sm:w-1/2 flex flex-col justify-center items-center relative">
-                <div className="absolute top-[43px] left-[63px]">
+                <div className="absolute top-[43px] left-[33px]">
                     <img src="/nucleus.png" alt="" className="w-[141px]" />
                 </div>
             </div>

@@ -55,10 +55,10 @@ export default function Login() {
             </div>
   
             {/* Right Section (Login Form) */}
-            <div className="w-full sm:w-1/2 flex flex-col justify-start items-center right-login px-6 sm:px-12 mt-[100px] sm:mt-[100px]">
-                <div className="flex justify-start w-full sm:w-[528px] flex-col">
-                    <div className="text-[#F5F5F5] font-poppins text-[35px] sm:text-[50px] font-bold leading-normal mb-[19px]">Welcome Back</div>
-                    <div className="w-full sm:w-[528px] h-[77px] rounded-[20px] bg-[#F3F3F3]">
+            <div className="w-full sm:w-1/2 flex flex-col justify-center items-center h-full right-login px-[33px] sm:px-[0px]">
+                <div className="flex justify-start w-full sm:w-[78%] flex-col mt-[100px]">
+                    <div className="md:text-[#F5F5F5] text-[#8338EC] px-[6px] sm:px-[12px] font-poppins text-[35px] sm:text-[50px] font-bold leading-normal mb-[19px]">Welcome Back</div>
+                    <div className="w-full h-[77px] rounded-[20px] bg-[#F3F3F3]">
                         <div className="mt-[11px] ml-[23px] text-[#BFA1E9] font-[700] font-poppins text-[16px]">
                             Email
                         </div>
@@ -70,7 +70,7 @@ export default function Login() {
                         />
                     </div>
         
-                    <div className="w-full sm:w-[528px] h-[77px] rounded-[20px] bg-[#F3F3F3] mt-[20px]">
+                    <div className="w-full h-[77px] rounded-[20px] bg-[#F3F3F3] mt-[20px]">
                         <div className="mt-[11px] ml-[23px] text-[#BFA1E9] font-[700] font-poppins text-[16px]">
                             Password
                         </div>
@@ -108,7 +108,7 @@ export default function Login() {
                     <div className="flex flex-col sm:flex-row gap-10 sm:gap-4 w-full mt-[29px]">
                         <div
                             onClick={handleLogin}
-                            className="w-full sm:w-[200px] h-[45px] signin flex justify-center items-center rounded-[50px] hover:bg-[#DECBF8] cursor-pointer"
+                            className="w-full h-[45px] signin flex justify-center items-center rounded-[50px] hover:bg-[#DECBF8] cursor-pointer"
                         >
                             <div className="text-[#F3F3F3] font-poppins text-[16px] font-bold leading-none">
                                 LOG IN
@@ -116,11 +116,13 @@ export default function Login() {
                         </div>
                     </div>
 
-                    <div className="mt-[45px] flex flex-row gap-[24px] items-center text-[#F3F3F3]">
-                        <div className="w-[120px] h-[1px] bg-white " />
-                        <div>Don't have an account? <a href="/signup">Signup</a></div>
-                        <div className="w-[120px] h-[1px] bg-white " />
+                    <div className="mt-[45px] flex items-center sm:text-[#F3F3F3] text-[#8338EC] gap-4">
+                        <div className="flex-1 h-[1px] sm:bg-white bg-[#8338EC]" />
+                        <div className="whitespace-nowrap">Don't have an account? <a href="/signup" className="text-blue-400 underline">Signup</a></div>
+                        <div className="flex-1 h-[1px] sm:bg-white bg-[#8338EC]" />
                     </div>
+
+
                 </div>
             </div>
         </div>

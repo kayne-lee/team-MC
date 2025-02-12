@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/login.css'
 import Error from '../assets/error.png'
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import GoogleService from '../services/GoogleService';
-
+import Google from "../assets/google_button.png"
+import { motion } from "framer-motion";
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -17,8 +16,6 @@ export default function Login() {
 
     const handleLogin = async (e) => {
         e.preventDefault(); 
-        setIsLoading(true); // Start loading
-       
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
@@ -33,21 +30,16 @@ export default function Login() {
         body: raw,
         redirect: "follow"
         };
-        fetch(`${apiUrl}/auth/login`, requestOptions)
+        fetch("https://api.nucleusapp.ca/auth/login", requestOptions)
             .then((response) => {
-                // Read the response body as text
                 return response.text().then((text) => {
                 if (!response.ok) {
-                    console.log(response);
                     setMessage(text);
-                    
                 } else {
                     setMessage('')
                     localStorage.setItem("jwt", text);
-                    localStorage.removeItem('access_token'); // Clean up
                     navigate("/");
                 }
-                
                 });
             })
             .catch((error) => {
@@ -117,81 +109,54 @@ export default function Login() {
       </div>
     </div>
   
-    {/* Right Section (Login Form) */}
-    <div className="w-1/2 flex flex-col justify-center items-center right-login">
-        <div className="flex justify-start w-[528px] flex-col">
-            <div class="text-[#F5F5F5] font-poppins text-[50px] font-bold leading-normal mb-[19px]">Welcome Back</div>
-            <div className="w-[528px] h-[77px] rounded-[20px] bg-[#F3F3F3]">
-                <div className="mt-[11px] ml-[23px] text-[#BFA1E9] font-[700] font-poppins text-[16px]">
-                Email
-                </div>
-                <input
-                type="email"
-                defaultValue=""
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full h-[40px] rounded-[25px] pb-[5px] px-[23px] bg-[#F3F3F3] text-[#333] focus:outline-none"
-                />
-            </div>
-    
-            <div className="w-[528px] h-[77px] rounded-[20px] bg-[#F3F3F3] mt-[20px]">
-                <div className="mt-[11px] ml-[23px] text-[#BFA1E9] font-[700] font-poppins text-[16px]">
-                Password
-                </div>
-                <input
-                type="password"
-                defaultValue=""
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-[40px] rounded-[25px] pb-[5px] px-[23px] bg-[#F3F3F3] text-[#333] focus:outline-none"
-                />
-            </div>
-
-            <div className="flex flex-row items-center px-[19px] justify-between w-full mt-[25px]">
-                <div className="flex flex-row gap-[6px] items-center">
-                    <input 
-                        type="checkbox" 
-                        class="w-[20px] h-[20px] text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+            {/* Right Section (Login Form) */}
+            <div className="w-full sm:w-1/2 flex flex-col justify-center items-center h-full right-login px-[33px] sm:px-[0px]">
+                <div className="flex justify-start w-full sm:w-[78%] flex-col mt-[100px]">
+                    <div className="md:text-[#F5F5F5] text-[#8338EC] px-[6px] sm:px-[12px] font-poppins text-[35px] sm:text-[50px] font-bold leading-normal mb-[19px]">Welcome Back</div>
+                    <div className="w-full h-[77px] rounded-[20px] bg-[#F3F3F3]">
+                        <div className="mt-[11px] ml-[23px] text-[#BFA1E9] font-[700] font-poppins text-[16px]">
+                            Email
+                        </div>
+                        <input
+                            type="email"
+                            defaultValue=""
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full h-[40px] rounded-[25px] pb-[5px] px-[23px] bg-[#F3F3F3] text-[#333] focus:outline-none"
                         />
-                    <span class="text-[#BFA1E9] font-poppins text-[14px] font-medium leading-none">
-                        Remember me
-                    </span>
-                </div>
+                    </div>
+        
+                    <div className="w-full h-[77px] rounded-[20px] bg-[#F3F3F3] mt-[20px]">
+                        <div className="mt-[11px] ml-[23px] text-[#BFA1E9] font-[700] font-poppins text-[16px]">
+                            Password
+                        </div>
+                        <input
+                            type="password"
+                            defaultValue=""
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full h-[40px] rounded-[25px] pb-[5px] px-[23px] bg-[#F3F3F3] text-[#333] focus:outline-none"
+                        />
+                    </div>
 
-                <span class="text-[#BFA1E9] font-poppins text-[14px] font-medium leading-none cursor-pointer">
-                    Forgot Password?
-                </span>
-            </div>
-            <br></br>
-            
-            {message && (
-                <div className="text-[#FB9393] font-poppins text-[14px] font-bold leading-none flex flex-row items-center justify-center mt-[23px]">
-                    <img src={Error} alt="" className="w-[29px] h-[29px] mr-[5px]"/>
-                    There was a problem with the user details entered.  Please try again
-                </div>
-            )}
-            <div className="flex flex-row gap-10">
-                <div
-                    onClick={email.length > 0 && password.length > 0 ? handleLogin : undefined}
-                    style={{
-                        width: "100%",
-                        height: "45px",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        borderRadius: "50px",
-                        marginTop: "9px",
-                        cursor:
-                          !(email.length > 0 && password.length) > 0 ? "not-allowed" : "pointer",
-                        backgroundColor:
-                          !(email.length > 0 && password.length) > 0 ? "gray" : "#ba95ed",
-                        color: !(email.length > 0 && password.length > 0) ? "gray" : "inherit",
-                      }}
-                    
-                >
-                    {isLoading ? (
-                        <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
-                    ) : (
-                        <div className="text-[#F3F3F3] font-poppins text-[16px] font-bold leading-none">
-                        LOGIN
+                    <div className="flex flex-row items-center px-[19px] justify-between w-full mt-[25px]">
+                        <div className="flex flex-row gap-[6px] items-center">
+                            <input 
+                                type="checkbox" 
+                                className="w-[20px] h-[20px] text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                            />
+                            <span className="text-[#BFA1E9] font-poppins text-[14px] font-medium leading-none">
+                                Remember me
+                            </span>
+                        </div>
+
+                        <span className="text-[#BFA1E9] font-poppins text-[14px] font-medium leading-none cursor-pointer">
+                            Forgot Password?
+                        </span>
+                    </div>
+
+                    {message && (
+                        <div className="text-[#FB9393] font-poppins text-[14px] font-bold leading-none flex flex-row items-center justify-center mt-[23px]">
+                            <img src={Error} alt="" className="w-[29px] h-[29px] mr-[5px]" />
+                            There was a problem with the user details entered. Please try again.
                         </div>
                     )}
                 </div>
@@ -217,19 +182,10 @@ export default function Login() {
                     <div className="text-[#F3F3F3] font-poppins text-[16px] font-bold leading-none">
                     SIGN UP
                     </div>
-            </div> */}
-                {/* </div> */}
-            <div className="mt-[45px] flex flex-row gap-[24px] items-center text-[#F3F3F3]">
-                <div className="w-[120px] h-[1px] bg-white " />
-                <div>Don't have an account? <a href="/signup">Signup</a></div>
-                <div className="w-[120px] h-[1px] bg-white " />
+
+
+                </div>
             </div>
-            {/* <div className="flex mt-[24px] justify-center items-center cursor-pointer">
-                <img src={Google} alt="" className="w-[30px]" />
-            </div> */}
         </div>
-    </div>
-  </div>
-  
-  )
+    );
 }

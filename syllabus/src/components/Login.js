@@ -174,7 +174,7 @@ export default function Login() {
                     >
                         Login With Google
                 </button>
-                {/* <div
+                <div
                     hidden = {true}
                     onClick={handleSignup}
                     className="w-full h-[45px] signin flex justify-center items-center rounded-[50px] mt-[29px] hover:bg-[#DECBF8] cursor-pointer"
@@ -186,6 +186,5 @@ export default function Login() {
 
                 </div>
             </div>
-        </div>
     );
 }

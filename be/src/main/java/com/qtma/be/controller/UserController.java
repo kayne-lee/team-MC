@@ -15,7 +15,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Map;
 import java.util.Optional;
 
@@ -45,6 +44,33 @@ public class UserController {
         }
         userService.registerUser(user);
         return ResponseEntity.ok("User registered successfully");
+    }
+
+    @PostMapping("/googlelogin")
+    public ResponseEntity<String> googleLogin(@RequestBody User request) {
+        String googleEmail = request.getGoogleEmail();
+
+        if (googleEmail == null || googleEmail.isEmpty()) {
+            return ResponseEntity.badRequest().body("Email is required");
+        }
+
+        Optional<User> userOpt = userService.findBygoogleEmail(googleEmail);
+
+        User user;
+        if (userOpt.isPresent()) {
+            user = userOpt.get(); // Existing user, proceed with login
+            String token = jwtUtil.generateToken(user);
+            return ResponseEntity.ok(token);
+        } else {
+            // Create a new user entry with the Google email
+            // user = new User();
+            // user.setgoogleEmail(googleEmail);
+            userService.registerUser(request);
+        }
+
+        // Generate and return JWT token
+        String token = jwtUtil.generateToken(request);
+        return ResponseEntity.ok(token);
     }
 
     @PostMapping("/login")

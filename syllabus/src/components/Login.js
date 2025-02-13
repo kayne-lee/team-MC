@@ -4,6 +4,7 @@ import '../styles/login.css'
 import Error from '../assets/error.png'
 import Google from "../assets/google_button.png"
 import { motion } from "framer-motion";
+import GoogleService from '../services/GoogleService';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -159,11 +160,20 @@ export default function Login() {
                             There was a problem with the user details entered. Please try again.
                         </div>
                     )}
-                </div>
-                </div>
-                <div className="m-[10px] flex flex-row justify-center items-center gap-[24px] text-[#F3F3F3]">
+
+                    <div className="flex flex-col sm:flex-row gap-10 sm:gap-4 w-full mt-[29px]">
+                        <div
+                            onClick={handleLogin}
+                            className="w-full h-[45px] signin flex justify-center items-center rounded-[50px] hover:bg-[#DECBF8] cursor-pointer"
+                        >
+                            <div className="text-[#F3F3F3] font-poppins text-[16px] font-bold leading-none">
+                                LOG IN
+                            </div>
+                        </div>
+                    </div>
+                    <div className="m-[10px] flex flex-row justify-center items-center gap-[24px] text-[#F3F3F3]">
                     <div className="w-[120px] h-[1px] bg-white" />
-                    <div>OR</div>
+                        <div>OR</div>
                     <div className="w-[120px] h-[1px] bg-white" />
                     
                 </div>
@@ -174,17 +184,13 @@ export default function Login() {
                     >
                         Login With Google
                 </button>
-                <div
-                    hidden = {true}
-                    onClick={handleSignup}
-                    className="w-full h-[45px] signin flex justify-center items-center rounded-[50px] mt-[29px] hover:bg-[#DECBF8] cursor-pointer"
-                >
-                    <div className="text-[#F3F3F3] font-poppins text-[16px] font-bold leading-none">
-                    SIGN UP
-                    </div>
-
-
                 </div>
+                <div className="mt-[45px] flex items-center sm:text-[#F3F3F3] text-[#8338EC] gap-4">
+                        <div className="flex-1 h-[1px] sm:bg-white bg-[#8338EC]" />
+                        <div className="whitespace-nowrap">Don't have an account? <a href="/signup" className="text-blue-400 underline">Signup</a></div>
+                        <div className="flex-1 h-[1px] sm:bg-white bg-[#8338EC]" />
+                    </div>
+                </div>  
             </div>
     );
 }

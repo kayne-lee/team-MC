@@ -4,7 +4,11 @@ import com.qtma.be.model.User;
 import com.qtma.be.service.UserService;
 
 import com.qtma.be.util.JwtUtil;
+import com.qtma.be.util.NotificationUtil;
+import com.twilio.rest.api.v2010.account.Notification;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -12,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -26,6 +31,9 @@ public class UserController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private NotificationUtil notificationUtil;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -57,5 +65,42 @@ public class UserController {
 
         // Return the JWT token if the login is successful
         return ResponseEntity.ok(jwtUtil.generateToken(user));
+    }
+
+    @PutMapping("/notifications")
+    public ResponseEntity<String> updateNotificationCount(
+            @RequestBody Map<String, Integer> request,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+        
+        String token = null;
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            token = authorizationHeader.substring(7);
+        }
+
+        if (token != null && !jwtUtil.isTokenExpired(token)) {
+            try {
+                String username = jwtUtil.extractUsername(token);
+                Optional<User> userOpt = userService.findById(username);
+                
+                if (userOpt.isPresent()) {
+                    Integer notificationCount = request.get("notificationCount");
+                    if (notificationCount == null) {
+                        return ResponseEntity.badRequest().body("Notification count is required");
+                    }
+                    
+                    User user = userOpt.get();
+                    user.setNotificationCount(notificationCount);
+                    userService.save(user);
+                    
+                    return ResponseEntity.ok("Notification count updated successfully");
+                }
+                
+                return ResponseEntity.notFound().build();
+            } catch (Exception e) {
+                return ResponseEntity.internalServerError().body("Error updating notification count");
+            }
+        }
+        
+        return ResponseEntity.status(401).body("Unauthorized");
     }
 }

@@ -4,6 +4,7 @@ import nucleus from './assets/nucleus.png';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import profile from './assets/profile.png';
+import Settings from '../components/Settings';
 
 function Navbar({ activeTab, setActiveTab }) {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
@@ -12,6 +13,7 @@ function Navbar({ activeTab, setActiveTab }) {
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
   const apiURL = process.env.REACT_APP_NUCLEUS_API;
+  const [showSettings, setShowSettings] = useState(false);
 
   // Fetch user data
   useEffect(() => {
@@ -126,6 +128,8 @@ function Navbar({ activeTab, setActiveTab }) {
           </div>
         )}
       </div>
+      {/* Settings Modal */}
+      {showSettings && <Settings closeModal={() => setShowSettings(false)} />}
     </div>
   );
 }

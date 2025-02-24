@@ -1,11 +1,13 @@
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 const qs = require('qs');
 
 function GoogleService() {
+    const navigate = useNavigate()
     const apiURL = process.env.REACT_APP_NUCLEUS_API;
     let sv = {
         async getAccessToken(credential) {
-            console.log("CRED",credential)
+     
             const qs = new URLSearchParams({
                 client_id: process.env.REACT_APP_CLIENT_ID,
                 client_secret: process.env.REACT_APP_CLIENT_SECRET,
@@ -18,14 +20,33 @@ function GoogleService() {
             });
             console.log(response)
             localStorage.setItem("access_token", response["data"]["access_token"])
+            navigate("/");
+        },
+
+        async getUserInfo() {
+          const accessToken = localStorage.getItem("access_token")
+       
+          const response = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
+              headers: {
+                  "Authorization": `Bearer ${accessToken}`
+              }
+          });
+      
+          if (!response.ok) {
+              throw new Error("Failed to fetch user info");
+          }
+      
+          const data = await response.json();
+          console.log(data); // { id, email, given_name, family_name, picture }
+          return data;
         },
 
         async createCalendarEvent(dueDate, title, weight, description, courseTitle){
-            console.log("qa1",dueDate, title, weight, description, courseTitle)
+        
             try {
                 const authToken = localStorage.getItem("access_token")
                 const calendarId = 'primary'; // Use 'primary' for the user's main calendar
-                console.log("TOKE", authToken)
+          
                 const event = {
                   summary: `${courseTitle} - ${title}`,
                 //   location: '123 Main St, New York, NY',

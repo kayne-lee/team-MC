@@ -31,6 +31,6 @@ public class User {
     public void setgoogleEmail(String googleEmail) {
         this.googleEmail = googleEmail;
     }
-    private int notificationCount;
+    private List<Integer> notificationCount;
     private String phone;
 }

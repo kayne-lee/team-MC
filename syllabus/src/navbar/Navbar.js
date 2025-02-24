@@ -13,7 +13,7 @@ function Navbar({ activeTab, setActiveTab }) {
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
   const apiURL = process.env.REACT_APP_NUCLEUS_API;
-  const [showSettings, setShowSettings] = useState(false);
+  const [showSettings, setShowSettings] = useState(true);
 
   // Fetch user data
   useEffect(() => {

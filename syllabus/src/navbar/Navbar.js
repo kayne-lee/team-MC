@@ -4,6 +4,8 @@ import nucleus from './assets/nucleus.png';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import profile from './assets/profile.png';
+import SettingsPopup from '../components/SettingsPopUp';
+import { FaUser, FaEnvelope, FaCog, FaSignOutAlt } from "react-icons/fa";
 
 function Navbar({ activeTab, setActiveTab }) {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
@@ -12,6 +14,9 @@ function Navbar({ activeTab, setActiveTab }) {
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
   const apiURL = process.env.REACT_APP_NUCLEUS_API;
+  const [showPopup, setShowPopup] = useState(false);
+    
+  const togglePopup = () => setShowPopup(!showPopup);
 
   // Fetch user data
   useEffect(() => {
@@ -59,6 +64,11 @@ function Navbar({ activeTab, setActiveTab }) {
   const handleLogout = () => {
     localStorage.removeItem('jwt');
     navigate('/login');
+  };
+
+  const handleSettingsSave = (data) => {
+       
+    setShowPopup(false); // Close the popup
   };
 
   return (
@@ -113,19 +123,32 @@ function Navbar({ activeTab, setActiveTab }) {
         />
         {showProfileDropdown && (
           <div className="absolute right-0 top-[60px] z-10 bg-white border border-[#ccc] rounded-[5px] shadow-[0_2px_5px_rgba(0,_0,_0,_0.1)] p-[10px]">
-            <p className="m-0 p-[10px_5px]">
+            <p className="m-0 p-[5px] flex items-center gap-2">
+              <FaUser className="text-[#6A6A6A]" />
               <strong>{`${firstName} ${lastName}`}</strong>
             </p>
-            <p className="m-0 p-[10px_5px] text-[#6A6A6A] text-sm">{email}</p>
+            <p className="m-0 p-[5px] text-[#6A6A6A] text-sm flex items-center gap-2">
+              <FaEnvelope className="text-[#6A6A6A]" />
+              {email}
+            </p>
             <button
-              className="bg-[#8338EC] text-white border-none py-[12px] px-[17px] cursor-pointer rounded-[25px]"
+              className="bg-[#8338EC] text-white border-none py-[8px] px-[17px] cursor-pointer rounded-[25px] flex items-center gap-2 w-full mt-2"
+              onClick={togglePopup}
+            >
+              <FaCog />
+              Settings
+            </button>
+            <button
+              className="bg-[#8338EC] text-white border-none py-[8px] px-[17px] cursor-pointer rounded-[25px] flex items-center gap-2 w-full mt-2"
               onClick={handleLogout}
             >
+              <FaSignOutAlt />
               Sign Out
             </button>
           </div>
         )}
       </div>
+      {showPopup && <SettingsPopup onClose={handleSettingsSave} />}
     </div>
   );
 }

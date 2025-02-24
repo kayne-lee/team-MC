@@ -71,13 +71,13 @@ public class NotificationUtil {
 
         // For each user
         for (User user : users) {
-            // Get the number of days before the assignment is due to notify the user
-            int notificationDaysBefore = user.getNotificationCount();  // The notification days attribute
-
+            // Get the array of notification days before the assignment is due
+            List<Integer> notificationDaysBeforeList = user.getNotificationCount();  // Now a List<Integer>
+        
             List<UserCourse> userCourses = userCourseRepository.findByEmail(user.getEmail())
                         .map(userCourse -> List.of(userCourse)) // Return the user's courses
                         .orElse(List.of());
-
+        
             for (UserCourse userCourse : userCourses) {
                 for (Course course : userCourse.getCourses()) {
                     // For each assignment in the course
@@ -86,25 +86,28 @@ public class NotificationUtil {
                         if (assignment.getTitle().toLowerCase().contains("random task")) {
                             continue;
                         }
-
+        
                         LocalDateTime dueDate = LocalDateTime.parse(assignment.getDueDate(), 
                                 DateTimeFormatter.ISO_LOCAL_DATE_TIME);
                         
-                        // Get the user's notification setting (days before)
-                        LocalDateTime notifyDate = dueDate.minusDays(notificationDaysBefore);
-
-                        // If the notify date is today, send a notification
-                        if (notifyDate.toLocalDate().equals(now.toLocalDate())) {
-                            String phoneNumber = user.getPhone();
-                            if (phoneNumber != null) {
-                                // Prepare the notification message
-                                String message = "Reminder: Your assignment '" + assignment.getTitle() + course.getTitle() +
-                                                    "' is due in " + notificationDaysBefore + " days!";
-                                // Send SMS via Twilio
-                                twilioService.sendSms(phoneNumber, message);
-                                System.out.println("Sent SMS to: " + phoneNumber + " - Message: " + message);
-                            } else {
-                                System.out.println("No phone number for user: " + user.getEmail());
+                        // Loop through each notification day setting
+                        for (int notificationDaysBefore : notificationDaysBeforeList) {
+                            LocalDateTime notifyDate = dueDate.minusDays(notificationDaysBefore);
+        
+                            // If the notify date is today, send a notification
+                            if (notifyDate.toLocalDate().equals(now.toLocalDate())) {
+                                String phoneNumber = user.getPhone();
+                                if (phoneNumber != null) {
+                                    // Prepare the notification message
+                                    String message = "Reminder: Your assignment '" + assignment.getTitle() + 
+                                                     "' in course '" + course.getTitle() + 
+                                                     "' is due in " + notificationDaysBefore + " days!";
+                                    // Send SMS via Twilio
+                                    twilioService.sendSms(phoneNumber, message);
+                                    System.out.println("Sent SMS to: " + phoneNumber + " - Message: " + message);
+                                } else {
+                                    System.out.println("No phone number for user: " + user.getEmail());
+                                }
                             }
                         }
                     }

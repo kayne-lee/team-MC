@@ -15,6 +15,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -95,7 +97,7 @@ public class UserController {
 
     @PutMapping("/notifications")
     public ResponseEntity<String> updateNotificationCount(
-            @RequestBody Map<String, Integer> request,
+            @RequestBody Map<String, List<Integer>> request,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
         
         String token = null;
@@ -109,13 +111,13 @@ public class UserController {
                 Optional<User> userOpt = userService.findById(username);
                 
                 if (userOpt.isPresent()) {
-                    Integer notificationCount = request.get("notificationCount");
-                    if (notificationCount == null) {
+                    List<Integer> notificationCounts = request.get("notificationCount");
+                    if (notificationCounts == null) {
                         return ResponseEntity.badRequest().body("Notification count is required");
                     }
                     
                     User user = userOpt.get();
-                    user.setNotificationCount(notificationCount);
+                    user.setNotificationCount(notificationCounts);
                     userService.save(user);
                     
                     return ResponseEntity.ok("Notification count updated successfully");

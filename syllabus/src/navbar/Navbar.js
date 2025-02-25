@@ -12,6 +12,8 @@ function Navbar({ activeTab, setActiveTab }) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('')
+  const [notifSettings, setNotifSettings] = useState({})
   const navigate = useNavigate();
   const apiURL = process.env.REACT_APP_NUCLEUS_API;
   const [showPopup, setShowPopup] = useState(false);
@@ -45,9 +47,27 @@ function Navbar({ activeTab, setActiveTab }) {
 
         const userData = await response.json(); // Parse the JSON response
         if (userData) {
+          var notifState = {
+            1: false,
+            2: false,
+            5: false,
+          }
           setFirstName(userData.firstName);
           setLastName(userData.lastName);
           setEmail(userData.email);
+          setPhone(userData.phone);
+          console.log(userData)
+          console.log(typeof(userData.notificationCount));
+          if (userData.notificationCount.includes(1)){
+            notifState[1] = true
+          }
+          if (userData.notificationCount.includes(2)){
+            notifState[2] = true
+          }
+          if (userData.notificationCount.includes(5)){
+            notifState[5] = true
+          }
+          setNotifSettings(notifState)
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -148,7 +168,7 @@ function Navbar({ activeTab, setActiveTab }) {
           </div>
         )}
       </div>
-      {showPopup && <SettingsPopup onClose={handleSettingsSave} />}
+      {showPopup && <SettingsPopup data = {{"phone": phone, "email": email, "firstName": firstName, "lastName": lastName, "notifications": notifSettings}}onClose={handleSettingsSave} />}
     </div>
   );
 }

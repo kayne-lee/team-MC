@@ -13,7 +13,7 @@ function GoogleService() {
                 client_secret: process.env.REACT_APP_CLIENT_SECRET,
                 grant_type: 'authorization_code',
                 code: credential,
-                redirect_uri: 'http://localhost:3000/api/auth/callback/google',
+                redirect_uri: 'https://www.nucleusapp.ca/api/auth/callback/google',
               });
             const response = await axios.post('https://oauth2.googleapis.com/token', qs.toString(), {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' }

@@ -108,7 +108,34 @@ function MongoService() {
                     reject(error); // Reject the promise in case of errors
                     });
             });
-        }
+        },
+        async updateNofitications(newNotifs) {
+          const token = localStorage.getItem("jwt");
+          let data = JSON.stringify({
+              "notificationCount": newNotifs
+  
+            });
+            
+            let config = {
+              method: 'put',
+              maxBodyLength: Infinity,
+              url: `${apiURL}/auth/notifications`,
+              headers: { 
+                'Content-Type': 'application/json', 
+                'Authorization': `Bearer ${token}`
+              },
+              data : data
+            };
+            
+            
+            axios.request(config)
+            .then((response) => {
+              return response
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+      },
     }
 
     return sv;

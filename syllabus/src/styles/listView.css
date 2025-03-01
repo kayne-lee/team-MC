@@ -2,6 +2,7 @@
     background: white;
     height: calc(100vh - 114px);
     overflow-y: auto;
+    padding: 0 60px;
 }
 
 .list-container {

@@ -2,14 +2,15 @@
 
 .courses-page {
     display: flex;
-    height: calc(100vh - 114px);
+    height: calc(100vh - 165px);
     font-family: "Poppins", "Lato", "sans-serif";
     background: white;
 }
 
 .sidebar {
     flex: 1;
-    padding: 20px;
+    padding: 20px 20px 0 20px; /* Top Right Bottom Left */
+
     overflow-y: auto;
     border-right: 2px solid #e0e0e0;
     height: calc(100vh - 154px);

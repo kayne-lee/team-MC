@@ -39,7 +39,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .layout-container {
     display: flex;
     gap: 0;
-    padding: 20px 0;
+    padding: 0 40px;
     min-height: 663px;
     max-height: calc(100vh - 234px);
     width: 100%;

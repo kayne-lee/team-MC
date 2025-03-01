@@ -76,10 +76,10 @@ const TasksPage = () => {
                             // dueDate.setDate(dueDate.getDate() - 1); // Subtract 1 day
     
                             return {
-                                title: task.title,
-                                description: task.description,
+                                title: task.description,
                                 dueDate: formatDateKey(dueDate),
-                                course:"Extra Task"
+                                course: task.title,
+                                isRandomTask: true,
                             };
                             
                         })
@@ -102,6 +102,7 @@ const TasksPage = () => {
                                     course: course.title,
                                     weight: assignment.weight,
                                     dueDate: formatDateKey(dueDate),
+                                    isRandomTask: false,
                                 };
                             })
                         )
@@ -199,10 +200,10 @@ const TasksPage = () => {
             }}
         >
             {/* Page Header */}
-            <div className="flex flex-row items-center justify-between gap-[10px] ">
+            <div className="flex flex-row items-center justify-between gap-[10px] mt-[33px]">
                 <div className="flex flex-row items-center gap-[30px]">
-                    <h1 className="header">{formatHeaderDate(currentDate)}</h1>
-
+                    <h1 className="header text-[28.232px] font-bold leading-normal text-[#333] font-poppins">{formatHeaderDate(currentDate)}</h1>
+ 
                     <div id="date-picker-wrapper" style={{ position: 'relative' }}>
                         <div className="popup-row">
                             <input
@@ -250,7 +251,7 @@ const TasksPage = () => {
                             </div>
                             <div className="sub-list flex flex-col gap-[15px]">
                                 {(assignmentsByDate[formatDateKey(day)] || []).map((assignment, idx) => (
-                                    <div key={idx} className="task-tile">
+                                    <div key={idx} className={`task-tile ${assignment.isRandomTask ? 'bg-[#FAFAFA] text-black' : 'bg-[#8338EC] text-white'}`}>
                                         <div className="task-content">
                                             <div>
                                                 <div className="task-details">

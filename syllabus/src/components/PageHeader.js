@@ -15,6 +15,11 @@ const PageHeader = ({ currentDate, onDateChange, togglePopup, isExpanded, handle
         return `${month} ${year}`;
     };
 
+    const handleDateChange = (value) => {
+        localStorage.setItem('selectedDate', value);
+        onDateChange(value);
+    };
+
     return (
         <div className="page-header">
             <div className="flex flex-row items-center justify-between gap-[10px]">
@@ -27,11 +32,11 @@ const PageHeader = ({ currentDate, onDateChange, togglePopup, isExpanded, handle
                                 type="date"
                                 className="popup-pill w-[100px]"
                                 value={currentDate.toISOString().split('T')[0]}
-                                onClick={(e) => e.stopPropagation()} // Update date state
+                                onClick={(e) => e.stopPropagation()}
                                 onChange={(e) => {
-                                    e.stopPropagation(); // Ensure change event doesn't propagate
-                                    onDateChange(e.target.value); // Handle the date change
-                                }}                        
+                                    e.stopPropagation();
+                                    handleDateChange(e.target.value);
+                                }}
                             />
                         </div>
                     </div>

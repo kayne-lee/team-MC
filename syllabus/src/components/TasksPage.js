@@ -8,7 +8,10 @@ import PageHeader from './PageHeader';
 
 const TasksPage = () => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const [currentDate, setCurrentDate] = useState(new Date());
+    const [currentDate, setCurrentDate] = useState(() => {
+        const savedDate = localStorage.getItem('selectedDate');
+        return savedDate ? new Date(savedDate) : new Date();
+    });
     const [upcomingDays, setUpcomingDays] = useState([]);
     const [assignmentsByDate, setAssignmentsByDate] = useState({});
     const [showPopup, setShowPopup] = useState(false);

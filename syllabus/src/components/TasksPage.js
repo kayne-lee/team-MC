@@ -76,10 +76,10 @@ const TasksPage = () => {
                             // dueDate.setDate(dueDate.getDate() - 1); // Subtract 1 day
     
                             return {
-                                title: task.title,
-                                description: task.description,
+                                title: task.description,
                                 dueDate: formatDateKey(dueDate),
-                                course:"Extra Task"
+                                course: task.title,
+                                isRandomTask: true,
                             };
                             
                         })
@@ -102,6 +102,7 @@ const TasksPage = () => {
                                     course: course.title,
                                     weight: assignment.weight,
                                     dueDate: formatDateKey(dueDate),
+                                    isRandomTask: false,
                                 };
                             })
                         )
@@ -168,8 +169,27 @@ const TasksPage = () => {
     };
 
     const formatDisplayDate = (date) => {
-        const options = { weekday: 'long', month: 'long', day: 'numeric' };
-        return date.toLocaleDateString('en-US', options);
+        // Create short day names
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        
+        // Get day name and date
+        const dayName = days[date.getDay()];
+        const dayNumber = date.getDate();
+        
+        // Return formatted string
+        return `${dayName} ${dayNumber}`;
+    };
+
+    const formatHeaderDate = (date) => {
+        const months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        
+        const month = months[date.getMonth()];
+        const year = date.getFullYear();
+        
+        return `${month} ${year}`;
     };
 
     return (
@@ -180,10 +200,10 @@ const TasksPage = () => {
             }}
         >
             {/* Page Header */}
-            <div className="flex flex-row items-center justify-between gap-[10px] ">
+            <div className="flex flex-row items-center justify-between gap-[10px] mt-[33px]">
                 <div className="flex flex-row items-center gap-[30px]">
-                    <h1 className="header">Upcoming Tasks</h1>
-
+                    <h1 className="header text-[28.232px] font-bold leading-normal text-[#333] font-poppins">{formatHeaderDate(currentDate)}</h1>
+ 
                     <div id="date-picker-wrapper" style={{ position: 'relative' }}>
                         <div className="popup-row">
                             <input
@@ -192,7 +212,7 @@ const TasksPage = () => {
                                 value={currentDate.toISOString().split('T')[0]}
                                 onClick={(e) => e.stopPropagation()} // Update date state
                                 onChange={(e) => {
-                                    e.stopPropagation(); // Ensure change event doesn’t propagate
+                                    e.stopPropagation(); // Ensure change event doesn't propagate
                                     handleDateClick(e.target.value); // Handle the date change
                                 }}                        
                             />
@@ -219,54 +239,36 @@ const TasksPage = () => {
             
             {/* Layout Container */}
             <div className="layout-container">
-                {/* Left Large Box (Today's Tasks) */}
-                <div
-                    style={{ cursor: "pointer" }}
-                    className={`left-box ${isExpanded ? 'expanded' : ''}`}
-                    onClick={handleExpand} // Prevent collapse on clicking the box
-                >
-                    <div class="text-white font-poppins text-[26px] font-extrabold leading-normal">{formatDisplayDate(currentDate)}</div>
-                    <div className="task-list">
-                        <ul className="main-list list-none">
-                            {(assignmentsByDate[formatDateKey(currentDate)] || []).map((assignment, index) => (
-                                <li key={index} className="flex items-center before:content-[''] before:w-2.5 before:h-2.5 before:mr-3 before:bg-white before:rounded-full">
-                                    {assignment.course === "Extra Task" ? (
-                                        <strong>{assignment.title}</strong>
-                                        ) : (
-                                        <>
-                                            <strong>{assignment.title}</strong> - {assignment.course} ({assignment.weight})
-                                        </>
-                                        )}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
 
                 {/* Right Grid of Boxes (Next 6 Days) */}
                 <div className="right-grid overflow-y-auto  no-scrollbar">
-                    {upcomingDays.slice(1).map((day, index) => (
+                    {upcomingDays.map((day, index) => (
                         <div className="grid-box" key={index}>
                             <div className="flex justify-center items-center flex-col mb-[10px]">
-                                <h3 className="date-header mb-[7px]">{formatDisplayDate(day)}</h3>
-                                <div className="w-[320px] h-[1px] bg-black"></div>
+                                <div className="date-header">
+                                    {formatDisplayDate(day)}
+                                </div>
                             </div>
-                            <div className="sub-list flex flex-col gap-[15px]"> {/* Main container */}
+                            <div className="sub-list flex flex-col gap-[15px]">
                                 {(assignmentsByDate[formatDateKey(day)] || []).map((assignment, idx) => (
-                                    <li key={idx} className="flex items-center before:content-[''] before:w-1.5 before:h-1.5 before:mr-3 before:bg-black before:rounded-full">
-                                        {assignment.course === "Extra Task" ? (
-                                        <strong>{assignment.title}</strong>
-                                        ) : (
-                                        <>
-                                            <strong>{assignment.title}</strong> - {assignment.course} ({assignment.weight})
-                                        </>
-                                        )}
-                                    </li>
+                                    <div key={idx} className={`task-tile ${assignment.isRandomTask ? 'bg-[#FAFAFA] text-black' : 'bg-[#8338EC] text-white'}`}>
+                                        <div className="task-content">
+                                            <div>
+                                                <div className="task-details">
+                                                    <span>{assignment.course}</span>
+                                                </div>
+                                                <div className="task-title">{assignment.title}</div>
+                                            </div>
+                                            {assignment.weight && (
+                                                <div className="weight-container">
+                                                    <span className="weight-badge">{assignment.weight}</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
                                 ))}
                             </div>
-
                         </div>
-
                     ))}
                 </div>
             </div>

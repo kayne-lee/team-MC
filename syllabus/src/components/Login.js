@@ -17,6 +17,7 @@ export default function Login() {
 
     const handleLogin = async (e) => {
         e.preventDefault(); 
+        setIsLoading(true); // Start loading
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
@@ -166,9 +167,14 @@ export default function Login() {
                             onClick={handleLogin}
                             className="w-full h-[45px] signin flex justify-center items-center rounded-[50px] hover:bg-[#DECBF8] cursor-pointer"
                         >
-                            <div className="text-[#F3F3F3] font-poppins text-[16px] font-bold leading-none">
-                                LOG IN
-                            </div>
+
+                            {isLoading ? (
+                                <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                            ) : (
+                                <div className="text-[#F3F3F3] font-poppins text-[16px] font-bold leading-none">
+                                LOGIN
+                                </div>
+                            )}
                         </div>
                     </div>
                     <div className="m-[10px] flex flex-row justify-center items-center gap-[24px] text-[#F3F3F3]">

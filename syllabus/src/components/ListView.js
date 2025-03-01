@@ -7,7 +7,10 @@ import PageHeader from './PageHeader';
 import axios from 'axios';
 
 const ListView = () => {
-    const [currentDate, setCurrentDate] = useState(new Date());
+    const [currentDate, setCurrentDate] = useState(() => {
+        const savedDate = localStorage.getItem('selectedDate');
+        return savedDate ? new Date(savedDate) : new Date();
+    });
     const [showPopup, setShowPopup] = useState(false);
     const [assignmentsByDate, setAssignmentsByDate] = useState({});
     const togglePopup = () => setShowPopup(!showPopup);

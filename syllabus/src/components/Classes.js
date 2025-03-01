@@ -384,7 +384,7 @@ const Classes = () => {
 
                         <div className="course-details-container-inner">
                         {/* Assignments Section */}
-                        <div className="assignments-section">
+                        <div className="assignments-section pr-[10px]">
                         <ul>
                             {selectedCourse.assignments.map((assignment) => {
                                 const inputColor = checkedAssignments[selectedCourse.id]?.[assignment.id] ? 'border-purple-500 text-purple-500' : 'border-[#272627] text-[#272627]';
@@ -413,10 +413,10 @@ const Classes = () => {
                                         </div>
                                     </div>
                                     <div
-                                        className={`flex ml-[20px] items-center border-[1.816px] rounded-[18.637px] ${inputColor} ${bgColor} w-[53px] h-[33px]`}
+                                        className={`flex ml-[20px] items-center border-[1.816px] rounded-[18.637px] ${inputColor} ${bgColor} w-[68px] h-[33px]`}
                                     >
                                         <input
-                                        className={`w-[calc(100%-15px)] h-full text-right border-none rounded-[18.637px] ${bgColor} focus:outline-none px-0`}
+                                        className={`w-[calc(100%)] h-full text-right border-none rounded-[18.637px] ${bgColor} focus:outline-none px-0`}
                                         type="number"
                                         value={percentages[`${selectedCourse.title}-${assignment.title}`] || ''}
                                         min="0"
@@ -427,7 +427,7 @@ const Classes = () => {
                                         inputMode="numeric"
                                         pattern="[0-9]*"
                                         />
-                                        <span className="text-center font-poppins text-[14.526px] font-bold leading-normal">%</span>
+                                        <span className="text-center font-poppins text-[14.526px] font-bold leading-normal pr-[5px]">%</span>
                                     </div>
                                     </div>
                                 </li>

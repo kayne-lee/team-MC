@@ -11,7 +11,7 @@ export default function App() {
   return (
     <div className="app">
       <Router>
-      <Routes>
+        <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/" element={<PrivateRoute element={<Dashboard />} />} />

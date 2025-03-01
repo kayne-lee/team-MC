@@ -1,10 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
 .parent {
     font-family: 'Lato', 'sans-serif', 'Arial';
-    height: calc(100vh - 114px);
+    height: calc(100vh - 165px);
     overflow: hidden;
-    padding-left: 60px;
+    padding: 0 60px;
+    background: white;
+    width: 100%;
 }
 
 label {
@@ -35,11 +38,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Layout container */
 .layout-container {
     display: flex;
-    gap: 50px;
-    padding: 20px;
+    gap: 0;
+    padding: 20px 0;
     min-height: 663px;
     max-height: calc(100vh - 234px);
-    justify-content: center; 
+    width: 100%;
 }
 
 .nav {
@@ -80,7 +83,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .left-box.expanded {
     z-index: 10;
-    background: radial-gradient(123.37% 145% at 29.41% 3.92%, #8338EC 49.11%, #BFA1E9 96.5%);
+    background: white;
     border-radius: 20px;
     padding: 40px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
@@ -103,9 +106,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .left-box {
     flex: 1;
-    background: radial-gradient(123.37% 145% at 29.41% 3.92%, #8338EC 49.11%, #BFA1E9 96.5%);
+    background: white;
     box-shadow: 8px 11px 4px 0px rgba(0, 0, 0, 0.25);
-    color: white;
+    color: #333;
     border-radius: 45px;
     padding: 30px;
     display: flex;
@@ -160,12 +163,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Right Grid */
 .right-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: auto auto;
-    gap: 50px;
-    white-space: nowrap;
-    padding-bottom: 10px;
-    padding-right: 10px;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0;
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -175,13 +177,23 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* Grid Boxes */
 .grid-box {
     background: white;
-    border-radius: 45px;
     padding: 20px;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    border-right: 1px solid #e0e0e0;
+    min-width: 0;
+    height: calc(100vh - 234px);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    width: 393px;
-    height: 296px;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.grid-box::-webkit-scrollbar {
+    display: none;
+}
+
+/* Remove border from last column */
+.grid-box:last-child {
+    border-right: none;
 }
 
 .grid-box ul {
@@ -229,23 +241,29 @@ li {
 }
 
 .date-header {
-    color: #000;
-    text-align: center;
-    font-size: 16px;
-    font-style: normal;
+    color: #333;
+    font-family: Poppins;
+    font-size: 19.7px;
     font-weight: 700;
     line-height: normal;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    width: 100%;
+    background: white;
+    z-index: 1;
 }
 
 .sub-list {
-    color: #000;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    margin-left: 10px;
-    overflow: scroll;
+    overflow-y: auto;
+    height: calc(100% - 60px); /* Account for header height */
     gap: 10px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.sub-list::-webkit-scrollbar {
+    display: none;
 }
 
 .calendar-icon-container {
@@ -333,4 +351,63 @@ li {
     max-width: 100%;
     overflow: hidden;
     max-height: 100%;
+}
+
+.task-tile {
+    /* background: #8338EC; */
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 15px;
+    min-height: 140px;
+    /* filter: drop-shadow(0px 2px 2px #AE7DF1); */
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    /* filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)); */
+}
+
+.task-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 100%;
+    justify-content: space-between;
+}
+
+.task-details {
+    display: flex;
+    align-items: center;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    width: 90%;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700; /* Bold */
+}
+
+.task-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 12px;
+}
+
+.weight-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    width: fit-content;
+}
+
+/* New wrapper for the weight badge */
+.weight-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: auto;
+}
+
+::-webkit-scrollbar-horizontal {
+    display: none;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-height: none;
 }

@@ -1,62 +1,62 @@
 .list-view {
-    padding: 40px;
     background: white;
     height: calc(100vh - 114px);
     overflow-y: auto;
-  }
-  
-  .list-container {
+}
+
+.list-container {
+    padding: 0 40px;
     max-width: 1200px;
     margin: 0 auto;
-  }
-  
-  .date-section {
+}
+
+.date-section {
     margin-bottom: 30px;
-  }
-  
-  .date-section h2 {
+}
+
+.date-section h2 {
     font-family: 'Poppins', sans-serif;
     font-size: 20px;
     font-weight: 600;
     color: #333;
     margin-bottom: 15px;
-  }
-  
-  .task-item {
+}
+
+.task-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 12px 0;
     border-bottom: 1px solid #E0E0E0;
-  }
-  
-  .task-left {
+}
+
+.task-left {
     display: flex;
     align-items: center;
     gap: 12px;
-  }
-  
-  .task-right {
+}
+
+.task-right {
     display: flex;
     align-items: center;
     gap: 20px;
-  }
-  
-  .checkbox {
+}
+
+.checkbox {
     width: 20px;
     height: 20px;
     accent-color: #8338EC;
-  }
-  
-  .time {
+}
+
+.time {
     color: #8B898D;
     font-size: 14px;
-  }
-  
-  .class-tag {
+}
+
+.class-tag {
     background: #F3F3F3;
     padding: 6px 12px;
     border-radius: 20px;
     font-size: 14px;
     color: #333;
-  }
+}

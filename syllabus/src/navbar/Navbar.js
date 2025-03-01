@@ -93,6 +93,15 @@ function Navbar({ activeTab, setActiveTab }) {
         <div>
           <img src={nucleus} alt="Nucleus Logo" className="w-[141px] ml-[60px]" />
         </div>
+
+        {/* Profile Dropdown */}
+      <div className="mr-[60px] relative">
+        <img
+          src={profile}
+          alt="Profile"
+          className="w-[40px] h-[40px] cursor-pointer"
+          onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+        />
         {showProfileDropdown && (
           <div className="absolute right-0 top-[60px] z-10 bg-white border border-[#ccc] rounded-[5px] shadow-[0_2px_5px_rgba(0,_0,_0,_0.1)] p-[10px]">
             <p className="m-0 p-[5px] flex items-center gap-2">
@@ -121,6 +130,7 @@ function Navbar({ activeTab, setActiveTab }) {
         )}
       </div>
       {showPopup && <SettingsPopup data = {{"phone": phone, "email": email, "firstName": firstName, "lastName": lastName, "notifications": notifSettings}}onClose={handleSettingsSave} />}
+      </div>
 
       {/* Navigation */}
       <div className="w-full bg-white border-b border-gray-200">

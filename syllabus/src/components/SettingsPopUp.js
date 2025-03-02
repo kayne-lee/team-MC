@@ -6,7 +6,7 @@ const SettingsPopup = ({ data, onClose }) => {
  
     const mongoService = MongoService();
     const [activeTab, setActiveTab] = useState("Notifications");
-    const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+    const [notificationsEnabled, setNotificationsEnabled] = useState(data["allowNotifs"]);
     const [fname, setFName] = useState(data["firstName"]);
     const [lname, setLName] = useState(data["lastName"])
     const [email, setEmail] = useState(data["email"]);
@@ -29,19 +29,22 @@ const SettingsPopup = ({ data, onClose }) => {
 
     const handleSave = async () => {
         var newNotif = []
-        if (timePreferences[1] == true) {
-            newNotif.push(1)
-        } 
-        if (timePreferences[2] == true) {
-            newNotif.push(2)
-        } 
-        if (timePreferences[5] == true) {
-            newNotif.push(5)
-        } 
-        console.log(newNotif)
+        if (notificationsEnabled) {
+        
+          if (timePreferences[1] == true) {
+              newNotif.push(1)
+          } 
+          if (timePreferences[2] == true) {
+              newNotif.push(2)
+          } 
+          if (timePreferences[5] == true) {
+              newNotif.push(5)
+          } 
+          console.log(newNotif)
+        }
         
         await mongoService.updateNofitications(newNotif)
-        onClose();
+        onClose({"newNotif":newNotif, "allow": notificationsEnabled});
     };
 
     const toggleNotification = (type) => {

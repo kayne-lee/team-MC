@@ -5,6 +5,7 @@ import TaskPopup from './TaskPopUp';
 import plusIcon from '../assets/plus.png';
 import PageHeader from './PageHeader';
 import axios from 'axios';
+import Loader from "./Loader";
 
 const ListView = () => {
     const [currentDate, setCurrentDate] = useState(() => {
@@ -15,6 +16,7 @@ const ListView = () => {
     const [tasksInMonth, setTasksInMonth] = useState([]);
     const [assignmentsByDate, setAssignmentsByDate] = useState({});
     const [dataLoaded, setDataLoaded] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
     const togglePopup = () => setShowPopup(!showPopup);
     const apiURL = process.env.REACT_APP_NUCLEUS_API;
 
@@ -81,6 +83,7 @@ const ListView = () => {
             try {
                 const token = localStorage.getItem('jwt');
                 if (!token) throw new Error('No token found.');
+                setIsLoaded(true);
 
                 const response = await axios.get(`${apiURL}/api/data/courses`, {
                     headers: { Authorization: `Bearer ${token}` },
@@ -125,6 +128,7 @@ const ListView = () => {
 
                 setAssignmentsByDate(grouped);
                 setDataLoaded(true);
+                setIsLoaded(false);
             } catch (error) {
                 console.error('Error fetching assignments:', error);
             }
@@ -152,7 +156,11 @@ const ListView = () => {
 
     return (
         <div className="list-view">
-            <PageHeader 
+            {isLoaded ? (
+                <Loader />
+            ) : (
+                <>
+                <PageHeader 
                 currentDate={currentDate}
                 onDateChange={handleDateClick}
                 togglePopup={togglePopup}
@@ -197,6 +205,8 @@ const ListView = () => {
                 )}
             </div>
             {showPopup && <TaskPopup onSave={() => setShowPopup(false)} />}
+                </>
+            )}
         </div>
     );
 };

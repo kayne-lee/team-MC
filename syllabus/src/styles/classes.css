@@ -177,8 +177,9 @@
 .assignments-section {
     border-radius: 15px;
     min-width: 40%;
-    max-height: 87%;
-    overflow-y: scroll;
+    max-height: 508px;
+    overflow-y: auto;
+    
 }
 
 .assignments-section h3 {

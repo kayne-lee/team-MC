@@ -2,7 +2,7 @@
 
 .courses-page {
     display: flex;
-    height: calc(100vh - 165px);
+    height: calc(100vh - 137px);
     font-family: "Poppins", "Lato", "sans-serif";
     background: white;
 }

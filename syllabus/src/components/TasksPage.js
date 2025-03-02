@@ -4,10 +4,14 @@ import { useState, useEffect } from 'react';
 import axios, { all } from 'axios';
 import TaskPopup from './TaskPopUp';
 import plusIcon from '../assets/plus.png';
+import PageHeader from './PageHeader';
 
 const TasksPage = () => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const [currentDate, setCurrentDate] = useState(new Date());
+    const [currentDate, setCurrentDate] = useState(() => {
+        const savedDate = localStorage.getItem('selectedDate');
+        return savedDate ? new Date(savedDate) : new Date();
+    });
     const [upcomingDays, setUpcomingDays] = useState([]);
     const [assignmentsByDate, setAssignmentsByDate] = useState({});
     const [showPopup, setShowPopup] = useState(false);
@@ -180,18 +184,6 @@ const TasksPage = () => {
         return `${dayName} ${dayNumber}`;
     };
 
-    const formatHeaderDate = (date) => {
-        const months = [
-            'January', 'February', 'March', 'April', 'May', 'June',
-            'July', 'August', 'September', 'October', 'November', 'December'
-        ];
-        
-        const month = months[date.getMonth()];
-        const year = date.getFullYear();
-        
-        return `${month} ${year}`;
-    };
-
     return (
         <div
             className={`parent ${isExpanded ? 'blur-background' : ''}`}
@@ -199,43 +191,13 @@ const TasksPage = () => {
                 if (!e.target.closest('#date-picker')) handleClose();
             }}
         >
-            {/* Page Header */}
-            <div className="flex flex-row items-center justify-between gap-[10px] mt-[33px]">
-                <div className="flex flex-row items-center gap-[30px]">
-                    <h1 className="header text-[28.232px] font-bold leading-normal text-[#333] font-poppins">{formatHeaderDate(currentDate)}</h1>
- 
-                    <div id="date-picker-wrapper" style={{ position: 'relative' }}>
-                        <div className="popup-row">
-                            <input
-                                type="date"
-                                className="popup-pill w-[100px]"
-                                value={currentDate.toISOString().split('T')[0]}
-                                onClick={(e) => e.stopPropagation()} // Update date state
-                                onChange={(e) => {
-                                    e.stopPropagation(); // Ensure change event doesn't propagate
-                                    handleDateClick(e.target.value); // Handle the date change
-                                }}                        
-                            />
-                        </div>
-                    </div>
-                </div>
-
-
-                {/* Add Task Button */}
-                    <button
-                        className="new-task-button mr-[60px]"
-                        onClick={togglePopup}
-                    >
-                        <div class="new-task-button">
-                            <div class="new-task-button-inner">
-                                <div class="frame-child">
-                                </div>
-                            </div>
-                            <div class="new-task">New Task</div>
-                            <img class="plus-icon" alt="" src={plusIcon}/>
-                        </div>
-                    </button>
-            </div>
+            <PageHeader 
+                currentDate={currentDate}
+                onDateChange={handleDateClick}
+                togglePopup={togglePopup}
+                isExpanded={isExpanded}
+                handleClose={handleClose}
+            />
             
             {/* Layout Container */}
             <div className="layout-container">

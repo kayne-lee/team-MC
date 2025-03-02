@@ -3,7 +3,7 @@ import Navbar from '../navbar/Navbar'
 import SylaScan from './SylaScan'
 import TasksPage from './TasksPage'
 import Classes from './Classes'
-
+import ListView from './ListView'
 export default function Dashboard() {
     const [activeTab, setActiveTab] = useState('Classes')
     
@@ -15,6 +15,7 @@ export default function Dashboard() {
                     {activeTab === 'Tasks' && <TasksPage />}
                     {activeTab === 'Classes' && <Classes />}
                     {activeTab === 'SylaScan' && <SylaScan />}
+                    {activeTab === 'List' && <ListView />}
                 </div>
             </div>
         </div>

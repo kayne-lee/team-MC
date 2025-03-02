@@ -1,4 +1,9 @@
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
+
 function MongoService() {
+    const navigate = useNavigate()
     const apiURL = process.env.REACT_APP_NUCLEUS_API;
     let sv = {
         addRandomTask(jsonData) {
@@ -37,6 +42,37 @@ function MongoService() {
                     });
             });
         },
+        async googleLoginUser(email,firstName,lastName) {
+           
+            let data = JSON.stringify({
+                "googleEmail": email,
+                "password": "test123",
+                "email": email,
+                "firstName": firstName,
+                "lastName": lastName
+              });
+              
+              let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: `${apiURL}/auth/googlelogin`,
+                headers: { 
+                  'Content-Type': 'application/json'
+                },
+                data : data
+              };
+              
+              axios.request(config)
+              .then((response) => {
+             
+                localStorage.removeItem("googleLogin");
+                localStorage.setItem("jwt", response.data);
+                navigate("/");
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+        },
         saveCourseInfo(jsonData) {
             return new Promise((resolve, reject) => {
               // Asynchronous operation here
@@ -72,7 +108,34 @@ function MongoService() {
                     reject(error); // Reject the promise in case of errors
                     });
             });
-        }
+        },
+        async updateNofitications(newNotifs) {
+          const token = localStorage.getItem("jwt");
+          let data = JSON.stringify({
+              "notificationCount": newNotifs
+  
+            });
+            
+            let config = {
+              method: 'put',
+              maxBodyLength: Infinity,
+              url: `${apiURL}/auth/notifications`,
+              headers: { 
+                'Content-Type': 'application/json', 
+                'Authorization': `Bearer ${token}`
+              },
+              data : data
+            };
+            
+            
+            axios.request(config)
+            .then((response) => {
+              return response
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+      },
     }
 
     return sv;

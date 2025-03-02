@@ -3,14 +3,21 @@ import './Navbar.css';
 import nucleus from './assets/nucleus.png';
 import { useNavigate } from 'react-router-dom';
 import profile from './assets/profile.png';
+import SettingsPopup from '../components/SettingsPopUp';
+import { FaUser, FaEnvelope, FaCog, FaSignOutAlt } from "react-icons/fa";
 
 function Navbar({ activeTab, setActiveTab }) {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('')
+  const [notifSettings, setNotifSettings] = useState({})
   const navigate = useNavigate();
   const apiURL = process.env.REACT_APP_NUCLEUS_API;
+  const [showPopup, setShowPopup] = useState(false);
+    
+  const togglePopup = () => setShowPopup(!showPopup);
 
   // Fetch user data
   useEffect(() => {
@@ -39,9 +46,27 @@ function Navbar({ activeTab, setActiveTab }) {
 
         const userData = await response.json();
         if (userData) {
+          var notifState = {
+            1: false,
+            2: false,
+            5: false,
+          }
           setFirstName(userData.firstName);
           setLastName(userData.lastName);
           setEmail(userData.email);
+          setPhone(userData.phone);
+          console.log(userData)
+          console.log(typeof(userData.notificationCount));
+          if (userData.notificationCount.includes(1)){
+            notifState[1] = true
+          }
+          if (userData.notificationCount.includes(2)){
+            notifState[2] = true
+          }
+          if (userData.notificationCount.includes(5)){
+            notifState[5] = true
+          }
+          setNotifSettings(notifState)
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -56,6 +81,11 @@ function Navbar({ activeTab, setActiveTab }) {
     navigate('/login');
   };
 
+  const handleSettingsSave = (data) => {
+       
+    setShowPopup(false); // Close the popup
+  };
+
   return (
     <div className="flex flex-col bg-white">
       {/* Top Bar */}
@@ -64,28 +94,42 @@ function Navbar({ activeTab, setActiveTab }) {
           <img src={nucleus} alt="Nucleus Logo" className="w-[141px] ml-[60px]" />
         </div>
 
-        <div className="mr-[60px] relative">
-          <img
-            src={profile}
-            alt="Profile"
-            className="w-[40px] h-[40px] cursor-pointer"
-            onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-          />
-          {showProfileDropdown && (
-            <div className="absolute right-0 top-[60px] z-10 bg-white border border-[#ccc] rounded-[5px] shadow-[0_2px_5px_rgba(0,_0,_0,_0.1)] p-[10px]">
-              <p className="m-0 p-[10px_5px]">
-                <strong>{`${firstName} ${lastName}`}</strong>
-              </p>
-              <p className="m-0 p-[10px_5px] text-[#6A6A6A] text-sm">{email}</p>
-              <button
-                className="bg-[#8338EC] text-white border-none py-[12px] px-[17px] cursor-pointer rounded-[25px]"
-                onClick={handleLogout}
-              >
-                Sign Out
-              </button>
-            </div>
-          )}
-        </div>
+        {/* Profile Dropdown */}
+      <div className="mr-[60px] relative">
+        <img
+          src={profile}
+          alt="Profile"
+          className="w-[40px] h-[40px] cursor-pointer"
+          onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+        />
+        {showProfileDropdown && (
+          <div className="absolute right-0 top-[60px] z-10 bg-white border border-[#ccc] rounded-[5px] shadow-[0_2px_5px_rgba(0,_0,_0,_0.1)] p-[10px]">
+            <p className="m-0 p-[5px] flex items-center gap-2">
+              <FaUser className="text-[#6A6A6A]" />
+              <strong>{`${firstName} ${lastName}`}</strong>
+            </p>
+            <p className="m-0 p-[5px] text-[#6A6A6A] text-sm flex items-center gap-2">
+              <FaEnvelope className="text-[#6A6A6A]" />
+              {email}
+            </p>
+            <button
+              className="bg-[#8338EC] text-white border-none py-[8px] px-[17px] cursor-pointer rounded-[25px] flex items-center gap-2 w-full mt-2"
+              onClick={togglePopup}
+            >
+              <FaCog />
+              Settings
+            </button>
+            <button
+              className="bg-[#8338EC] text-white border-none py-[8px] px-[17px] cursor-pointer rounded-[25px] flex items-center gap-2 w-full mt-2"
+              onClick={handleLogout}
+            >
+              <FaSignOutAlt />
+              Sign Out
+            </button>
+          </div>
+        )}
+      </div>
+      {showPopup && <SettingsPopup data = {{"phone": phone, "email": email, "firstName": firstName, "lastName": lastName, "notifications": notifSettings}}onClose={handleSettingsSave} />}
       </div>
 
       {/* Navigation */}
@@ -99,7 +143,7 @@ function Navbar({ activeTab, setActiveTab }) {
               <path d="M17.75 3C18.612 3 19.4386 3.34241 20.0481 3.9519C20.6576 4.5614 21 5.38805 21 6.25V17.75C21 18.612 20.6576 19.4386 20.0481 20.0481C19.4386 20.6576 18.612 21 17.75 21H6.25C5.38805 21 4.5614 20.6576 3.9519 20.0481C3.34241 19.4386 3 18.612 3 17.75V6.25C3 5.38805 3.34241 4.5614 3.9519 3.9519C4.5614 3.34241 5.38805 3 6.25 3H17.75ZM17.75 4.5H6.25C5.78587 4.5 5.34075 4.68437 5.01256 5.01256C4.68437 5.34075 4.5 5.78587 4.5 6.25V17.75C4.5 18.716 5.284 19.5 6.25 19.5H17.75C18.2141 19.5 18.6592 19.3156 18.9874 18.9874C19.3156 18.6592 19.5 18.2141 19.5 17.75V6.25C19.5 5.78587 19.3156 5.34075 18.9874 5.01256C18.6592 4.68437 18.2141 4.5 17.75 4.5ZM13.25 8C13.4489 8 13.6397 8.07902 13.7803 8.21967C13.921 8.36032 14 8.55109 14 8.75V11.5H15.5V8.75C15.5 8.55109 15.579 8.36032 15.7197 8.21967C15.8603 8.07902 16.0511 8 16.25 8C16.4489 8 16.6397 8.07902 16.7803 8.21967C16.921 8.36032 17 8.55109 17 8.75V15.22C17 15.4189 16.921 15.6097 16.7803 15.7503C16.6397 15.891 16.4489 15.97 16.25 15.97C16.0511 15.97 15.8603 15.891 15.7197 15.7503C15.579 15.6097 15.5 15.4189 15.5 15.22V13H13.25C13.0511 13 12.8603 12.921 12.7197 12.7803C12.579 12.6397 12.5 12.4489 12.5 12.25V8.75C12.5 8.55109 12.579 8.36032 12.7197 8.21967C12.8603 8.07902 13.0511 8 13.25 8ZM7.5 8.744C7.847 8.362 8.415 8 9.25 8C10.402 8 11.144 8.792 11.405 9.661C11.658 10.508 11.505 11.556 10.785 12.279C10.5355 12.5193 10.2706 12.7431 9.992 12.949L9.952 12.98C9.672 13.196 9.422 13.392 9.202 13.61C8.947 13.866 8.738 14.145 8.617 14.5H10.75C10.9489 14.5 11.1397 14.579 11.2803 14.7197C11.421 14.8603 11.5 15.0511 11.5 15.25C11.5 15.4489 11.421 15.6397 11.2803 15.7803C11.1397 15.921 10.9489 16 10.75 16H7.75C7.55109 16 7.36032 15.921 7.21967 15.7803C7.07902 15.6397 7 15.4489 7 15.25C7 14.003 7.524 13.167 8.144 12.549C8.44 12.253 8.762 12.004 9.034 11.793L9.037 11.791C9.323 11.57 9.545 11.398 9.722 11.221C9.994 10.947 10.089 10.496 9.968 10.091C9.853 9.71 9.598 9.5 9.25 9.5C8.897 9.5 8.715 9.637 8.61 9.753C8.54828 9.82038 8.49856 9.89783 8.463 9.982L8.461 9.985C8.39825 10.1724 8.26408 10.3274 8.08766 10.4164C7.91123 10.5054 7.70681 10.5212 7.51881 10.4604C7.33081 10.3995 7.17443 10.2669 7.08365 10.0914C6.99287 9.91586 6.97503 9.7116 7.034 9.523L7.069 9.427C7.17096 9.17577 7.31753 8.94454 7.5 8.744Z" fill="currentColor"/>
             </svg>
             <span>List</span>
-          </button>
+          </button> */}
           
           <button 
             className={`nav-item flex flex-row items-center gap-[6px] ${activeTab === 'Tasks' ? 'text-[#8338EC]' : 'text-gray-600'}`}

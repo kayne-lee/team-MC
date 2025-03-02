@@ -354,12 +354,14 @@ li {
 }
 
 .task-tile {
-    background: #8338EC;
+    /* background: #8338EC; */
     border-radius: 15px;
     padding: 20px;
-    color: white;
     margin-bottom: 15px;
     min-height: 140px;
+    /* filter: drop-shadow(0px 2px 2px #AE7DF1); */
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    /* filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)); */
 }
 
 .task-content {

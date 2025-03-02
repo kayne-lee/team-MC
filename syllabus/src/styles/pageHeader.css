@@ -1,0 +1,29 @@
+.page-header {
+    padding: 40px 0 30px 0px;
+    background: white;
+    width: 100%;
+}
+
+.page-header .header  {
+    color: #000;
+    font-family: Poppins;
+    font-size: 35.398px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.popup-pill {
+    border: 1px solid #E0E0E0;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-family: Poppins;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+}
+
+.popup-pill:focus {
+    outline: none;
+    border-color: #8338EC;
+} 

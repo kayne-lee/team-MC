@@ -3,7 +3,7 @@
 
 .parent {
     font-family: 'Lato', 'sans-serif', 'Arial';
-    height: calc(100vh - 165px);
+    height: calc(100vh - 137px);
     overflow: hidden;
     padding: 0 60px;
     background: white;
@@ -39,7 +39,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .layout-container {
     display: flex;
     gap: 0;
-    padding: 20px 0;
+    padding: 0 20px;
     min-height: 663px;
     max-height: calc(100vh - 234px);
     width: 100%;
@@ -76,7 +76,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 /* For Firefox */
-.left-box.expanded {
+/* .left-box.expanded {
     scrollbar-width: thin;
     scrollbar-color: rgba(0, 0, 0, 0.4) transparent;
 }
@@ -90,9 +90,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     overflow-y: auto;
     transition: all 0.3s ease;
     max-width: 50vw;
-}
+} */
 
-/* Blur the background when the left-box is expanded */
+/* Blur the background when the left-box is expanded
 .blur-background .right-grid,
 .blur-background .header {
     filter: blur(5px);
@@ -102,7 +102,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .left-box.expanded .task-list {
     padding: 20px;
-}
+} */
 
 .left-box {
     flex: 1;

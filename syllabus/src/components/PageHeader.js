@@ -30,13 +30,13 @@ const PageHeader = ({ currentDate, onDateChange, togglePopup, isExpanded, handle
                         <div className="popup-row">
                             <input
                                 type="date"
-                                className="popup-pill w-[100px]"
+                                className="popup-pill w-[120px]"
                                 value={currentDate.toISOString().split('T')[0]}
-                                onClick={(e) => e.stopPropagation()}
+                                onClick={(e) => e.stopPropagation()} // Update date state
                                 onChange={(e) => {
-                                    e.stopPropagation();
-                                    handleDateChange(e.target.value);
-                                }}
+                                    e.stopPropagation(); // Ensure change event doesn't propagate
+                                    handleDateChange(e.target.value); // Handle the date change
+                                }}                        
                             />
                         </div>
                     </div>
@@ -44,7 +44,7 @@ const PageHeader = ({ currentDate, onDateChange, togglePopup, isExpanded, handle
 
                 {/* Add Task Button */}
                 <button
-                    className="new-task-button mr-[60px]"
+                    className="new-task-button mr-[40px]"
                     onClick={togglePopup}
                 >
                     <div class="new-task-button">

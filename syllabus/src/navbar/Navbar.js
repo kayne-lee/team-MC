@@ -92,7 +92,7 @@ function Navbar({ activeTab, setActiveTab }) {
       <div className="w-full bg-white border-b border-gray-200">
         <div className="flex flex-row gap-10 px-[60px] py-4">
           <button 
-            className={`nav-item flex flex-col items-center gap-1 ${activeTab === 'List' ? 'text-[#8338EC]' : 'text-gray-600'}`}
+            className={`nav-item flex flex-row items-center gap-[6px] ${activeTab === 'List' ? 'text-[#8338EC]' : 'text-gray-600'}`}
             onClick={() => setActiveTab('List')}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -102,7 +102,7 @@ function Navbar({ activeTab, setActiveTab }) {
           </button>
           
           <button 
-            className={`nav-item flex flex-col items-center gap-1 ${activeTab === 'Tasks' ? 'text-[#8338EC]' : 'text-gray-600'}`}
+            className={`nav-item flex flex-row items-center gap-[6px] ${activeTab === 'Tasks' ? 'text-[#8338EC]' : 'text-gray-600'}`}
             onClick={() => setActiveTab('Tasks')}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -119,7 +119,7 @@ function Navbar({ activeTab, setActiveTab }) {
           </button>
           
           <button 
-            className={`nav-item flex flex-col items-center gap-1 ${activeTab === 'Classes' ? 'text-[#8338EC]' : 'text-gray-600'}`}
+            className={`nav-item flex flex-row items-center gap-[6px] ${activeTab === 'Classes' ? 'text-[#8338EC]' : 'text-gray-600'}`}
             onClick={() => setActiveTab('Classes')}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

@@ -44,6 +44,7 @@ public class UserController {
         if (userService.findByEmail(user.getEmail()).isPresent()) {
             return ResponseEntity.badRequest().body("Email already in use");
         }
+        
         userService.registerUser(user);
         return ResponseEntity.ok("User registered successfully");
     }

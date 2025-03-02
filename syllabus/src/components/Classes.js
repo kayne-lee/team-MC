@@ -6,6 +6,9 @@ import info from "../assets/info.png"
 import { useNavigate } from 'react-router-dom';
 import GoogleService from "../services/GoogleService";
 import Loader from "./Loader";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const Classes = () => {
     const [selectedCourse, setSelectedCourse] = useState(null);
@@ -164,15 +167,28 @@ const Classes = () => {
         }
         else {
             console.log(courses)
-            for (const course of courses) {
-               
-                for (const assignment of course.assignments) {
+            try{
             
-                    const calDate = convertDate(assignment.dueDate)
-                    await googleService.createCalendarEvent(calDate, assignment.title, assignment.weight, assignment.description, course.title)
+                for (const course of courses) {
+                
+                    for (const assignment of course.assignments) {
+                
+                        const calDate = convertDate(assignment.dueDate)
+                        await googleService.createCalendarEvent(calDate, assignment.title, assignment.weight, assignment.description, course.title)
+                    }
                 }
+                toast.success("Successfully Uploaded Tasks to Calendar!", {
+                        
+                    autoClose: 3000, // 3 seconds
+                });
             }
-            alert('Calendar Upload Complete')
+            catch{
+                toast.failure("Something Went Wrong Uploading To Calendar", {
+                        
+                    autoClose: 3000, // 3 seconds
+                });
+            }
+            
         }
         
     }
@@ -563,6 +579,7 @@ const Classes = () => {
                     )}
                 </>
             )}
+            <ToastContainer position="bottom-center" />
         </div>
     );
 };

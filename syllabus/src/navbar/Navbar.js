@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import profile from './assets/profile.png';
 import SettingsPopup from '../components/SettingsPopUp';
 import { FaUser, FaEnvelope, FaCog, FaSignOutAlt } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Navbar({ activeTab, setActiveTab }) {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
@@ -89,6 +91,12 @@ function Navbar({ activeTab, setActiveTab }) {
     console.log(data)
     setShowPopup(false); // Close the popup
     if (data) {
+      if(data.error == true) {
+        toast.failure("Something Went Wront Updating Your Settings", {
+          autoClose: 3000, // 3 seconds
+        });
+        return
+      }
       var notifState = {
         1: false,
         2: false,
@@ -105,6 +113,10 @@ function Navbar({ activeTab, setActiveTab }) {
       }
       setNotifSettings(notifState)
       setAllowNotifs(data.allow);
+      toast.success("Successfully Updated Your Settings!", {
+        
+        autoClose: 3000, // 3 seconds
+      });
     }
     
   };
@@ -197,7 +209,9 @@ function Navbar({ activeTab, setActiveTab }) {
           </button>
         </div>
       </div>
+      <ToastContainer position="bottom-center" />
     </div>
+    
   );
 }
 

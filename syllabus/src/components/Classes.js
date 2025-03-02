@@ -126,6 +126,7 @@ const Classes = () => {
                 }));
 
                 setCourses(mappedCourses); // Set the state with the fetched and mapped courses
+                setSelectedCourse(mappedCourses[0]); // Set the selected course to the first course
                 
 
             })

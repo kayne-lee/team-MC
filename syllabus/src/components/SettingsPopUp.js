@@ -1,16 +1,17 @@
 
 import React, { useState } from "react";
 import MongoService from '../services/MongoService';
-
 const SettingsPopup = ({ data, onClose }) => {
  
     const mongoService = MongoService();
     const [activeTab, setActiveTab] = useState("Notifications");
-    const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+    const [notificationsEnabled, setNotificationsEnabled] = useState(data["allowNotifs"]);
     const [fname, setFName] = useState(data["firstName"]);
     const [lname, setLName] = useState(data["lastName"])
     const [email, setEmail] = useState(data["email"]);
     const [phone, setPhone] = useState(data["phone"]);
+    const [showToast, setShowToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState("");
     // const [timePreferences, setTimePreferences] = useState(true);
     const [allowedNotifications, setAllowedNotifications] = useState({
       tasks: true,
@@ -20,8 +21,6 @@ const SettingsPopup = ({ data, onClose }) => {
     });
 
     const [timePreferences, setTimePreferences] = useState(data["notifications"]);
-
-
     // Close the popup if the backdrop (outside the content) is clicked
     const handleCancel = (e) => {
         onClose();
@@ -29,19 +28,29 @@ const SettingsPopup = ({ data, onClose }) => {
 
     const handleSave = async () => {
         var newNotif = []
-        if (timePreferences[1] == true) {
-            newNotif.push(1)
-        } 
-        if (timePreferences[2] == true) {
-            newNotif.push(2)
-        } 
-        if (timePreferences[5] == true) {
-            newNotif.push(5)
-        } 
-        console.log(newNotif)
+        if (notificationsEnabled) {
         
-        await mongoService.updateNofitications(newNotif)
-        onClose();
+          if (timePreferences[1] == true) {
+              newNotif.push(1)
+          } 
+          if (timePreferences[2] == true) {
+              newNotif.push(2)
+          } 
+          if (timePreferences[5] == true) {
+              newNotif.push(5)
+          } 
+          console.log(newNotif)
+        }
+        try{
+          await mongoService.updateNofitications(newNotif)
+          onClose({"error":false,"newNotif":newNotif, "allow": notificationsEnabled});
+          
+        }
+        catch{
+      
+          onClose({"error": true});
+        }
+      
     };
 
     const toggleNotification = (type) => {
@@ -176,6 +185,7 @@ const SettingsPopup = ({ data, onClose }) => {
               </button>
             </div>
           </div>
+          
         </div>
       );
     };

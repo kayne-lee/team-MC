@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import profile from './assets/profile.png';
 import SettingsPopup from '../components/SettingsPopUp';
 import { FaUser, FaEnvelope, FaCog, FaSignOutAlt } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Navbar({ activeTab, setActiveTab }) {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
@@ -13,6 +15,7 @@ function Navbar({ activeTab, setActiveTab }) {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('')
   const [notifSettings, setNotifSettings] = useState({})
+  const [allowNotifs, setAllowNotifs] = useState(true)
   const navigate = useNavigate();
   const apiURL = process.env.REACT_APP_NUCLEUS_API;
   const [showPopup, setShowPopup] = useState(false);
@@ -66,6 +69,9 @@ function Navbar({ activeTab, setActiveTab }) {
           if (userData.notificationCount.includes(5)){
             notifState[5] = true
           }
+          if (userData.notificationCount.length == 0) {
+            setAllowNotifs(false)
+          }
           setNotifSettings(notifState)
         }
       } catch (error) {
@@ -82,8 +88,37 @@ function Navbar({ activeTab, setActiveTab }) {
   };
 
   const handleSettingsSave = (data) => {
-       
+    console.log(data)
     setShowPopup(false); // Close the popup
+    if (data) {
+      if(data.error == true) {
+        toast.failure("Something Went Wront Updating Your Settings", {
+          autoClose: 3000, // 3 seconds
+        });
+        return
+      }
+      var notifState = {
+        1: false,
+        2: false,
+        5: false,
+      }
+      if (data.newNotif.includes(1)){
+        notifState[1] = true
+      }
+      if (data.newNotif.includes(2)){
+        notifState[2] = true
+      }
+      if (data.newNotif.includes(5)){
+        notifState[5] = true
+      }
+      setNotifSettings(notifState)
+      setAllowNotifs(data.allow);
+      toast.success("Successfully Updated Your Settings!", {
+        
+        autoClose: 3000, // 3 seconds
+      });
+    }
+    
   };
 
   return (
@@ -129,7 +164,7 @@ function Navbar({ activeTab, setActiveTab }) {
           </div>
         )}
       </div>
-      {showPopup && <SettingsPopup data = {{"phone": phone, "email": email, "firstName": firstName, "lastName": lastName, "notifications": notifSettings}}onClose={handleSettingsSave} />}
+      {showPopup && <SettingsPopup data = {{"phone": phone, "email": email, "firstName": firstName, "lastName": lastName, "notifications": notifSettings, "allowNotifs": allowNotifs}}onClose={handleSettingsSave} />}
       </div>
 
       {/* Navigation */}
@@ -174,7 +209,9 @@ function Navbar({ activeTab, setActiveTab }) {
           </button>
         </div>
       </div>
+      <ToastContainer position="bottom-center" />
     </div>
+    
   );
 }
 

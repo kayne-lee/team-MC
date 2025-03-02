@@ -80,10 +80,10 @@ const TasksPage = () => {
                             // dueDate.setDate(dueDate.getDate() - 1); // Subtract 1 day
     
                             return {
-                                title: task.title,
-                                description: task.description,
+                                title: task.description,
                                 dueDate: formatDateKey(dueDate),
-                                course:"Extra Task"
+                                course: task.title,
+                                isRandomTask: true,
                             };
                             
                         })
@@ -106,6 +106,7 @@ const TasksPage = () => {
                                     course: course.title,
                                     weight: assignment.weight,
                                     dueDate: formatDateKey(dueDate),
+                                    isRandomTask: false,
                                 };
                             })
                         )
@@ -212,7 +213,7 @@ const TasksPage = () => {
                             </div>
                             <div className="sub-list flex flex-col gap-[15px]">
                                 {(assignmentsByDate[formatDateKey(day)] || []).map((assignment, idx) => (
-                                    <div key={idx} className="task-tile">
+                                    <div key={idx} className={`task-tile ${assignment.isRandomTask ? 'bg-[#FAFAFA] text-black' : 'bg-[#8338EC] text-white'}`}>
                                         <div className="task-content">
                                             <div>
                                                 <div className="task-details">

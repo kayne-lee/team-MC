@@ -1,7 +1,6 @@
 
 import React, { useState } from "react";
 import MongoService from '../services/MongoService';
-
 const SettingsPopup = ({ data, onClose }) => {
  
     const mongoService = MongoService();
@@ -11,6 +10,8 @@ const SettingsPopup = ({ data, onClose }) => {
     const [lname, setLName] = useState(data["lastName"])
     const [email, setEmail] = useState(data["email"]);
     const [phone, setPhone] = useState(data["phone"]);
+    const [showToast, setShowToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState("");
     // const [timePreferences, setTimePreferences] = useState(true);
     const [allowedNotifications, setAllowedNotifications] = useState({
       tasks: true,
@@ -20,8 +21,6 @@ const SettingsPopup = ({ data, onClose }) => {
     });
 
     const [timePreferences, setTimePreferences] = useState(data["notifications"]);
-
-
     // Close the popup if the backdrop (outside the content) is clicked
     const handleCancel = (e) => {
         onClose();
@@ -42,9 +41,16 @@ const SettingsPopup = ({ data, onClose }) => {
           } 
           console.log(newNotif)
         }
-        
-        await mongoService.updateNofitications(newNotif)
-        onClose({"newNotif":newNotif, "allow": notificationsEnabled});
+        try{
+          await mongoService.updateNofitications(newNotif)
+          onClose({"error":false,"newNotif":newNotif, "allow": notificationsEnabled});
+          
+        }
+        catch{
+      
+          onClose({"error": true});
+        }
+      
     };
 
     const toggleNotification = (type) => {
@@ -179,6 +185,7 @@ const SettingsPopup = ({ data, onClose }) => {
               </button>
             </div>
           </div>
+          
         </div>
       );
     };

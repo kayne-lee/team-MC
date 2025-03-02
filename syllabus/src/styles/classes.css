@@ -107,7 +107,7 @@
 
 /* COURSE DETAILS BOX (SOLO BOX ON THE RIGHT) */
 .main-content {
-    flex: 1.5;
+    /* flex: 1.5; */
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -127,8 +127,8 @@
 .course-details-container {
     background: rgba(242, 235, 251, 0.95);
 
-    width: 739px;
-    height: 621px;
+    /* width: 739px; */
+    height: 90%;
     padding: 30px;  
     border-radius: 20px;
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
@@ -177,7 +177,7 @@
 .assignments-section {
     border-radius: 15px;
     min-width: 40%;
-    max-height: 447px;
+    max-height: 87%;
     overflow-y: scroll;
 }
 

@@ -436,7 +436,7 @@ const Classes = () => {
                             </ul>
                         </div>
                         {/* Flex that contains both meeting and stat sections */}
-                        <div>
+                        <div className="h-[300px]">
                             {/* Meeting information Section */}
                             <div className="meeting-information-section">
                                 

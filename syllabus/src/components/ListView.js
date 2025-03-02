@@ -14,6 +14,7 @@ const ListView = () => {
     const [showPopup, setShowPopup] = useState(false);
     const [tasksInMonth, setTasksInMonth] = useState([]);
     const [assignmentsByDate, setAssignmentsByDate] = useState({});
+    const [dataLoaded, setDataLoaded] = useState(false);
     const togglePopup = () => setShowPopup(!showPopup);
     const apiURL = process.env.REACT_APP_NUCLEUS_API;
 
@@ -36,7 +37,11 @@ const ListView = () => {
         selectedDate.setDate(selectedDate.getDate() + 1); 
         setCurrentDate(selectedDate);
         localStorage.setItem('selectedDate', selectedDate.toISOString());
-        filterTasksByMonth(selectedDate);
+        
+        // Only filter tasks if data is already loaded
+        if (dataLoaded) {
+            filterTasksByMonth(selectedDate);
+        }
     };
 
     const filterTasksByMonth = (date) => {
@@ -70,6 +75,7 @@ const ListView = () => {
         setTasksInMonth(tasksArray);
     };
 
+    // Effect to fetch assignments data
     useEffect(() => {
         const fetchAssignments = async () => {
             try {
@@ -118,7 +124,7 @@ const ListView = () => {
                 }, {});
 
                 setAssignmentsByDate(grouped);
-                filterTasksByMonth(currentDate);
+                setDataLoaded(true);
             } catch (error) {
                 console.error('Error fetching assignments:', error);
             }
@@ -126,6 +132,13 @@ const ListView = () => {
 
         fetchAssignments();
     }, []);
+
+    // Separate effect to filter tasks when either the date changes or data is loaded
+    useEffect(() => {
+        if (dataLoaded) {
+            filterTasksByMonth(currentDate);
+        }
+    }, [currentDate, dataLoaded, assignmentsByDate]);
 
     // Group tasks by date for display
     const tasksByDate = tasksInMonth.reduce((groups, task) => {
@@ -146,34 +159,40 @@ const ListView = () => {
             />
             
             <div className="list-container">
-                {Object.keys(tasksByDate).length > 0 ? (
-                    Object.entries(tasksByDate).map(([date, tasks]) => (
-                        <div className="date-section" key={date}>
-                            <h2>{date}</h2>
-                            <div className="tasks">
-                                {tasks.map((task, index) => (
-                                    <div key={index} className="task-item">
-                                        <div className="task-left">
-                                            <input type="checkbox" className="checkbox" />
-                                            <span>{task.title}</span>
+                {dataLoaded ? (
+                    Object.keys(tasksByDate).length > 0 ? (
+                        Object.entries(tasksByDate).map(([date, tasks]) => (
+                            <div className="date-section" key={date}>
+                                <h2>{date}</h2>
+                                <div className="tasks">
+                                    {tasks.map((task, index) => (
+                                        <div key={index} className="task-item">
+                                            <div className="task-left">
+                                                <input type="checkbox" className="checkbox" />
+                                                <span>{task.title}</span>
+                                            </div>
+                                            <div className="task-right">
+                                                <span className="time">
+                                                    {new Date(task.dueDate).toLocaleTimeString('en-US', {
+                                                        hour: 'numeric',
+                                                        minute: '2-digit'
+                                                    })}
+                                                </span>
+                                                <div className="class-tag">{task.course}</div>
+                                            </div>
                                         </div>
-                                        <div className="task-right">
-                                            <span className="time">
-                                                {new Date(task.dueDate).toLocaleTimeString('en-US', {
-                                                    hour: 'numeric',
-                                                    minute: '2-digit'
-                                                })}
-                                            </span>
-                                            <div className="class-tag">{task.course}</div>
-                                        </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
+                        ))
+                    ) : (
+                        <div className="no-tasks">
+                            <p>No tasks for this month.</p>
                         </div>
-                    ))
+                    )
                 ) : (
-                    <div className="no-tasks">
-                        <p>No tasks for this month.</p>
+                    <div className="loading">
+                        <p>Loading tasks...</p>
                     </div>
                 )}
             </div>

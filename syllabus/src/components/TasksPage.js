@@ -5,6 +5,7 @@ import axios, { all } from 'axios';
 import TaskPopup from './TaskPopUp';
 import plusIcon from '../assets/plus.png';
 import PageHeader from './PageHeader';
+import Loader from "./Loader";
 
 const TasksPage = () => {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -16,6 +17,7 @@ const TasksPage = () => {
     const [assignmentsByDate, setAssignmentsByDate] = useState({});
     const [showPopup, setShowPopup] = useState(false);
     const [randomTaskAdded, setRandomTaskAdded] = useState({});
+    const [isLoaded, setIsLoaded] = useState(false);
     const togglePopup = () => setShowPopup(!showPopup);
     const apiURL = process.env.REACT_APP_NUCLEUS_API;
 
@@ -62,7 +64,7 @@ const TasksPage = () => {
                 // Assume the token is stored in localStorage
                 const token = localStorage.getItem('jwt');
                 if (!token) throw new Error('No token found.');
-
+                setIsLoaded(true);
                 const response = await axios.get(`${apiURL}/api/data/courses`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
@@ -122,6 +124,7 @@ const TasksPage = () => {
                 }, {});
                 console.log("GROUPED ASSIGNMENTS!:", groupedAssignments)
                 setAssignmentsByDate(groupedAssignments);
+                setIsLoaded(false);
             } catch (error) {
                 console.error('Error fetching assignments:', error);
             }
@@ -191,7 +194,11 @@ const TasksPage = () => {
                 if (!e.target.closest('#date-picker')) handleClose();
             }}
         >
-            <PageHeader 
+                        {isLoaded ? (
+                            <Loader />
+                        ) : (
+                            <>
+                            <PageHeader 
                 currentDate={currentDate}
                 onDateChange={handleDateClick}
                 togglePopup={togglePopup}
@@ -236,6 +243,8 @@ const TasksPage = () => {
             </div>
 
             {showPopup && <TaskPopup onSave={handleSave} />}
+                            </>)}
+            
 
         </div>
     );

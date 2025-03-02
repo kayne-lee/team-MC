@@ -13,7 +13,7 @@ export default function Signup() {
     const [confirmPass, setConfirmPass] = useState('');
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
-
+    const apiURL = process.env.REACT_APP_NUCLEUS_API;
     const handleSignup = async (e) => {
         e.preventDefault();
         const myHeaders = new Headers();
@@ -31,7 +31,7 @@ export default function Signup() {
                 "friends": [],
                 "streak": 0,
                 "phone": phone,
-                "notification": 3
+                "notificationCount": [5]
                 });
         
                 const requestOptions = {
@@ -41,7 +41,8 @@ export default function Signup() {
                 redirect: 'follow',
             };
 
-            fetch('https://api.nucleusapp.ca/auth/signup', requestOptions)
+            fetch(`${apiURL}/auth/signup`, requestOptions)
+         
                 .then((response) => response.text().then((text) => {
                     if (!response.ok) {
                         setMessage(text);
@@ -58,7 +59,7 @@ export default function Signup() {
                             redirect: 'follow',
                         };
 
-                        fetch('https://api.nucleusapp.ca/auth/login', loginRequestOptions)
+                        fetch(`${apiURL}/auth/login`, loginRequestOptions)
                             .then((response) => response.text().then((text) => {
                                 if (!response.ok) {
                                     setMessage(text);

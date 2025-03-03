@@ -93,7 +93,7 @@ function Navbar({ activeTab, setActiveTab }) {
     if (data) {
       if(data.error == true) {
         toast.failure("Something Went Wront Updating Your Settings", {
-          autoClose: 3000, // 3 seconds
+      
         });
         return
       }
@@ -114,8 +114,6 @@ function Navbar({ activeTab, setActiveTab }) {
       setNotifSettings(notifState)
       setAllowNotifs(data.allow);
       toast.success("Successfully Updated Your Settings!", {
-        
-        autoClose: 3000, // 3 seconds
       });
     }
     
@@ -208,8 +206,9 @@ function Navbar({ activeTab, setActiveTab }) {
             <span>Classes</span>
           </button>
         </div>
+        <ToastContainer position="bottom-center" autoClose={3000}/>
       </div>
-      <ToastContainer position="bottom-center" />
+      
     </div>
     
   );

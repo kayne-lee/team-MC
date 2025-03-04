@@ -376,10 +376,14 @@ li {
     display: flex;
     align-items: center;
     padding-bottom: 8px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    /* border-bottom: 1px solid rgba(255, 255, 255, 0.3); */
     width: 90%;
     font-family: 'Poppins', sans-serif;
     font-weight: 700; /* Bold */
+}
+
+.task-details-border {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .task-title {

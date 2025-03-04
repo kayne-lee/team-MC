@@ -1,8 +1,10 @@
 import React from 'react';
 import plusIcon from '../assets/plus.png';
+import lessthan from '../assets/lessthan.png';
+import greaterthan from '../assets/greaterthan.png';
 import '../styles/pageHeader.css';
 
-const PageHeader = ({ currentDate, onDateChange, togglePopup, isExpanded, handleClose }) => {
+const PageHeader = ({ currentDate, onDateChange, togglePopup }) => {
     const formatHeaderDate = (date) => {
         const months = [
             'January', 'February', 'March', 'April', 'May', 'June',
@@ -15,11 +17,17 @@ const PageHeader = ({ currentDate, onDateChange, togglePopup, isExpanded, handle
         return `${month} ${year}`;
     };
 
-    const handleDateChange = (value) => {
-        localStorage.setItem('selectedDate', value);
-        onDateChange(value);
-    };
+    const handleDateChange = (days) => {
+       
+        const newDate = new Date(currentDate);
 
+        newDate.setDate(newDate.getDate() + days);
+
+        localStorage.setItem('selectedDate', newDate.toISOString().split('T')[0]);
+        onDateChange(newDate, true );
+    };
+    
+    
     return (
         <div className="page-header">
             <div className="flex flex-row items-center justify-between gap-[10px]">
@@ -27,17 +35,24 @@ const PageHeader = ({ currentDate, onDateChange, togglePopup, isExpanded, handle
                     <h1 className="header">{formatHeaderDate(currentDate)}</h1>
 
                     <div id="date-picker-wrapper" style={{ position: 'relative' }}>
-                        <div className="popup-row">
+                        <div className="popup-row flex items-center gap-2">
+                            
                             <input
                                 type="date"
-                                className="popup-pill w-[120px]"
+                                className="popup-pill w-[127px]"
                                 value={currentDate.toISOString().split('T')[0]}
-                                onClick={(e) => e.stopPropagation()} // Update date state
+                                onClick={(e) => e.stopPropagation()}
                                 onChange={(e) => {
-                                    e.stopPropagation(); // Ensure change event doesn't propagate
-                                    handleDateChange(e.target.value); // Handle the date change
+                                    e.stopPropagation();
+                                    onDateChange(new Date(e.target.value), false);
                                 }}                        
                             />
+                            <button onClick={() => handleDateChange(-7)}>
+                                <img src={lessthan} alt="Previous" className="w-5 h-5" />
+                            </button>
+                            <button onClick={() => handleDateChange(7)}>
+                                <img src={greaterthan} alt="Next" className="w-5 h-5" />
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -47,13 +62,12 @@ const PageHeader = ({ currentDate, onDateChange, togglePopup, isExpanded, handle
                     className="new-task-button mr-[40px]"
                     onClick={togglePopup}
                 >
-                    <div class="new-task-button">
-                        <div class="new-task-button-inner">
-                            <div class="frame-child">
-                            </div>
+                    <div className="new-task-button">
+                        <div className="new-task-button-inner">
+                            <div className="frame-child" />
                         </div>
-                        <div class="new-task">New Task</div>
-                        <img class="plus-icon" alt="" src={plusIcon}/>
+                        <div className="new-task">New Task</div>
+                        <img className="plus-icon" alt="Add" src={plusIcon} />
                     </div>
                 </button>
             </div>
@@ -61,4 +75,4 @@ const PageHeader = ({ currentDate, onDateChange, togglePopup, isExpanded, handle
     );
 };
 
-export default PageHeader; 
+export default PageHeader;

@@ -18,6 +18,7 @@ const TasksPage = () => {
     const [showPopup, setShowPopup] = useState(false);
     const [randomTaskAdded, setRandomTaskAdded] = useState({});
     const [isLoaded, setIsLoaded] = useState(false);
+    const [selectedAddDay, setSelectedAddDay] = useState();
     const togglePopup = () => setShowPopup(!showPopup);
     const apiURL = process.env.REACT_APP_NUCLEUS_API;
 
@@ -50,12 +51,15 @@ const TasksPage = () => {
         setUpcomingDays(days);
     }, [currentDate]);
 
-    const handleDateClick = (day) => {
+    const handleDateClick = (day, shift) => {
         const selectedDate = new Date(day);
         selectedDate.setHours(0, 0, 0, 0);
-        selectedDate.setDate(selectedDate.getDate() + 1); 
+        if (!shift) {
+            selectedDate.setDate(selectedDate.getDate() + 1); 
+        }
+        
         setCurrentDate(selectedDate);
-      };
+    };
 
     // Fetch assignments and group them by due date
     useEffect(() => {
@@ -143,17 +147,19 @@ const TasksPage = () => {
             
             if (date in tempAssignments){
                 tempAssignments[date].push({
-                    "course":"Extra Task",
+                    "course":data["title"],
                     "dueDate":date,
-                    "title":data["title"],
-                    "weight":""
+                    "title":data["description"],
+                    "weight":"",
+                    "isRandomTask": true
                 })
             } else{
                 tempAssignments[date] = [{
-                    "course":"Extra Task",
+                    "course":data["title"],
                     "dueDate":date,
-                    "title":data["title"],
-                    "weight":""
+                    "title":data["description"],
+                    "weight":"",
+                    "isRandomTask": true
                 }]
             }
 
@@ -210,9 +216,16 @@ const TasksPage = () => {
             <div className="layout-container">
 
                 {/* Right Grid of Boxes (Next 6 Days) */}
-                <div className="right-grid overflow-y-auto  no-scrollbar">
+                <div className="right-grid overflow-y-auto no-scrollbar">
                     {upcomingDays.map((day, index) => (
-                        <div className="grid-box" key={index}>
+                        <div
+                            className="grid-box"
+                            key={index}
+                            onClick={() => {
+                                setShowPopup(true);
+                                setSelectedAddDay(day);
+                            }}
+                        >
                             <div className="flex justify-center items-center flex-col mb-[10px]">
                                 <div className="date-header">
                                     {formatDisplayDate(day)}
@@ -220,17 +233,35 @@ const TasksPage = () => {
                             </div>
                             <div className="sub-list flex flex-col gap-[15px]">
                                 {(assignmentsByDate[formatDateKey(day)] || []).map((assignment, idx) => (
-                                    <div key={idx} className={`task-tile ${assignment.isRandomTask ? 'bg-[#FAFAFA] text-black' : 'bg-[#8338EC] text-white'}`}>
+                                    <div
+                                        key={idx}
+                                        className={`task-tile ${
+                                            assignment.isRandomTask
+                                                ? 'bg-[#FAFAFA] text-black'
+                                                : 'bg-[#8338EC] text-white'
+                                        }`}
+                                        onClick={(e) => e.stopPropagation()} // Prevent popup from opening when clicking on tasks
+                                    >
                                         <div className="task-content">
                                             <div className={``}>
-                                                <div className={`task-details ${assignment.isRandomTask ? 'border-b border-black' : 'border-b border-white/30'}`}>
+                                                <div
+                                                    className={`task-details ${
+                                                        assignment.isRandomTask
+                                                            ? 'border-b border-black'
+                                                            : 'border-b border-white/30'
+                                                    }`}
+                                                >
                                                     <span>{assignment.course}</span>
                                                 </div>
-                                                <div className="task-details mt-[4px]">{assignment.title}</div>
+                                                <div className="task-details mt-[4px]">
+                                                    {assignment.title}
+                                                </div>
                                             </div>
                                             {assignment.weight && (
                                                 <div className="weight-container">
-                                                    <span className="weight-badge">{assignment.weight}</span>
+                                                    <span className="weight-badge">
+                                                        {assignment.weight}
+                                                    </span>
                                                 </div>
                                             )}
                                         </div>
@@ -242,7 +273,7 @@ const TasksPage = () => {
                 </div>
             </div>
 
-            {showPopup && <TaskPopup onSave={handleSave} />}
+            {showPopup && <TaskPopup onSave={handleSave} data={{"date": selectedAddDay ? selectedAddDay : null}}/>}
                             </>)}
             
 

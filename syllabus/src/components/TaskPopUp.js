@@ -1,12 +1,10 @@
 import '../styles/tasksPopup.css';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MongoService from '../services/MongoService';
 
-const TaskPopup = ({ onSave }) => {
+const TaskPopup = ({ data, onSave }) => {
     const [title, setTitle] = useState("Add Title");
     const [description, setDescription] = useState("");
-    const [time, setTime] = useState("2:00 PM");  // State for time
-    const [date, setDate] = useState("2024-11-09"); 
     const [dateTime, setDateTime] = useState(""); // State to hold date and time
     const mongoService = MongoService();
 
@@ -15,6 +13,20 @@ const TaskPopup = ({ onSave }) => {
         onSave({});
     };
 
+    useEffect(() => {
+        console.log(data)
+        console.log(dateTime)
+        if (dateTime == "") {
+            if (data["date"]) {
+                const date = new Date(data["date"]);
+                date.setHours(8, 0, 0, 0);
+                const isoString = date.toISOString().slice(0, 16);
+                console.log(isoString)
+                setDateTime(isoString)
+             
+            }
+        }
+      }, []);
     const handleSave = async () => {
         try {
             const response = await mongoService.addRandomTask({

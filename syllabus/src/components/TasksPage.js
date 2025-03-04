@@ -222,11 +222,11 @@ const TasksPage = () => {
                                 {(assignmentsByDate[formatDateKey(day)] || []).map((assignment, idx) => (
                                     <div key={idx} className={`task-tile ${assignment.isRandomTask ? 'bg-[#FAFAFA] text-black' : 'bg-[#8338EC] text-white'}`}>
                                         <div className="task-content">
-                                            <div>
-                                                <div className="task-details">
+                                            <div className={``}>
+                                                <div className={`task-details ${assignment.isRandomTask ? 'border-b border-black' : 'border-b border-white/30'}`}>
                                                     <span>{assignment.course}</span>
                                                 </div>
-                                                <div className="task-title">{assignment.title}</div>
+                                                <div className="task-details mt-[4px]">{assignment.title}</div>
                                             </div>
                                             {assignment.weight && (
                                                 <div className="weight-container">

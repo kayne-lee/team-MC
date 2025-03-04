@@ -4,9 +4,10 @@ import nucleus from './assets/nucleus.png';
 import { useNavigate } from 'react-router-dom';
 import profile from './assets/profile.png';
 import SettingsPopup from '../components/SettingsPopUp';
-import { FaUser, FaEnvelope, FaCog, FaSignOutAlt } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaCog, FaSignOutAlt, FaCalendar } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Cal from './assets/Calendar.png';
 
 function Navbar({ activeTab, setActiveTab }) {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
@@ -199,10 +200,11 @@ function Navbar({ activeTab, setActiveTab }) {
             className={`nav-item flex flex-row items-center gap-[6px] ${activeTab === 'Classes' ? 'text-[#8338EC]' : 'text-gray-600'}`}
             onClick={() => setActiveTab('Classes')}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            {/* <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
               <path d="M21.75 24H2.25C1.005 24 0 22.995 0 21.75V3.75C0 2.505 1.005 1.5 2.25 1.5H21.75C22.995 1.5 24 2.505 24 3.75V21.75C24 22.995 22.995 24 21.75 24ZM2.25 3C1.83 3 1.5 3.33 1.5 3.75V21.75C1.5 22.17 1.83 22.5 2.25 22.5H21.75C22.17 22.5 22.5 22.17 22.5 21.75V3.75C22.5 3.33 22.17 3 21.75 3H2.25Z" fill="currentColor"/>
               <path d="M6.75 6C6.33 6 6 5.67 6 5.25V0.75C6 0.33 6.33 0 6.75 0C7.17 0 7.5 0.33 7.5 0.75V5.25C7.5 5.67 7.17 6 6.75 6ZM17.25 6C16.83 6 16.5 5.67 16.5 5.25V0.75C16.5 0.33 16.83 0 17.25 0C17.67 0 18 0.33 18 0.75V5.25C18 5.67 17.67 6 17.25 6ZM23.25 9H0.75C0.33 9 0 8.67 0 8.25C0 7.83 0.33 7.5 0.75 7.5H23.25C23.67 7.5 24 7.83 24 8.25C24 8.67 23.67 9 23.25 9ZM4.845 18H6.165L6.735 16.5H8.61L9.18 18H10.5L8.25 12H7.155L4.875 18H4.845ZM6.915 15.57L7.665 13.32L8.415 15.57H6.915ZM12.285 18C12.9 18 13.335 17.685 13.515 17.355H13.575V18H14.61V13.5H13.53V16.02C13.53 16.575 13.155 16.995 12.63 16.995C12.105 16.995 11.775 16.635 11.775 16.095V13.5H10.695V16.365C10.695 17.295 11.31 18 12.285 18ZM17.43 19.53C18.81 19.53 19.5 18.72 19.5 17.625V13.59H18.51V14.115H18.45C18.3109 13.9151 18.1243 13.7528 17.907 13.6429C17.6897 13.5329 17.4485 13.4787 17.205 13.485C16.125 13.485 15.33 14.325 15.33 15.6C15.33 16.875 16.14 17.7 17.235 17.7C17.955 17.7 18.345 17.265 18.45 17.085H18.51V17.61C18.51 18.3 18.15 18.69 17.43 18.69C16.875 18.69 16.56 18.465 16.485 18.09H15.555C15.63 18.84 16.26 19.515 17.43 19.515V19.53Z" fill="currentColor"/>
-            </svg>
+            </svg> */}
+            <img src={Cal} alt="Calendar" className="w-[28px] h-[28px]" />
             <span>Classes</span>
           </button>
         </div>

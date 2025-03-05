@@ -98,7 +98,7 @@ export default function Signup() {
   
     {/* Right Section (Login Form) */}
     <div className="w-full sm:w-1/2 flex flex-col justify-center items-center h-full right-login px-[33px] sm:px-[0px]">
-        <div className="flex justify-start w-full sm:w-[78%] flex-col mt-[100px]">
+        <div className="flex justify-start w-full sm:w-[78%] flex-col mt-[133px]">
             <div class="md:text-[#F5F5F5] text-[#8338EC] px-[0px] sm:px-[12px] font-poppins text-[35px] sm:text-[50px] font-bold leading-normal mb-[19px]">Create an Account</div>
             <div className="w-full h-[77px] rounded-[20px] bg-[#F3F3F3]">
                 <div className="mt-[11px] ml-[23px] text-[#BFA1E9] font-[700] font-poppins text-[16px]">

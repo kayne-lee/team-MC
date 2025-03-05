@@ -107,7 +107,7 @@ export default function Login() {
     <div className="h-screen flex">
     {/* Left Section */}
     <div className="w-1/2 flex flex-col justify-center items-center">
-      <div className="absolute top-[43px] left-[63px]">
+      <div className="absolute top-[43px] left-[33px]">
         <img src="/nucleus.png" alt="" className="w-[141px]" />
       </div>
     </div>
@@ -165,15 +165,18 @@ export default function Login() {
 
                     <div className="flex flex-col sm:flex-row gap-10 sm:gap-4 w-full mt-[29px]">
                         <div
-                            onClick={handleLogin}
-                            className="w-full h-[45px] signin flex justify-center items-center rounded-[50px] hover:bg-[#DECBF8] cursor-pointer"
+                            onClick={email && password ? handleLogin : null}
+                            className={`w-full h-[45px] flex justify-center items-center rounded-[50px] cursor-pointer ${
+                                email && password 
+                                    ? "signin hover:bg-[#DECBF8]" 
+                                    : "bg-[#a898c0] hover:bg-[#b4a7cd]"
+                            }`}
                         >
-
                             {isLoading ? (
                                 <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
                             ) : (
                                 <div className="text-[#F3F3F3] font-poppins text-[16px] font-bold leading-none">
-                                LOGIN
+                                    LOGIN
                                 </div>
                             )}
                         </div>

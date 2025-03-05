@@ -8,10 +8,6 @@
     background: radial-gradient(123.37% 145% at 29.41% 3.92%, #8338EC 49.11%, #BFA1E9 96.5%);
 }
 
-.signin {
-    background: linear-gradient(90deg, #DECBF8 0%, #BFA1E9 100%);
-}
-
 @media (max-width: 768px) {
     .welcome {
         background: linear-gradient(180deg, #FDFBFD 0%, #E3CCFF 55%, #FDFBFD 100%);

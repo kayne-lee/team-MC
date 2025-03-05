@@ -53,7 +53,7 @@ const PageHeader = ({ currentDate, onDateChange, togglePopup, isExpanded, handle
                             </div>
                         </div>
                         <div class="new-task">New Task</div>
-                        <img class="plus-icon" alt="" src={plusIcon}/>
+                        {/* <img class="plus-icon" alt="" src={plusIcon}/> */}
                     </div>
                 </button>
             </div>

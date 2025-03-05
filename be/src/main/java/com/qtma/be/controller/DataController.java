@@ -220,6 +220,7 @@ public class DataController {
                             assignmentMap.put("description", assignment.getDescription());
                             assignmentMap.put("grade", assignment.getGrade());
                             assignmentMap.put("isCompleted", assignment.isCompleted());
+                            assignmentMap.put("progressionTasks", assignment.getProgressionTasks());
                             return assignmentMap;
                         }).collect(Collectors.toList());
 

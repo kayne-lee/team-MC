@@ -2,6 +2,7 @@ package com.qtma.be.model;
 
 import lombok.*;
 
+import java.util.List;
 @Data
 @Setter
 @Getter
@@ -14,4 +15,5 @@ public class Assignment {
     private String description;
     private float grade;
     private boolean completed;
+    private List<Object> progressionTasks;
 }

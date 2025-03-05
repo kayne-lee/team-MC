@@ -167,7 +167,7 @@ export default function Signup() {
                     <div className="flex flex-col sm:flex-row gap-10 sm:gap-4 w-full mt-[29px]">
                         <div
                             onClick={handleSignup}
-                            className="w-full h-[45px] signin flex justify-center items-center rounded-[50px] hover:bg-[#DECBF8] cursor-pointer"
+                            className="w-full h-[45px] signin flex justify-center items-center rounded-[50px] bg-[#DECBF8] cursor-pointer"
                         >
                             <div className="text-[#F3F3F3] font-poppins text-[16px] font-bold leading-none">
                                 LOG IN

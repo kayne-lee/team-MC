@@ -93,8 +93,8 @@ export default function Login() {
         localStorage.setItem("googleLogin", true);
         const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
         `client_id=${process.env.REACT_APP_CLIENT_ID}` +
-        `&redirect_uri=${encodeURIComponent('https://www.nucleusapp.ca/api/auth/callback/google')}` +
-        // `&redirect_uri=${encodeURIComponent('http://localhost:3000/api/auth/callback/google')}` +
+        //`&redirect_uri=${encodeURIComponent('https://www.nucleusapp.ca/api/auth/callback/google')}` +
+        `&redirect_uri=${encodeURIComponent('http://localhost:3000/api/auth/callback/google')}` +
         `&response_type=code` +
         `&scope=${encodeURIComponent('openid email profile https://www.googleapis.com/auth/calendar')}` +
         `&access_type=offline`;
@@ -165,15 +165,18 @@ export default function Login() {
 
                     <div className="flex flex-col sm:flex-row gap-10 sm:gap-4 w-full mt-[29px]">
                         <div
-                            onClick={handleLogin}
-                            className="w-full h-[45px] signin flex justify-center items-center rounded-[50px] hover:bg-[#DECBF8] cursor-pointer"
+                            onClick={!email || !password || isLoading ? null : handleLogin} // Disable click if fields are empty or loading
+                            className={`w-full h-[45px] signin flex justify-center items-center rounded-[50px] transition-all ${
+                                !email || !password
+                                    ? 'bg-gray-400 cursor-not-allowed'
+                                    : 'bg-[#DECBF8] hover:bg-[#DECBF8] cursor-pointer'
+                            }`}
                         >
-
                             {isLoading ? (
                                 <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
                             ) : (
                                 <div className="text-[#F3F3F3] font-poppins text-[16px] font-bold leading-none">
-                                LOGIN
+                                    LOGIN
                                 </div>
                             )}
                         </div>

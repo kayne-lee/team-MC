@@ -14,4 +14,5 @@ public class Assignment {
     private String description;
     private float grade;
     private boolean completed;
+    private String notes;
 }

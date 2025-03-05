@@ -167,27 +167,30 @@ const ListView = () => {
         setEditedNoteText(currentNote || '');
     };
 
-    const handleSaveNote = (taskId) => {
-        // Find the task in tasksInMonth and update its note
-        const updatedTasks = tasksInMonth.map(task => {
-            if (task.id === taskId) {
-                return { ...task, notes: editedNoteText };
+    const handleSaveNote = async (taskId) => {
+        try {
+            // Find the task in tasksInMonth
+            const taskToUpdate = tasksInMonth.find(t => t.id === taskId);
+            
+            if (!taskToUpdate) {
+                console.error('Task not found:', taskId);
+                return;
             }
-            return task;
-        });
-
-        setTasksInMonth(updatedTasks);
-        
-        // Also update the grouped assignments by date
-        const newAssignmentsByDate = { ...assignmentsByDate };
-        
-        // Find which date this task belongs to
-        const taskToUpdate = tasksInMonth.find(t => t.id === taskId);
-        if (taskToUpdate) {
+            
+            // Update tasks in state
+            const updatedTasks = tasksInMonth.map(task => {
+                if (task.id === taskId) {
+                    return { ...task, notes: editedNoteText };
+                }
+                return task;
+            });
+            setTasksInMonth(updatedTasks);
+            
+            // Update assignmentsByDate
+            const newAssignmentsByDate = { ...assignmentsByDate };
             const dateKey = taskToUpdate.dueDate;
             
             if (newAssignmentsByDate[dateKey]) {
-                // Find the task index in this date's array
                 const taskIndex = newAssignmentsByDate[dateKey].findIndex(t => 
                     t.title === taskToUpdate.title && 
                     t.course === taskToUpdate.course
@@ -200,14 +203,32 @@ const ListView = () => {
                     };
                 }
             }
+            setAssignmentsByDate(newAssignmentsByDate);
+            
+            // Prepare API payload
+            const apiPayload = [{
+                courseTitle: taskToUpdate.course,
+                assignmentTitle: taskToUpdate.title,
+                notes: editedNoteText // Adding notes to the payload
+            }];
+            
+            console.log('Sending API payload:', apiPayload);
+            
+            // For now just log the payload, but eventually will send to API
+            const token = localStorage.getItem('jwt');
+            if (!token) throw new Error('No token found.');
+            
+            await axios.post(`${apiURL}/api/data/updateNotes`, apiPayload, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            
+            
+            setEditingNoteId(null);
+        } catch (error) {
+            console.error('Error saving note:', error);
         }
-        
-        setAssignmentsByDate(newAssignmentsByDate);
-        setEditingNoteId(null);
-        
-        // Log the update (will be replaced with API call later)
-        console.log('Saving note for task:', taskId, 'New note:', editedNoteText);
     };
+
 
     const handleCancelEdit = () => {
         setEditingNoteId(null);

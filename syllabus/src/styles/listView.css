@@ -32,7 +32,7 @@
 
 .task-left {
     display: flex;
-    align-items: center;
+    /* align-items: center; */
     gap: 12px;
 }
 
@@ -46,6 +46,7 @@
     width: 20px;
     height: 20px;
     accent-color: #8338EC;
+    margin-top: 15px;
 }
 
 .time {

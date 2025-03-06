@@ -38,10 +38,9 @@ const ListView = () => {
     const handleDateClick = (day) => {
         const selectedDate = new Date(day);
         selectedDate.setHours(0, 0, 0, 0);
-        selectedDate.setDate(selectedDate.getDate() + 1); 
         setCurrentDate(selectedDate);
         localStorage.setItem('selectedDate', selectedDate.toISOString());
-        
+
         // Only filter tasks if data is already loaded
         if (dataLoaded) {
             filterTasksByMonth(selectedDate);
@@ -50,33 +49,38 @@ const ListView = () => {
 
     const filterTasksByMonth = (date) => {
         const currentMonthYear = getMonthYearKey(date);
-        
+
         // Filter assignments to only include those in the current month
         const filteredTasks = Object.entries(assignmentsByDate)
             .filter(([dateKey]) => {
                 const taskDate = new Date(dateKey);
+                taskDate.setHours(0, 0, 0, 0); // Ensure the time is set to midnight
                 return getMonthYearKey(taskDate) === currentMonthYear;
             })
             .reduce((acc, [dateKey, tasks]) => {
                 acc[dateKey] = tasks;
                 return acc;
             }, {});
-            
+
         // Convert the filtered object to an array of tasks with dates
         const tasksArray = Object.entries(filteredTasks)
-            .flatMap(([dateKey, tasks]) => 
-                tasks.map((task, index) => ({
-                    ...task,
-                    id: `${dateKey}-${index}`, // Add unique ID for editing
-                    formattedDate: new Date(dateKey).toLocaleDateString('en-US', { 
-                        weekday: 'short', 
-                        month: 'short', 
-                        day: 'numeric' 
-                    })
-                }))
+            .flatMap(([dateKey, tasks]) =>
+                tasks.map((task, index) => {
+                    const taskDate = new Date(dateKey);
+                    taskDate.setDate(taskDate.getDate() + 1); // Add one day to the date
+                    return {
+                        ...task,
+                        id: `${dateKey}-${index}`, // Add unique ID for editing
+                        formattedDate: taskDate.toLocaleDateString('en-US', {
+                            weekday: 'short',
+                            month: 'short',
+                            day: 'numeric'
+                        })
+                    };
+                })
             )
             .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-            
+
         setTasksInMonth(tasksArray);
     };
 

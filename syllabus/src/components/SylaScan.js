@@ -163,7 +163,7 @@ export default function SylaScan({ closeModal }) {
 
   return (
     <div className="">
-      <div className=" relative w-[988px] h-[540px] flex flex-col justify-center items-center bg-white rounded-[45px] border-[8px] border-[#8338EC] ">
+      <div className=" relative w-[988px] min-h-[540px] flex flex-col justify-center items-center bg-white rounded-[45px] border-[8px] border-[#8338EC] ">
       <button
           onClick={closeModal}
           className="absolute top-[25px] right-[25px] text-3xl font-bold text-gray-500 hover:text-gray-700"
@@ -224,59 +224,64 @@ export default function SylaScan({ closeModal }) {
 
             {/* Assignment Table and Edit */}
             {!loading && jsonData.assignments.length > 0 && (
-              <div className="w-full p-[25px]">
-                <h2 style={{ textAlign: "center" }} className="text-black font-inter text-[31.052px] font-bold not-italic leading-none mb-[20px]">
+              <div className="w-full p-6 bg-white rounded-[45px] shadow-md">
+                <h2 className="text-center text-purple-800 font-inter text-3xl font-bold leading-none mb-6">
                   {jsonData.title} Assessments
                 </h2>
+                
                 {/* Course Info Table Edit */}
-                <div className="flex justify-center items-center w-full mb-4">
-                  <table className="">
+                <div className="flex justify-center items-center w-full mb-8">
+                  <table className="w-full max-w-2xl border-collapse">
                     <tbody>
-                      <tr>
-                        <td className="w-[150px]">Instructor Name:</td>
-                        <td>
+                      <tr className="border-b border-purple-100">
+                        <td className="py-3 px-4 text-purple-700 font-medium w-[180px]">Instructor Name:</td>
+                        <td className="py-2">
                           <input
                             type="text"
                             value={jsonData.courseInfo.instructorName}
                             onChange={(e) =>
                               handleInputChange(null, "instructorName", e.target.value, "courseInfo")
                             }
+                            className="w-full p-2 border border-purple-200 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                           />
                         </td>
                       </tr>
-                      <tr>
-                        <td>Instructor Email:</td>
-                        <td>
+                      <tr className="border-b border-purple-100">
+                        <td className="py-3 px-4 text-purple-700 font-medium">Instructor Email:</td>
+                        <td className="py-2">
                           <input
                             type="email"
                             value={jsonData.courseInfo.instructorEmail}
                             onChange={(e) =>
                               handleInputChange(null, "instructorEmail", e.target.value, "courseInfo")
                             }
+                            className="w-full p-2 border border-purple-200 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                           />
                         </td>
                       </tr>
-                      <tr>
-                        <td>Office Hours:</td>
-                        <td>
+                      <tr className="border-b border-purple-100">
+                        <td className="py-3 px-4 text-purple-700 font-medium">Office Hours:</td>
+                        <td className="py-2">
                           <input
                             type="text"
                             value={jsonData.courseInfo.officeHoursTime}
                             onChange={(e) =>
                               handleInputChange(null, "officeHoursTime", e.target.value, "courseInfo")
                             }
+                            className="w-full p-2 border border-purple-200 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                           />
                         </td>
                       </tr>
                       <tr>
-                        <td>Office Location:</td>
-                        <td>
+                        <td className="py-3 px-4 text-purple-700 font-medium">Office Location:</td>
+                        <td className="py-2">
                           <input
                             type="text"
                             value={jsonData.courseInfo.officeHoursLocation}
                             onChange={(e) =>
                               handleInputChange(null, "officeHoursLocation", e.target.value, "courseInfo")
                             }
+                            className="w-full p-2 border border-purple-200 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                           />
                         </td>
                       </tr>
@@ -285,71 +290,94 @@ export default function SylaScan({ closeModal }) {
                 </div>
 
                 {/* Assignments Table */}
-                <table className="mt-[10px]" border="1" style={{ borderCollapse: "collapse", width: "100%" }}>
-                  <thead>
-                    <tr>
-                      <th className="w-[10px] text-left">Title</th>
-                      <th className="w-[10px] text-left">Weight</th>
-                      <th className="w-[10px] text-left">Due Date</th>
-                      <th className="w-[10px] text-left">Description</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {jsonData.assignments.map((row, index) => (
-                      <tr key={index}>
-                        <td>
-                          <input
-                            type="text"
-                            value={row.title}
-                            onChange={(e) =>
-                              handleInputChange(index, "title", e.target.value, "assignments")
-                            }
-                          />
-                        </td>
-                        <td>
-                          <input
-                            type="text"
-                            value={row.weight}
-                            onChange={(e) =>
-                              handleInputChange(index, "weight", e.target.value, "assignments")
-                            }
-                          />
-                        </td>
-                        <td>
-                          <input
-                            type="datetime-local"
-                            value={row.dueDate}
-                            onChange={(e) =>
-                              handleInputChange(index, "dueDate", e.target.value, "assignments")
-                            }
-                          />
-                        </td>
-                        <td className="w-[200px]">
-                          <input
-                            type="text"
-                            value={row.description}
-                            onChange={(e) =>
-                              handleInputChange(index, "description", e.target.value, "assignments")
-                            }
-                          />
-                        </td>
-                        <td>
-                          <button onClick={() => handleDeleteRow(index)}>Delete</button>
-                        </td>
+                <div className="overflow-x-auto max-h-[350px] scroll">
+                  <table className="w-full border-collapse bg-white rounded-lg overflow-hidden">
+                    <thead className="bg-purple-600 text-white">
+                      <tr>
+                        <th className="py-3 px-4 text-left font-medium">Title</th>
+                        <th className="py-3 px-4 text-left font-medium">Weight</th>
+                        <th className="py-3 px-4 text-left font-medium">Due Date</th>
+                        <th className="py-3 px-4 text-left font-medium">Description</th>
+                        <th className="py-3 px-4 text-left font-medium w-20">Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <button onClick={handleAddRow} style={{ marginTop: "10px" }}>
-                  Add Row
+                    </thead>
+                    <tbody>
+                      {jsonData.assignments.map((row, index) => (
+                        <tr key={index} className={index % 2 === 0 ? "bg-purple-50" : "bg-white"}>
+                          <td className="py-2 px-4 border-t border-purple-100">
+                            <input
+                              type="text"
+                              value={row.title}
+                              onChange={(e) =>
+                                handleInputChange(index, "title", e.target.value, "assignments")
+                              }
+                              className="w-full p-2 border border-purple-200 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            />
+                          </td>
+                          <td className="py-2 px-4 border-t border-purple-100">
+                            <input
+                              type="text"
+                              value={row.weight}
+                              onChange={(e) =>
+                                handleInputChange(index, "weight", e.target.value, "assignments")
+                              }
+                              className="w-full p-2 border border-purple-200 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            />
+                          </td>
+                          <td className="py-2 px-4 border-t border-purple-100">
+                            <input
+                              type="datetime-local"
+                              value={row.dueDate}
+                              onChange={(e) =>
+                                handleInputChange(index, "dueDate", e.target.value, "assignments")
+                              }
+                              className="w-full p-2 border border-purple-200 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            />
+                          </td>
+                          <td className="py-2 px-4 border-t border-purple-100">
+                            <input
+                              type="text"
+                              value={row.description}
+                              onChange={(e) =>
+                                handleInputChange(index, "description", e.target.value, "assignments")
+                              }
+                              className="w-full p-2 border border-purple-200 rounded focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            />
+                          </td>
+                          <td className="py-2 px-4 border-t border-purple-100">
+                            <button 
+                              onClick={() => handleDeleteRow(index)}
+                              className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded transition duration-200 flex items-center justify-center"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                              </svg>
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="mt-6 flex justify-end">
+                  <button 
+                    onClick={handleAddRow} 
+                    className="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg shadow-sm transition duration-200 flex items-center"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    Add Row
+                  </button>
+                </div>
+                {/* Save Button */}
+                <button hidden={jsonData.assignments.length === 0 || loading} onClick={saveInfo} className="upload-button mt-[20px] hover:bg-[#BFA1E9]">
+                  Save Course Info
                 </button>
               </div>
             )}
 
-            {/* Save Button */}
-            <button hidden={jsonData.assignments.length === 0 || loading} onClick={saveInfo} className="upload-button mt-[20px]">
-              Save Course Info
-            </button>
+
             <h1 hidden={!showSuccessMessage}>Congrats! Your course has been saved to your profile.</h1>
 
           </>

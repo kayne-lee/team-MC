@@ -330,5 +330,51 @@ public class DataController {
         
         return ResponseEntity.status(401).body(null);
     }
+    @PostMapping("/updateNotes")
+    public ResponseEntity<Map<String, Boolean>> updateNotes(
+            @RequestBody List<Map<String, Object>> noteUpdates,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+        
+        String token = null;
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            token = authorizationHeader.substring(7);
+        }
+
+        if (token != null && !jwtUtil.isTokenExpired(token)) {
+            try {
+                String username = jwtUtil.extractUsername(token);
+                Optional<User> user = userService.findById(username);
+                
+                if (user.isPresent()) {
+                    String email = user.get().getEmail();
+                    Map<String, Boolean> results = new HashMap<>();
+
+                    for (Map<String, Object> update : noteUpdates) {
+                        String courseTitle = (String) update.get("courseTitle");
+                        String assignmentTitle = (String) update.get("assignmentTitle");
+                        String notes = (String) update.get("notes");
+
+                        boolean updated = databaseSerivce.updateNotes(
+                            email, 
+                            courseTitle, 
+                            assignmentTitle, 
+                            notes
+                        );
+
+                        String key = courseTitle + "-" + assignmentTitle;
+                        results.put(key, updated);
+                    }
+
+                    return ResponseEntity.ok(results);
+                }
+            } catch (Exception e) {
+                logger.error("Error updating notes: ", e);
+                return ResponseEntity.status(500).body(null);
+            }
+        }
+        
+        return ResponseEntity.status(401).body(null);
+    }
+
 
 }

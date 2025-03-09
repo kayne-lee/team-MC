@@ -16,4 +16,5 @@ public class Assignment {
     private float grade;
     private boolean completed;
     private List<Object> progressionTasks;
+    private String notes;
 }

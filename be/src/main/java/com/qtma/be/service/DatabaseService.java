@@ -10,6 +10,7 @@ import com.google.gson.JsonParser;
 import com.qtma.be.model.Assignment;
 import com.qtma.be.model.Course;
 import com.qtma.be.model.RandomTask;
+import com.qtma.be.model.User;
 import com.qtma.be.model.CourseInfo;
 import com.qtma.be.model.OpenAIRequest;
 import com.qtma.be.model.UserCourse;
@@ -41,6 +42,8 @@ public class DatabaseService {
     @Autowired
     private UserCourseRepository userCourseRepository;
 
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -107,6 +110,19 @@ public class DatabaseService {
             
             if (userCourseOpt.isPresent()) {
                 UserCourse userCourse = userCourseOpt.get();
+
+                logger.info("Course title: " + courseTitle);
+
+                if (courseTitle.equals("Extra Task")) {
+                    logger.info(userCourse.getRandomTasks().toString());
+                    for (RandomTask task : userCourse.getRandomTasks()) {
+                        if (task.getTitle().equals(assignmentTitle)) {
+                            task.setCompleted(isCompleted);
+                            userCourseRepository.save(userCourse);
+                            return true;
+                        }
+                    }
+                }
                 
                 // Find the course
                 for (Course course : userCourse.getCourses()) {
@@ -116,12 +132,16 @@ public class DatabaseService {
                             if (assignment.getTitle().equals(assignmentTitle)) {
                                 // Update the completion status
                                 assignment.setCompleted(isCompleted);
+                                // logger.info("Assignment completion status updated: " + assignment.getTitle() + " " + isCompleted);
                                 userCourseRepository.save(userCourse);
                                 return true;
                             }
                         }
                     }
                 }
+
+
+
             }
             return false;
         } catch (Exception e) {
@@ -129,4 +149,53 @@ public class DatabaseService {
             return false;
         }
     }
+    public boolean updateNotes(String email, String courseTitle, String assignmentTitle, String notes) {
+        try {
+            Optional<User> userOpt = userRepository.findByEmail(email);
+            Optional<UserCourse> userC = userCourseRepository.findByEmail(email);
+            
+            if (userOpt.isPresent()) {
+                User user = userOpt.get();
+                UserCourse userCourse = userC.get();
+                boolean updated = false;
+    
+                // Check assignments within courses
+                for (Course course : userCourse.getCourses()) {
+                    if (course.getTitle().equals(courseTitle)) {
+                        for (Assignment assignment : course.getAssignments()) {
+                            if (assignment.getTitle().equals(assignmentTitle)) {
+                                assignment.setNotes(notes);
+                                userCourseRepository.save(userCourse);
+                                updated = true;
+                            }
+                        }
+                    }
+                }
+    
+                // If the courseTitle is "Random Task", check for randomTasks
+                if (courseTitle.equals("Extra Task")) {
+                    // logger.info(userCourse.getRandomTasks().toString());
+                    for (RandomTask task : userCourse.getRandomTasks()) {
+                        if (task.getTitle().equals(assignmentTitle)) {
+                            task.setNotes(notes);
+                            userCourseRepository.save(userCourse);
+                            updated = true;
+                        }
+                    }
+                }
+    
+                if (updated) {
+                    userRepository.save(user);  // Save the updated user object
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            logger.error("Error updating notes: ", e);
+            return false;
+        }
+    }
+    
+
+    
 }

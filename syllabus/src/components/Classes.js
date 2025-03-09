@@ -8,6 +8,7 @@ import GoogleService from "../services/GoogleService";
 import Loader from "./Loader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import plus from "../assets/plus-icon.png";
 
 
 const Classes = () => {
@@ -355,7 +356,7 @@ const Classes = () => {
             ) : (
                 <>
                     {/* Sidebar */}
-                    <div className="sidebar">
+                    <div className="sidebar grid grid-cols-2 gap-[20px]">
                         {
                             courses.map((course) => (
                                 <div
@@ -367,7 +368,7 @@ const Classes = () => {
                                         <img src={course.image} alt={course.title} className="course-image" />
                                         <h2 className="course-title">{course.title}</h2>
                                     </div>
-                                    <div className="course-details">
+                                    {/* <div className="course-details">
                                         <div className="flex flex-col">
                                             <div class="text-black font-poppins text-sm font-bold leading-[125%]">Instructor:</div>
                                             <div class="text-[#8B898D] font-poppins text-sm font-normal leading-[125%]">{course.instructor}</div>
@@ -384,15 +385,13 @@ const Classes = () => {
                                             <div class="text-black font-poppins text-sm font-bold leading-[125%]">Office Hours:</div>
                                             <div class="text-[#8B898D] font-poppins text-sm font-normal leading-[125%]">{course.officeHours}</div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             ))
                         }
                         {/* ADD COURSES BUTTON */}
                         <div className="add-course-card" onClick={openModal}>
-                            <div className="add-icon">
-                                <span>+</span>
-                            </div>
+                            <img src={plus} alt="" className="w-[48px]"/>
                         </div>
                     </div>
 

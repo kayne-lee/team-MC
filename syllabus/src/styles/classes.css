@@ -5,17 +5,20 @@
     height: calc(100vh - 137px);
     font-family: "Poppins", "Lato", "sans-serif";
     background: white;
-    padding-left: 60px;
+    padding-left: 30px;
     padding-right: 60px;
+    z-index: 2;
 }
 
 .sidebar {
-    flex: 1;
-    padding: 20px 20px 0 0px; /* Top Right Bottom Left */
-    margin-right: 50px;
+    /* display: grid;
+    grid-template-rows: 1fr 1fr; */
+    padding: 20px 20px 0 30px; /* Top Right Bottom Left */
+    /* margin-right: 150px; */
     overflow-y: auto;
     border-right: 2px solid #e0e0e0;
     height: calc(100vh - 154px);
+    width: 550px;
 }
 
 .add-course-card {
@@ -26,10 +29,12 @@
     border: 1px solid #8B898D;
     background: white;
     margin-bottom: 15px;
-    height: 100px;
+    height: 187px;
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease;
+    border-radius: 11.035px;
+background: linear-gradient(123deg, rgba(227, 204, 255, 0.80) 9.3%, rgba(243, 243, 243, 0.60) 44.23%, rgba(222, 203, 248, 0.50) 92.46%);
 }
 
 .add-course-card:hover {
@@ -54,13 +59,15 @@
 .course-card {
     display: flex;
     background: #F3F3F3;
-    margin-bottom: 15px;
+    /* margin-bottom: 15px; */
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     cursor: pointer;
     transition: transform 0.2s ease;
-    padding: 19px;
+    padding: 16px;
+    height: 187px;
+    /* width: 250px; */
 }
 
 .course-card:hover {
@@ -73,11 +80,10 @@
 
 
 .course-image {
-    width: 251px;
-    height: 150px;
+    width: 218px;
+    height: 131px;
     object-fit: cover;
-    border-radius: 9.791px;
-    /* border: 1px solid #8B898D; */
+    border-radius: 8.532px;
 }
 
 
@@ -99,7 +105,7 @@
 
 .course-title {
     color: #000;
-    font-size: 20px;
+    font-size: 17px;
     font-style: normal;
     font-weight: 700;
     line-height: 125%;
@@ -113,8 +119,8 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
-    
     align-items: center;
+    width: 1119px;
     padding: 20px 0 20px 20px;
     h1 {
         color: #000;

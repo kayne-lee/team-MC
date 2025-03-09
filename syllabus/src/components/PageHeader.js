@@ -66,8 +66,9 @@ const PageHeader = ({ currentDate, onDateChange, togglePopup }) => {
                         <div className="new-task-button-inner">
                             <div className="frame-child" />
                         </div>
-                        <div className="new-task">New Task</div>
-                        <img className="plus-icon" alt="Add" src={plusIcon} />
+                        <div class="new-task">New Task</div>
+                        {/* <img class="plus-icon" alt="" src={plusIcon}/> */}
+
                     </div>
                 </button>
             </div>

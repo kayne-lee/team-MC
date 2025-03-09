@@ -107,7 +107,7 @@ export default function Login() {
     <div className="h-screen flex">
     {/* Left Section */}
     <div className="w-1/2 flex flex-col justify-center items-center">
-      <div className="absolute top-[43px] left-[63px]">
+      <div className="absolute top-[43px] left-[33px]">
         <img src="/nucleus.png" alt="" className="w-[141px]" />
       </div>
     </div>
@@ -165,11 +165,11 @@ export default function Login() {
 
                     <div className="flex flex-col sm:flex-row gap-10 sm:gap-4 w-full mt-[29px]">
                         <div
-                            onClick={!email || !password || isLoading ? null : handleLogin} // Disable click if fields are empty or loading
-                            className={`w-full h-[45px] signin flex justify-center items-center rounded-[50px] transition-all ${
-                                !email || !password
-                                    ? 'bg-gray-400 cursor-not-allowed'
-                                    : 'bg-[#DECBF8] hover:bg-[#DECBF8] cursor-pointer'
+                            onClick={email && password ? handleLogin : null}
+                            className={`w-full h-[45px] flex justify-center items-center rounded-[50px] cursor-pointer ${
+                                email && password 
+                                    ? "signin hover:bg-[#DECBF8]" 
+                                    : "bg-[#a898c0] hover:bg-[#b4a7cd]"
                             }`}
                         >
                             {isLoading ? (

@@ -401,8 +401,10 @@ li {
 /* New wrapper for the weight badge */
 .weight-container {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
     margin-top: auto;
+    width: 100%;
 }
 
 ::-webkit-scrollbar-horizontal {

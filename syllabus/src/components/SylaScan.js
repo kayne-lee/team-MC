@@ -83,6 +83,7 @@ export default function SylaScan({ closeModal }) {
     });
     setLoading(true);
     const data = await openaiService.openAICall(inputText);
+    console.log("DATA",data)
     setJsonData(data);
     setLoading(false);
   }

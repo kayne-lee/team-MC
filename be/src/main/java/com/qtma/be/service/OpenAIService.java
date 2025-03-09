@@ -8,6 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.qtma.be.model.Assignment;
+import com.qtma.be.model.ProgressionTask;
 import com.qtma.be.model.Course;
 import com.qtma.be.model.CourseInfo;
 import com.qtma.be.model.OpenAIRequest;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class OpenAIService {
@@ -44,7 +46,10 @@ public class OpenAIService {
 
     public JsonNode openaiCall(OpenAIRequest openAIRequest) throws IOException {
         final String API_URL = "https://api.openai.com/v1/chat/completions";
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder().connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
+        .build();
 
         JSONArray messages = new JSONArray();
         JSONObject userMessage = new JSONObject();
@@ -55,7 +60,6 @@ public class OpenAIService {
 
         JSONObject requestBody = new JSONObject();
         requestBody.put("model", "gpt-4o-mini");
-        requestBody.put("messages", messages);
         requestBody.put("messages", messages);
         requestBody.put("temperature", 0.3);
 
@@ -123,8 +127,10 @@ public class OpenAIService {
                 "We are in the year 2025." +
                 "Example: {\"instructorName\": \"NAME_HERE\", \"instructorEmail\": \"example@queesnu.ca\", \"officeHoursTime\": \"DAY_OF_WEEK at TIME_OF_DAY\", \"officeHoursLocation\": \"LOCATION\", \"category\": \"CATEGORY\"} " +
                 "If any of the above fields are missing for courseInfo, just leave them as an empty string." +
-                "Each assessment should have the keys 'title', 'weight', 'description' and 'dueDate'. " +
-                "Example: {\"title\": \"COURSE_CODE\", \"assessments\": [{\"title\": \"ASSESSMENT_NAME\", \"weight\": \"WEIGHT\", \"description\": \"SHORT DESCRIPTION\", \"dueDate\": \"2025-12-10T23:59\"}]} " +
+                "Each assessment should have the keys 'title', 'weight', 'description', 'progressionTasks' and 'dueDate'. " +
+                "The progressionTasks will be an array of 2 objects, where each object will be a study session of work period to help the user stay on track to completing the work. " +
+                "Each progressionTasks object should have the keys 'course' (same as assignments course), 'dueDate' (which should be a few days before the actual assignment is due), 'description', and 'title'" +
+                "Example: {\"title\": \"COURSE_CODE\", \"assessments\": [{\"title\": \"ASSESSMENT_NAME\", \"weight\": \"WEIGHT\", \"description\": \"SHORT DESCRIPTION\", \"progressionTasks\": \"[{INSERT TWO TASKS HERE WITH CORRECT KEYS}]\", \"dueDate\": \"2025-12-10T23:59\"}]} " +
                 "Additional requirements: " +
                 "1. If the time is not specified, assume the time is 11:59 PM on the given date. " +
                 "2. If a date is not specified, fill in December 1, 2024, with the assumed time of 11:59 PM. " +
@@ -192,11 +198,11 @@ public class OpenAIService {
             newUser.setEmail(email);
             return newUser;
         });
-
+        
         // Create the course object
         Course course = new Course();
         course.setTitle(c.get("title").asText());
-
+        
         JsonNode courseNode = c.get("courseInfo");
         CourseInfo courseInfo = new CourseInfo();
         courseInfo.setInstructorName(courseNode.get("instructorName").asText());
@@ -205,7 +211,7 @@ public class OpenAIService {
         courseInfo.setOfficeHoursLocation(courseNode.get("officeHoursLocation").asText());
         courseInfo.setCategory(courseNode.get("category").asText());
         course.setCourseInfo(courseInfo);
-
+        
         // Extract assignments from the JsonNode
         List<Assignment> assignments = new ArrayList<>();
         if (c.has("assignments") && c.get("assignments").isArray()) {
@@ -215,19 +221,34 @@ public class OpenAIService {
                 assignment.setWeight(assignmentNode.get("weight").asText());
                 assignment.setDueDate(assignmentNode.get("dueDate").asText());
                 assignment.setDescription(assignmentNode.get("description").asText());
+        
+                // Extract progression tasks
+                List<ProgressionTask> progressionTasks = new ArrayList<>();
+                if (assignmentNode.has("progressionTasks") && assignmentNode.get("progressionTasks").isArray()) {
+                    for (JsonNode taskNode : assignmentNode.get("progressionTasks")) {
+                        ProgressionTask task = new ProgressionTask();
+                        task.setCourse(taskNode.get("course").asText());
+                        task.setDueDate(taskNode.get("dueDate").asText());
+                        task.setDescription(taskNode.get("description").asText());
+                        task.setTitle(taskNode.get("title").asText());
+                        progressionTasks.add(task);
+                    }
+                }
+                assignment.setProgressionTasks(progressionTasks);
+        
                 assignments.add(assignment);
             }
         }
         course.setAssignments(assignments);
-
+        
         // Update the user's courses
         if (user.getCourses() == null) {
             user.setCourses(new ArrayList<>());
         }
-
+        
         // Add the course to the user's courses list
         user.getCourses().add(course);
-
+        
         // Save the user back to MongoDB
         userRepository.save(user);
     }

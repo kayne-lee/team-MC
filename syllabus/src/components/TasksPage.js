@@ -5,6 +5,7 @@ import axios, { all } from 'axios';
 import TaskPopup from './TaskPopUp';
 import plusIcon from '../assets/plus.png';
 import PageHeader from './PageHeader';
+import sparkle from '../assets/sparkle.png'
 import Loader from "./Loader";
 
 const TasksPage = () => {
@@ -21,7 +22,7 @@ const TasksPage = () => {
     const [selectedAddDay, setSelectedAddDay] = useState();
     const togglePopup = () => setShowPopup(!showPopup);
     const apiURL = process.env.REACT_APP_NUCLEUS_API;
-
+    const [forceRender, setForceRender] = useState(false);
     // Format a date as YYYY-MM-DD (to match the API data)
     // const formatDateKey = (date) => date.toISOString().split('T')[0];
     const formatDateKey = (date) => {
@@ -60,7 +61,9 @@ const TasksPage = () => {
         
         setCurrentDate(selectedDate);
     };
-
+    const forceReRender = () => {
+        setForceRender(prev => !prev); // Toggle between true and false to trigger a re-render
+    };
     // Fetch assignments and group them by due date
     useEffect(() => {
         const fetchAssignments = async () => {
@@ -113,13 +116,42 @@ const TasksPage = () => {
                                     weight: assignment.weight,
                                     dueDate: formatDateKey(dueDate),
                                     isRandomTask: false,
+                                    completed: assignment.completed,
+                                    progressionTasks: assignment.progressionTasks,
+                                    description: assignment.description,
+                                    grade: assignment.grade
                                 };
                             })
                         )
                     );
                 }
+                var progressionTasks = []
+                for (const course of response.data[0].courses){
+                    for (const assignment of course["assignments"]) {
+                        if (assignment["progressionTasks"]) {
             
-                 allAssignments = [ ...randomTasks, ...allAssignments ];
+                   
+                            for (const data of assignment["progressionTasks"]) {
+                               
+                                const dueDate = new Date(data["dueDate"]);
+                                const formatDate = formatDateKey(dueDate)
+                                console.log("F",formatDate)
+                                
+                                progressionTasks.push({
+                                    "course":data["course"],
+                                    "dueDate":formatDate,
+                                    "title":data["title"],
+                                    "description": data["description"],
+                                    "isProgression": true,
+                                    "hidden":true
+                                });
+                                
+                            }
+                        }
+                    }
+                }
+            
+                 allAssignments = [ ...randomTasks, ...allAssignments, ...progressionTasks ];
                
                 const groupedAssignments = allAssignments.reduce((acc, assignment) => {
                     if (!acc[assignment.dueDate]) acc[assignment.dueDate] = [];
@@ -181,6 +213,28 @@ const TasksPage = () => {
         if (isExpanded) setIsExpanded(false); // Close only if expanded
     };
 
+    const showProgression = (assignment) => {
+        console.log(assignment)
+        var tempAssignments = assignmentsByDate;
+        for (const [key, value] of Object.entries(tempAssignments)) {
+        
+            for(var task of value) {
+               
+                if(task["isProgression"]) {
+                    console.log(task)
+                    if(task["course"] == assignment["course"]) {
+                        task["hidden"] = false
+                    }
+                }
+            }
+          }
+        
+        setAssignmentsByDate(tempAssignments);
+        forceReRender();
+          
+      
+    }
+
     const formatDisplayDate = (date) => {
         // Create short day names
         const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -232,11 +286,15 @@ const TasksPage = () => {
                                 </div>
                             </div>
                             <div className="sub-list flex flex-col gap-[15px]">
-                                {(assignmentsByDate[formatDateKey(day)] || []).map((assignment, idx) => (
+                                
+                                {(assignmentsByDate[formatDateKey(day)] || []).filter(assignment => !(assignment.isProgression && assignment.hidden)).map((assignment, idx) => (
+                                    
                                     <div
                                         key={idx}
                                         className={`task-tile ${
-                                            assignment.isRandomTask
+                                            assignment.isProgression
+                                                ? 'bg-[#bda5ea] text-white'
+                                                : assignment.isRandomTask
                                                 ? 'bg-[#FAFAFA] text-black'
                                                 : 'bg-[#8338EC] text-white'
                                         }`}
@@ -261,7 +319,9 @@ const TasksPage = () => {
                                                 <div className="weight-container">
                                                     <span className="weight-badge">
                                                         {assignment.weight}
+                                                        
                                                     </span>
+                                                    <img src={sparkle} alt="sparkle" width="23" height="10" className="ml-2 cursor-pointer" onClick={() => showProgression(assignment)} />
                                                 </div>
                                             )}
                                         </div>

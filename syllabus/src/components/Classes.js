@@ -34,8 +34,8 @@ const Classes = () => {
         console.log("ID", process.env.REACT_APP_CLIENT_ID)
         const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
           `client_id=${process.env.REACT_APP_CLIENT_ID}` +
-          `&redirect_uri=${encodeURIComponent('https://www.nucleusapp.ca/api/auth/callback/google')}` +
-        //   `&redirect_uri=${encodeURIComponent('http://localhost:3000/api/auth/callback/google')}` +
+          //`&redirect_uri=${encodeURIComponent('https://www.nucleusapp.ca/api/auth/callback/google')}` +
+          `&redirect_uri=${encodeURIComponent('http://localhost:3000/api/auth/callback/google')}` +
           `&response_type=code` +
           `&scope=${encodeURIComponent('openid email profile https://www.googleapis.com/auth/calendar')}` +
           `&access_type=offline`;

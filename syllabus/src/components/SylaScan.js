@@ -7,6 +7,7 @@ import OpenAIService from '../services/OpenAIService';
 import MongoService from '../services/MongoService';
 
 import pdfToText from 'react-pdftotext';
+import onq from '../assets/onq.png';
 import loader from '../assets/loader3.gif';
 
 export default function SylaScan({ closeModal }) {
@@ -67,6 +68,11 @@ export default function SylaScan({ closeModal }) {
         }
       });
     }
+  };
+
+  // Function to handle onQ integration
+  const handleOnQIntegration = () => {
+    window.open('https://auth.brightspace.com/oauth2/auth?response_type=code&client_id=3296d14e-9e15-45f1-b1be-b509a8ca53bd&redirect_uri=https%3A%2F%2Fwww.nucleusapp.ca%2F&scope=calendar:access:read content:access:read grades:access:read&state=xyz123', '_blank');
   };
 
   async function fetchDates() {
@@ -193,6 +199,23 @@ export default function SylaScan({ closeModal }) {
                   style={{ display: 'none' }}
                   onChange={handleFileChange}
                 />
+
+                {/* New Line Break */}
+                <div className="w-[70%] my-4 border-t border-gray-200"></div>
+                
+                {/* New Integrate with onQ Button */}
+                <button
+                  className="upload-button hover:bg-[#BFA1E9] flex items-center justify-center"
+                  onClick={handleOnQIntegration}
+                >
+                  Integrate with 
+                  <img 
+                    src={onq}
+                    alt="onQ" 
+                    className="ml-2" 
+                    style={{ height: '30px' }}
+                  />
+                </button>
               </>
             )}
 

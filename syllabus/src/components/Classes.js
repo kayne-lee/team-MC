@@ -528,40 +528,40 @@ const Classes = () => {
                                             </div>
                                         </div>
                                         <button
-                                        onClick={handleSaveGrades}
-                                        disabled={Object.keys(modifiedGrades).length === 0 || isSaving}
-                                        className={`
-                                            relative flex items-center justify-center
-                                            w-32 h-12 prounded-lg px-6 py-3 shadow-md
-                                            transition duration-200
-                                            ${isSaving || showSuccess 
-                                                ? 'bg-purple-500 text-white cursor-not-allowed'
-                                                : Object.keys(modifiedGrades).length === 0
-                                                    ? 'bg-purple-300 text-white cursor-not-allowed'
-                                                    : 'bg-purple-500 text-white hover:bg-purple-600'
-                                            }
-                                        `}
+                                onClick={handleSaveGrades}
+                                disabled={Object.keys(modifiedGrades).length === 0 || isSaving}
+                                className={`
+                                    relative flex items-center justify-center
+                                    w-32 h-12 rounded-lg px-6 py-3 shadow-md
+                                    transition duration-200 pt-20px
+                                    ${isSaving || showSuccess 
+                                        ? 'bg-purple-500 text-white cursor-not-allowed'
+                                        : Object.keys(modifiedGrades).length === 0
+                                            ? 'bg-purple-300 text-white cursor-not-allowed'
+                                            : 'bg-purple-500 text-white hover:bg-purple-600'
+                                    }
+                                `}
+                            >
+                                {isSaving ? (
+                                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
+                                ) : showSuccess ? (
+                                    <svg 
+                                        className="w-6 h-6 text-white animate-scale-check" 
+                                        fill="none" 
+                                        stroke="currentColor" 
+                                        viewBox="0 0 24 24"
                                     >
-                                        {isSaving ? (
-                                            <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
-                                        ) : showSuccess ? (
-                                            <svg 
-                                                className="w-6 h-6 text-white animate-scale-check" 
-                                                fill="none" 
-                                                stroke="currentColor" 
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path 
-                                                    strokeLinecap="round" 
-                                                    strokeLinejoin="round" 
-                                                    strokeWidth={2} 
-                                                    d="M5 13l4 4L19 7" 
-                                                />
-                                            </svg>
-                                        ) : (
-                                            'Save Grades'
-                                        )}
-                                    </button>
+                                        <path 
+                                            strokeLinecap="round" 
+                                            strokeLinejoin="round" 
+                                            strokeWidth={2} 
+                                            d="M5 13l4 4L19 7" 
+                                        />
+                                    </svg>
+                                ) : (
+                                    'Save Grades'
+                                )}
+                            </button>
                                     </div>
                                 </div>
                             </div>

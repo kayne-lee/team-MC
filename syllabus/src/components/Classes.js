@@ -389,7 +389,7 @@ const Classes = () => {
                                 </div>
                             ))
                         }
-                        {/* ADD COURSES BUTTON */}
+                        {/* ADD COURSES BUTTON  testing*/}
                         <div className="add-course-card" onClick={openModal}>
                             <img src={plus} alt="" className="w-[48px]"/>
                         </div>

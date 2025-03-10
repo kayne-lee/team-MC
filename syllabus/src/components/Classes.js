@@ -393,7 +393,19 @@ const Classes = () => {
                         <div className="add-course-card" onClick={openModal}>
                             <img src={plus} alt="" className="w-[48px]"/>
                         </div>
+
+                        {/* Existing Calendar button */}
+                        <div className="calendar-container">
+                            <button
+                                onClick={uploadToCalendar}
+                                className="bg-white text-black border border-gray-300 rounded-lg px-6 py-3 shadow-md hover:bg-gray-100 transition duration-200"
+                            >
+                                {access_token ? "Upload to Calendar" : "Connect Google Calendar"}
+                            </button>
+                        </div>
+
                     </div>
+
 
                     {/* Main Content */}
                     <div className="main-content">
@@ -560,14 +572,6 @@ const Classes = () => {
                                 ) : (
                                     'Save Grades'
                                 )}
-                            </button>
-                            
-                            {/* Existing Calendar button */}
-                            <button
-                                onClick={uploadToCalendar}
-                                className="bg-white text-black border border-gray-300 rounded-lg px-6 py-3 shadow-md hover:bg-gray-100 transition duration-200"
-                            >
-                                {access_token ? "Upload to Calendar" : "Connect Google Calendar"}
                             </button>
                         </div>
                     </div>

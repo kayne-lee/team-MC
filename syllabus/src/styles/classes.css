@@ -112,6 +112,14 @@ background: linear-gradient(123deg, rgba(227, 204, 255, 0.80) 9.3%, rgba(243, 24
     padding-top: 10px;
 }
 
+.calendar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: auto;
+    padding: 16px;
+    width: 100%;
+}
 
 /* COURSE DETAILS BOX (SOLO BOX ON THE RIGHT) */
 .main-content {

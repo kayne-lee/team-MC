@@ -166,10 +166,10 @@ export default function Login() {
                     <div className="flex flex-col sm:flex-row gap-10 sm:gap-4 w-full mt-[29px]">
                         <div
                             onClick={email && password ? handleLogin : null}
-                            className={`w-full h-[45px] flex justify-center items-center rounded-[50px] cursor-pointer ${
+                            className={`w-full h-[45px] flex justify-center items-center rounded-[50px]  ${
                                 email && password 
-                                    ? "signin hover:bg-[#DECBF8]" 
-                                    : "bg-[#a898c0] hover:bg-[#b4a7cd]"
+                                    ? "signin cursor-pointer hover:bg-[#DECBF8]" 
+                                    : "bg-[#a898c0] cursor-not-allowed"
                             }`}
                         >
                             {isLoading ? (

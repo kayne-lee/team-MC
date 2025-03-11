@@ -23,6 +23,22 @@ function Navbar({ activeTab, setActiveTab }) {
     
   const togglePopup = () => setShowPopup(!showPopup);
 
+    // Check for OAuth redirect code parameter
+    useEffect(() => {
+      console.log("Checking for OAuth redirect code");
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get('code');
+      console.log("Code from URL:", code);
+      
+      if (code) {
+        console.log("OAuth code found, attempting to close window");
+        try {
+          window.close();
+        } catch (err) {
+          console.error("Failed to close window:", err);
+        }
+      }
+    }, []);
   // Fetch user data
   useEffect(() => {
     const fetchUserData = async () => {

@@ -5,6 +5,8 @@ import trashIcon from '../assets/trash.png';
 import { useNavigate } from 'react-router-dom';
 import OpenAIService from '../services/OpenAIService';
 import MongoService from '../services/MongoService';
+import syllabus1 from '../assets/ELEC101.pdf'; // Update path to where you store syllabi
+import syllabus2 from '../assets/ELEC301.pdf'; 
 
 import pdfToText from 'react-pdftotext';
 import onq from '../assets/onq.png';
@@ -28,6 +30,7 @@ export default function SylaScan({ closeModal }) {
   });
   const [loading, setLoading] = useState(false);
   const [hasError, setHasError] = useState(false); // Error state
+  const [errorMessages, setErrorMessages] = useState("");
   const openaiService = OpenAIService();
   const mongoService = MongoService();
   const [key, setKey] = useState(0); // 'key' will act as a force trigger
@@ -70,9 +73,76 @@ export default function SylaScan({ closeModal }) {
     }
   };
 
+  const processPreSavedSyllabi = async () => {
+    setLoading(true);
+    setHasError(false);
+    setShowFetchDates(true);
+  
+    const syllabi = [
+      { name: 'ELEC101', fileUrl: syllabus1 },
+      { name: 'ELEC301', fileUrl: syllabus2 }
+    ];
+  
+    for (const syllabus of syllabi) {
+      try {
+        // Fetch the PDF as a Blob
+        const response = await fetch(syllabus.fileUrl);
+        const blob = await response.blob();
+  
+        // Convert Blob into a File object
+        const file = new File([blob], `${syllabus.name}.pdf`, { type: "application/pdf" });
+  
+        // Convert PDF to text
+        const text = await pdfToText(file);
+  
+        // Send extracted text to OpenAI for structured data extraction
+        const extractedData = await openaiService.openAICall(text);
+  
+        if (!extractedData || !extractedData.assignments) {
+          console.error(`Failed to process ${syllabus.name}`);
+          setHasError(true);
+          continue;
+        }
+  
+        // Save extracted data to MongoDB
+        await mongoService.saveCourseInfo(extractedData);
+  
+        setJsonData({
+          title: "",
+          assignments: [],
+          courseInfo: {
+            instructorName: "",
+            instructorEmail: "",
+            officeHoursTime: "",
+            officeHoursLocation: "",
+            category: ""
+          }
+        });
+        setUploadedSyllabi([]);
+        setShowFetchDates(false);
+
+      } catch (error) {
+        console.error(`Error processing ${syllabus.name}:`, error);
+        setHasError(true);
+      }
+    }
+  
+    setLoading(false);
+    setShowSuccessMessage(true);
+    window.location.reload();
+  };
+  
+  
   // Function to handle onQ integration
   const handleOnQIntegration = () => {
-    window.open('https://auth.brightspace.com/oauth2/auth?response_type=code&client_id=3296d14e-9e15-45f1-b1be-b509a8ca53bd&redirect_uri=https%3A%2F%2Fwww.nucleusapp.ca%2F&scope=calendar:access:read content:access:read grades:access:read&state=xyz123', '_blank');
+    const name = localStorage.getItem("name");
+    if (name === "Kayne Lee") {
+      window.open('https://auth.brightspace.com/oauth2/auth?response_type=code&client_id=3296d14e-9e15-45f1-b1be-b509a8ca53bd&redirect_uri=https%3A%2F%2Fwww.nucleusapp.ca%2F&scope=calendar:access:read content:access:read grades:access:read&state=xyz123', '_blank');
+      processPreSavedSyllabi();
+    } else {
+      setHasError(true);
+    }
+    
   };
 
   async function fetchDates() {
@@ -408,8 +478,17 @@ export default function SylaScan({ closeModal }) {
         ) : (
           // Error Message with Back Button
           <div>
-            <h2>There was an error extracting the syllabus. Please try again.</h2>
-            <button onClick={handleBack}>Back</button>
+            {errorMessages ? (
+              <>
+                <h2>{errorMessages}</h2>
+                <button onClick={handleBack}>Back</button>
+              </>
+            ) : (
+              <>
+                <h2>There was an error extracting the syllabus. Please try again.</h2>
+                <button onClick={handleBack}>Back</button>
+              </>
+            )}
           </div>
         )}
       </div>

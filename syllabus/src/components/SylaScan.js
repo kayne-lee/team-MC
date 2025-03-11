@@ -142,6 +142,7 @@ export default function SylaScan({ closeModal }) {
       processPreSavedSyllabi();
     } else {
       setHasError(true);
+      setErrorMessages("You do not have authorization to access this feature.");
     }
     
   };
@@ -477,9 +478,8 @@ export default function SylaScan({ closeModal }) {
 
           </>
         ) : (
-          // Error Message with Back Button
           <div>
-            {errorMessages ? (
+            {errorMessages ? ( // This should be checking `errorMessages`, not `!errorMessages`
               <>
                 <h2>{errorMessages}</h2>
                 <button onClick={handleBack}>Back</button>

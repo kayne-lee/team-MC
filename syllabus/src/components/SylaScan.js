@@ -119,7 +119,7 @@ export default function SylaScan({ closeModal }) {
           }
         });
         setUploadedSyllabi([]);
-        setShowFetchDates(false);
+        
 
       } catch (error) {
         console.error(`Error processing ${syllabus.name}:`, error);
@@ -129,6 +129,7 @@ export default function SylaScan({ closeModal }) {
   
     setLoading(false);
     setShowSuccessMessage(true);
+    setShowFetchDates(false);
     window.location.reload();
   };
   

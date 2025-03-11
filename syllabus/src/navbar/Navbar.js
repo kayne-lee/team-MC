@@ -73,6 +73,7 @@ function Navbar({ activeTab, setActiveTab }) {
           }
           setFirstName(userData.firstName);
           setLastName(userData.lastName);
+          localStorage.setItem("name", userData.firstName + " " + userData.lastName);
           setEmail(userData.email);
           setPhone(userData.phone);
           console.log(userData)

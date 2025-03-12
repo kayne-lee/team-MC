@@ -7,7 +7,7 @@ import OpenAIService from '../services/OpenAIService';
 import MongoService from '../services/MongoService';
 import syllabus1 from '../assets/ELEC101.pdf'; // Update path to where you store syllabi
 import syllabus2 from '../assets/ELEC301.pdf'; 
-
+import Loader from './Loader';
 import pdfToText from 'react-pdftotext';
 import onq from '../assets/onq.png';
 import loader from '../assets/loader3.gif';
@@ -310,8 +310,9 @@ export default function SylaScan({ closeModal }) {
 
             {/* Loading Spinner */}
             {loading && (
-              <div className="flex flex-col justify-center items-center w-full">
-                <img src={loader} alt="Loader" />
+              <div className="flex flex-col justify-center items-center w-full gap-[20px]">
+                {/* <img src={loader} alt="Loader" /> */}
+                <Loader />
                 <h2 style={{ textAlign: "center" }}>
                   {jsonData.assignments.length === 0 ? "Scanning For Course Assessments" : "Saving Your Course Data"}
                 </h2>

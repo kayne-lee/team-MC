@@ -212,10 +212,10 @@ public class OpenAIService {
         courseInfo.setOfficeHoursTime(courseNode.get("officeHoursTime").asText());
         courseInfo.setOfficeHoursLocation(courseNode.get("officeHoursLocation").asText());
         courseInfo.setCategory(courseNode.get("category").asText());
-        courseInfo.setCategory(courseNode.get("requiredResouces").asText());
-        courseInfo.setCategory(courseNode.get("attendanceAndLate").asText());
-        courseInfo.setCategory(courseNode.get("gradingPolicy").asText());
-        courseInfo.setCategory(courseNode.get("teachingAssistantInfo").asText());
+        courseInfo.setRequiredResouces(courseNode.get("requiredResouces").asText());
+        courseInfo.setAttendanceAndLate(courseNode.get("attendanceAndLate").asText());
+        courseInfo.setGradingPolicy(courseNode.get("gradingPolicy").asText());
+        courseInfo.setTeachingAssistantInfo(courseNode.get("teachingAssistantInfo").asText());
         course.setCourseInfo(courseInfo);
         // Extract assignments from the JsonNode
         List<Assignment> assignments = new ArrayList<>();

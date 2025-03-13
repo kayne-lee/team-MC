@@ -421,75 +421,137 @@ const Classes = () => {
                                 <div className="course-details-container-inner">
                                 {/* Assignments Section */}
                                 <div className="assignments-section pr-[10px]">
-                                <ul>
-                                    {selectedCourse.assignments.map((assignment) => {
-                                        const inputColor = checkedAssignments[selectedCourse.id]?.[assignment.id] ? 'border-purple-500 text-purple-500' : 'border-[#272627] text-[#272627]';
-                                        const bgColor = checkedAssignments[selectedCourse.id]?.[assignment.id] ? 'bg-purple-100' : 'bg-white';
+                                    <ul>
+                                        {selectedCourse.assignments.map((assignment) => {
+                                            const inputColor = checkedAssignments[selectedCourse.id]?.[assignment.id] ? 'border-purple-500 text-purple-500' : 'border-[#272627] text-[#272627]';
+                                            const bgColor = checkedAssignments[selectedCourse.id]?.[assignment.id] ? 'bg-purple-100' : 'bg-white';
 
-                                        return (
-                                        <li key={assignment.id}>
-                                            <input
-                                            type="checkbox"
-                                            checked={checkedAssignments[selectedCourse.id]?.[assignment.id] || false}
-                                            onChange={() => toggleAssignmentCheck(
-                                                selectedCourse.id, 
-                                                assignment.id,
-                                                selectedCourse.title,
-                                                assignment.title
-                                            )}
-                                            />
-                                            <div className="flex flex-row w-full ml-[15px] justify-between">
-                                            <div className="flex flex-col">
-                                                <div className={`text-[#333] font-bold text-[15.732px] max-w-[120px] leading-normal ${inputColor}`}>
-                                                {assignment.title}
-                                                </div>
-                                                <div className="flex flex-row justify-between text-[#8B898D] font-poppins font-bold text-[12.275px] leading-normal w-[107px]">
-                                                <div>{assignment.weight}</div>
-                                                <div>{assignment.dueDate}</div>
-                                                </div>
-                                            </div>
-                                            <div
-                                                className={`flex ml-[20px] items-center border-[1.816px] rounded-[18.637px] ${inputColor} ${bgColor} w-[68px] h-[33px]`}
-                                            >
-                                                <input
-                                                className={`w-[calc(100%)] h-full text-right border-none rounded-[18.637px] ${bgColor} focus:outline-none px-0`}
-                                                type="number"
-                                                value={percentages[`${selectedCourse.title}-${assignment.title}`] || ''}
-                                                min="0"
-                                                max="100"
-                                                placeholder={assignment.grade}
-                                                aria-label="Percentage"
-                                                onChange={(e) => handlePercentageChange(e, selectedCourse.title, assignment.title)}
-                                                inputMode="numeric"
-                                                pattern="[0-9]*"
-                                                />
-                                                <span className="text-center font-poppins text-[14.526px] font-bold leading-normal pr-[5px]">%</span>
-                                            </div>
-                                            </div>
-                                        </li>
-                                        );
-                                    })}
+                                            return (
+                                                <li key={assignment.id}>
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={checkedAssignments[selectedCourse.id]?.[assignment.id] || false}
+                                                        onChange={() => toggleAssignmentCheck(
+                                                            selectedCourse.id, 
+                                                            assignment.id,
+                                                            selectedCourse.title,
+                                                            assignment.title
+                                                        )}
+                                                    />
+                                                    <div className="flex flex-row w-full ml-[15px] justify-between">
+                                                        <div className="flex flex-col">
+                                                            <div className={`text-[#333] font-bold text-[15.732px] max-w-[120px] leading-normal ${inputColor}`}>
+                                                                {assignment.title}
+                                                            </div>
+                                                            <div className="flex flex-row justify-between text-[#8B898D] font-poppins font-bold text-[12.275px] leading-normal w-[107px]">
+                                                                <div>{assignment.weight}</div>
+                                                                <div>{assignment.dueDate}</div>
+                                                            </div>
+                                                        </div>
+                                                        <div
+                                                            className={`flex ml-[20px] items-center border-[1.816px] rounded-[18.637px] ${inputColor} ${bgColor} w-[68px] h-[33px]`}
+                                                        >
+                                                            <input
+                                                                className={`w-[calc(100%)] h-full text-right border-none rounded-[18.637px] ${bgColor} focus:outline-none px-0`}
+                                                                type="number"
+                                                                value={percentages[`${selectedCourse.title}-${assignment.title}`] || ''}
+                                                                min="0"
+                                                                max="100"
+                                                                placeholder={assignment.grade}
+                                                                aria-label="Percentage"
+                                                                onChange={(e) => handlePercentageChange(e, selectedCourse.title, assignment.title)}
+                                                                inputMode="numeric"
+                                                                pattern="[0-9]*"
+                                                            />
+                                                            <span className="text-center font-poppins text-[14.526px] font-bold leading-normal pr-[5px]">%</span>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            );
+                                        })}
                                     </ul>
+                                    <div className="calendar-container">
+                                                    <button
+                                                        onClick={handleSaveGrades}
+                                                        disabled={Object.keys(modifiedGrades).length === 0 || isSaving}
+                                                        className={`
+                                                            relative flex items-center justify-center
+                                                            w-32 h-12 rounded-lg px-6 py-3 shadow-md
+                                                            transition duration-200 pt-20px
+                                                            ${isSaving || showSuccess 
+                                                                ? 'bg-purple-500 text-white cursor-not-allowed'
+                                                                : Object.keys(modifiedGrades).length === 0
+                                                                    ? 'bg-purple-300 text-white cursor-not-allowed'
+                                                                    : 'bg-purple-500 text-white hover:bg-purple-600'
+                                                            }
+                                                        `}
+                                                    >
+                                                        {isSaving ? (
+                                                            <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
+                                                        ) : showSuccess ? (
+                                                            <svg 
+                                                                className="w-6 h-6 text-white animate-scale-check" 
+                                                                fill="none" 
+                                                                stroke="currentColor" 
+                                                                viewBox="0 0 24 24"
+                                                            >
+                                                                <path 
+                                                                    strokeLinecap="round" 
+                                                                    strokeLinejoin="round" 
+                                                                    strokeWidth={2} 
+                                                                    d="M5 13l4 4L19 7" 
+                                                                />
+                                                            </svg>
+                                                        ) : (
+                                                            'Save Grades'
+                                                        )}
+                                                    </button>
+                                                    </div>
                                 </div>
+
                                 {/* Flex that contains both meeting and stat sections */}
                                 <div className="h-[300px]">
                                     {/* Meeting information Section */}
                                     <div className="meeting-information-section">
-                                        
-                                    
+
+                                    <div className="instructor-info-container">
                                         <p>
-                                            <strong>Instructor:</strong><br></br> {selectedCourse.instructor}<br></br>{selectedCourse.email}
+                                            <strong>Instructor</strong><br />
+                                            {selectedCourse.instructor}{" "}
+                                            <span style={{ marginLeft: "10px" }}>
+                                            <h3>{selectedCourse.email}</h3>
+                                            </span>
+                                        </p>
+                                        {/* <p>
+                                                    <strong>Office Location</strong>
+                                                    <br />
+                                                    {selectedCourse.officeLocation}
+                                                </p> */}
+                                        <p>
+                                            Office Hours {" "}
+                                            <span style={{ marginLeft: "4px" }}>
+                                            <h4>{selectedCourse.officeHours}</h4>
+                                            </span>
+                                        </p>
+
+                                        {/* idk the backend for this so i just left the variable names */}
+                                        <p>
+                                            <strong>Teaching Assistants</strong><br />
+                                            {selectedCourse.instructor}{" "}
+                                            <span style={{ marginLeft: "10px" }}>
+                                            <h3>{selectedCourse.email}</h3>
+                                            </span>
                                         </p>
                                         <p>
-                                            <strong>Office Location:</strong><br></br> {selectedCourse.officeLocation}
+                                            Office Hours {" "}
+                                            <span style={{ marginLeft: "4px" }}>
+                                            <h4>{selectedCourse.officeHours}</h4>
+                                            </span>
                                         </p>
-                                        <p>
-                                            <strong>Office Hours:</strong><br></br> {selectedCourse.officeHours}
-                                        </p>
+                                    </div>
                                     </div>
 
                                     {/* Statistics Section */}
-                                    
                                     <div className="statistics-section">
                                         <div className="statistics-top">
                                             <div className="statistics-inner-box">
@@ -527,41 +589,6 @@ const Classes = () => {
                                                 </p>
                                             </div>
                                         </div>
-                                        <button
-                                onClick={handleSaveGrades}
-                                disabled={Object.keys(modifiedGrades).length === 0 || isSaving}
-                                className={`
-                                    relative flex items-center justify-center
-                                    w-32 h-12 rounded-lg px-6 py-3 shadow-md
-                                    transition duration-200 pt-20px
-                                    ${isSaving || showSuccess 
-                                        ? 'bg-purple-500 text-white cursor-not-allowed'
-                                        : Object.keys(modifiedGrades).length === 0
-                                            ? 'bg-purple-300 text-white cursor-not-allowed'
-                                            : 'bg-purple-500 text-white hover:bg-purple-600'
-                                    }
-                                `}
-                            >
-                                {isSaving ? (
-                                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
-                                ) : showSuccess ? (
-                                    <svg 
-                                        className="w-6 h-6 text-white animate-scale-check" 
-                                        fill="none" 
-                                        stroke="currentColor" 
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path 
-                                            strokeLinecap="round" 
-                                            strokeLinejoin="round" 
-                                            strokeWidth={2} 
-                                            d="M5 13l4 4L19 7" 
-                                        />
-                                    </svg>
-                                ) : (
-                                    'Save Grades'
-                                )}
-                            </button>
                                     </div>
                                 </div>
                             </div>

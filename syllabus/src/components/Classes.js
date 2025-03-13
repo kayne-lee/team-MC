@@ -553,41 +553,49 @@ const Classes = () => {
 
                                     {/* Statistics Section */}
                                     <div className="statistics-section">
-                                        <div className="statistics-top">
-                                            <div className="statistics-inner-box">
-                                                <h4>Uncompleted Tasks</h4>
-                                                <p className="statistic-number">
-                                                    {
-                                                        selectedCourse.assignments.filter(
-                                                            (a) =>
-                                                                !checkedAssignments[selectedCourse.id]?.[a.id]
-                                                        ).length
-                                                    }
-                                                </p>
-                                            </div>
-                                            
-                                            <div>
-                                                <div className="statistics-inner-box">
-                                                    <h4>Completed Tasks</h4>
-                                                    <p className="statistic-number">
-                                                        {
-                                                            selectedCourse.assignments.filter(
-                                                                (a) =>
-                                                                    checkedAssignments[selectedCourse.id]?.[a.id]
-                                                            ).length
-                                                        }
-                                                    </p>
-                                                </div>
-                                            </div>
+                                        {/* Grade Calculator (Left Side) */}
+                                        <div className="grade-calculator">
+                                        <div className="statistics-inner-box">
+                                            <h4>Grade Calculator</h4>
+                                            <p className="statistic-number">
+                                            {selectedCourse ? `${calculateGrade(selectedCourse)}%` : '0%'}
+                                            </p>
                                         </div>
-                                        
-                                        <div className="statistics-bottom">
-                                            <div className="statistics-inner-box-bottom">
-                                                <h4>Grade Calculator</h4>
-                                                <p className="statistic-number">
-                                                    {selectedCourse ? `${calculateGrade(selectedCourse)}%` : '0%'}
-                                                </p>
-                                            </div>
+                                        </div>
+
+                                        {/* Uncompleted and Completed Tasks (Right Side) */}
+                                        <div className="tasks-container">
+                                        <div className="statistics-inner-box">
+                                            <h4>Uncompleted Tasks</h4>
+                                            <p className="statistic-number">
+                                            {
+                                                selectedCourse.assignments.filter(
+                                                (a) => !checkedAssignments[selectedCourse.id]?.[a.id]
+                                                ).length
+                                            }
+                                            </p>
+                                        </div>
+                                        <div className="statistics-inner-box">
+                                            <h4>Completed Tasks</h4>
+                                            <p className="statistic-number">
+                                            {
+                                                selectedCourse.assignments.filter(
+                                                (a) => checkedAssignments[selectedCourse.id]?.[a.id]
+                                                ).length
+                                            }
+                                            </p>
+                                        </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Additional Information Section */}
+                                    <div className="additional-info-section">
+                                        <h4>Additional Information</h4>
+                                        <div className="info-scroll-container">
+                                        <div className="info-item">Required Resources</div>
+                                        <div className="info-item">Attendance & Late Policy</div>
+                                        <div className="info-item">Course Schedule</div>
+                                        <div className="info-item">Grading Policy</div>
                                         </div>
                                     </div>
                                 </div>

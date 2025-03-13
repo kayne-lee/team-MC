@@ -393,7 +393,18 @@ const Classes = () => {
                         <div className="add-course-card" onClick={openModal}>
                             <img src={plus} alt="" className="w-[48px]"/>
                         </div>
+
+                        {/* Existing Calendar button */}
+                        <div className="calendar-container">
+                            <button
+                                onClick={uploadToCalendar}
+                                className="bg-white text-black border border-gray-300 rounded-lg px-6 py-3 shadow-md hover:bg-gray-100 transition duration-200"
+                            >
+                                {access_token ? "Upload to Calendar" : "Connect Google Calendar"}
+                            </button>
+                        </div>
                     </div>
+
 
                     {/* Main Content */}
                     <div className="main-content">
@@ -410,111 +421,205 @@ const Classes = () => {
                                 <div className="course-details-container-inner">
                                 {/* Assignments Section */}
                                 <div className="assignments-section pr-[10px]">
-                                <ul>
-                                    {selectedCourse.assignments.map((assignment) => {
-                                        const inputColor = checkedAssignments[selectedCourse.id]?.[assignment.id] ? 'border-purple-500 text-purple-500' : 'border-[#272627] text-[#272627]';
-                                        const bgColor = checkedAssignments[selectedCourse.id]?.[assignment.id] ? 'bg-purple-100' : 'bg-white';
+                                    <ul>
+                                        {selectedCourse.assignments.map((assignment) => {
+                                            const inputColor = checkedAssignments[selectedCourse.id]?.[assignment.id] ? 'border-purple-500 text-purple-500' : 'border-[#272627] text-[#272627]';
+                                            const bgColor = checkedAssignments[selectedCourse.id]?.[assignment.id] ? 'bg-purple-100' : 'bg-white';
 
-                                        return (
-                                        <li key={assignment.id}>
-                                            <input
-                                            type="checkbox"
-                                            checked={checkedAssignments[selectedCourse.id]?.[assignment.id] || false}
-                                            onChange={() => toggleAssignmentCheck(
-                                                selectedCourse.id, 
-                                                assignment.id,
-                                                selectedCourse.title,
-                                                assignment.title
-                                            )}
-                                            />
-                                            <div className="flex flex-row w-full ml-[15px] justify-between">
-                                            <div className="flex flex-col">
-                                                <div className={`text-[#333] font-bold text-[15.732px] max-w-[120px] leading-normal ${inputColor}`}>
-                                                {assignment.title}
-                                                </div>
-                                                <div className="flex flex-row justify-between text-[#8B898D] font-poppins font-bold text-[12.275px] leading-normal w-[107px]">
-                                                <div>{assignment.weight}</div>
-                                                <div>{assignment.dueDate}</div>
-                                                </div>
-                                            </div>
-                                            <div
-                                                className={`flex ml-[20px] items-center border-[1.816px] rounded-[18.637px] ${inputColor} ${bgColor} w-[68px] h-[33px]`}
-                                            >
-                                                <input
-                                                className={`w-[calc(100%)] h-full text-right border-none rounded-[18.637px] ${bgColor} focus:outline-none px-0`}
-                                                type="number"
-                                                value={percentages[`${selectedCourse.title}-${assignment.title}`] || ''}
-                                                min="0"
-                                                max="100"
-                                                placeholder={assignment.grade}
-                                                aria-label="Percentage"
-                                                onChange={(e) => handlePercentageChange(e, selectedCourse.title, assignment.title)}
-                                                inputMode="numeric"
-                                                pattern="[0-9]*"
-                                                />
-                                                <span className="text-center font-poppins text-[14.526px] font-bold leading-normal pr-[5px]">%</span>
-                                            </div>
-                                            </div>
-                                        </li>
-                                        );
-                                    })}
+                                            return (
+                                                <li key={assignment.id}>
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={checkedAssignments[selectedCourse.id]?.[assignment.id] || false}
+                                                        onChange={() => toggleAssignmentCheck(
+                                                            selectedCourse.id, 
+                                                            assignment.id,
+                                                            selectedCourse.title,
+                                                            assignment.title
+                                                        )}
+                                                    />
+                                                    <div className="flex flex-row w-full ml-[15px] justify-between">
+                                                        <div className="flex flex-col">
+                                                            <div className={`text-[#333] font-bold text-[15.732px] max-w-[120px] leading-normal ${inputColor}`}>
+                                                                {assignment.title}
+                                                            </div>
+                                                            <div className="flex flex-row justify-between text-[#8B898D] font-poppins font-bold text-[12.275px] leading-normal w-[107px]">
+                                                                <div>{assignment.weight}</div>
+                                                                <div>{assignment.dueDate}</div>
+                                                            </div>
+                                                        </div>
+                                                        <div
+                                                            className={`flex ml-[20px] items-center border-[1.816px] rounded-[18.637px] ${inputColor} ${bgColor} w-[68px] h-[33px]`}
+                                                        >
+                                                            <input
+                                                                className={`w-[calc(100%)] h-full text-right border-none rounded-[18.637px] ${bgColor} focus:outline-none px-0`}
+                                                                type="number"
+                                                                value={percentages[`${selectedCourse.title}-${assignment.title}`] || ''}
+                                                                min="0"
+                                                                max="100"
+                                                                placeholder={assignment.grade}
+                                                                aria-label="Percentage"
+                                                                onChange={(e) => handlePercentageChange(e, selectedCourse.title, assignment.title)}
+                                                                inputMode="numeric"
+                                                                pattern="[0-9]*"
+                                                            />
+                                                            <span className="text-center font-poppins text-[14.526px] font-bold leading-normal pr-[5px]">%</span>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            );
+                                        })}
                                     </ul>
+                                    <div className="calendar-container">
+                                                    <button
+                                                        onClick={handleSaveGrades}
+                                                        disabled={Object.keys(modifiedGrades).length === 0 || isSaving}
+                                                        className={`
+                                                            relative flex items-center justify-center
+                                                            w-32 h-12 rounded-lg px-6 py-3 shadow-md
+                                                            transition duration-200 pt-20px
+                                                            ${isSaving || showSuccess 
+                                                                ? 'bg-purple-500 text-white cursor-not-allowed'
+                                                                : Object.keys(modifiedGrades).length === 0
+                                                                    ? 'bg-purple-300 text-white cursor-not-allowed'
+                                                                    : 'bg-purple-500 text-white hover:bg-purple-600'
+                                                            }
+                                                        `}
+                                                    >
+                                                        {isSaving ? (
+                                                            <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
+                                                        ) : showSuccess ? (
+                                                            <svg 
+                                                                className="w-6 h-6 text-white animate-scale-check" 
+                                                                fill="none" 
+                                                                stroke="currentColor" 
+                                                                viewBox="0 0 24 24"
+                                                            >
+                                                                <path 
+                                                                    strokeLinecap="round" 
+                                                                    strokeLinejoin="round" 
+                                                                    strokeWidth={2} 
+                                                                    d="M5 13l4 4L19 7" 
+                                                                />
+                                                            </svg>
+                                                        ) : (
+                                                            'Save Grades'
+                                                        )}
+                                                    </button>
+                                                    </div>
                                 </div>
+
                                 {/* Flex that contains both meeting and stat sections */}
                                 <div className="h-[300px]">
                                     {/* Meeting information Section */}
                                     <div className="meeting-information-section">
-                                        
-                                    
+
+                                    <div className="instructor-info-container">
                                         <p>
-                                            <strong>Instructor:</strong><br></br> {selectedCourse.instructor}<br></br>{selectedCourse.email}
+                                            <strong>Instructor</strong><br />
+                                            {selectedCourse.instructor}{" "}
+                                            <span style={{ marginLeft: "10px" }}>
+                                            <h3>{selectedCourse.email}</h3>
+                                            </span>
+                                        </p>
+                                        {/* <p>
+                                                    <strong>Office Location</strong>
+                                                    <br />
+                                                    {selectedCourse.officeLocation}
+                                                </p> */}
+                                        <p>
+                                            Office Hours {" "}
+                                            <span style={{ marginLeft: "4px" }}>
+                                            <h4>{selectedCourse.officeHours}</h4>
+                                            </span>
+                                        </p>
+
+                                        {/* idk the backend for this so i just left the variable names */}
+                                        <p>
+                                            <strong>Teaching Assistants</strong><br />
+                                            {selectedCourse.instructor}{" "}
+                                            <span style={{ marginLeft: "10px" }}>
+                                            <h3>{selectedCourse.email}</h3>
+                                            </span>
                                         </p>
                                         <p>
-                                            <strong>Office Location:</strong><br></br> {selectedCourse.officeLocation}
+                                            Office Hours {" "}
+                                            <span style={{ marginLeft: "4px" }}>
+                                            <h4>{selectedCourse.officeHours}</h4>
+                                            </span>
                                         </p>
                                         <p>
-                                            <strong>Office Hours:</strong><br></br> {selectedCourse.officeHours}
+                                            {selectedCourse.instructor}{" "}
+                                            <span style={{ marginLeft: "10px" }}>
+                                            <h3>{selectedCourse.email}</h3>
+                                            </span>
                                         </p>
+                                        <p>
+                                            Office Hours {" "}
+                                            <span style={{ marginLeft: "4px" }}>
+                                            <h4>{selectedCourse.officeHours}</h4>
+                                            </span>
+                                        </p>
+                                        <p>
+                                            {selectedCourse.instructor}{" "}
+                                            <span style={{ marginLeft: "10px" }}>
+                                            <h3>{selectedCourse.email}</h3>
+                                            </span>
+                                        </p>
+                                        <p>
+                                            Office Hours {" "}
+                                            <span style={{ marginLeft: "4px" }}>
+                                            <h4>{selectedCourse.officeHours}</h4>
+                                            </span>
+                                        </p>
+                                    </div>
                                     </div>
 
                                     {/* Statistics Section */}
-                                    
                                     <div className="statistics-section">
-                                        <div className="statistics-top">
-                                            <div className="statistics-inner-box">
-                                                <h4>Uncompleted Tasks</h4>
-                                                <p className="statistic-number">
-                                                    {
-                                                        selectedCourse.assignments.filter(
-                                                            (a) =>
-                                                                !checkedAssignments[selectedCourse.id]?.[a.id]
-                                                        ).length
-                                                    }
-                                                </p>
-                                            </div>
-                                            
-                                            <div>
-                                                <div className="statistics-inner-box">
-                                                    <h4>Completed Tasks</h4>
-                                                    <p className="statistic-number">
-                                                        {
-                                                            selectedCourse.assignments.filter(
-                                                                (a) =>
-                                                                    checkedAssignments[selectedCourse.id]?.[a.id]
-                                                            ).length
-                                                        }
-                                                    </p>
-                                                </div>
-                                            </div>
+                                        {/* Grade Calculator (Left Side) */}
+                                        <div className="grade-calculator">
+                                        <div className="statistics-inner-box">
+                                            <p className="statistic-number">
+                                            {selectedCourse ? `${calculateGrade(selectedCourse)}%` : '0%'}
+                                            </p>
+                                            <h4>Grade Calculator</h4>
                                         </div>
-                                        
-                                        <div className="statistics-bottom">
-                                            <div className="statistics-inner-box-bottom">
-                                                <h4>Grade Calculator</h4>
-                                                <p className="statistic-number">
-                                                    {selectedCourse ? `${calculateGrade(selectedCourse)}%` : '0%'}
-                                                </p>
-                                            </div>
+                                        </div>
+
+                                        {/* Uncompleted and Completed Tasks (Right Side) */}
+                                        <div className="tasks-container">
+                                        <div className="statistics-inner-box">
+                                            <p className="statistic-number">
+                                            {
+                                                selectedCourse.assignments.filter(
+                                                (a) => !checkedAssignments[selectedCourse.id]?.[a.id]
+                                                ).length
+                                            }
+                                            </p>
+                                            <h4>Incomplete Tasks</h4>
+                                        </div>
+                                        <div className="statistics-inner-box">
+                                            <p className="statistic-number">
+                                            {
+                                                selectedCourse.assignments.filter(
+                                                (a) => checkedAssignments[selectedCourse.id]?.[a.id]
+                                                ).length
+                                            }
+                                            </p>
+                                            <h4>Completed Tasks</h4>
+                                        </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Additional Information Section */}
+                                    <div className="additional-info-section">
+                                        <h4>Additional Information</h4>
+                                        <div className="info-scroll-container">
+                                        <div className="info-item">Required Resources</div>
+                                        <div className="info-item">Attendance & Late Policy</div>
+                                        <div className="info-item">Course Schedule</div>
+                                        <div className="info-item">Grading Policy</div>
                                         </div>
                                     </div>
                                 </div>
@@ -525,51 +630,6 @@ const Classes = () => {
                                 <h2>Add a course to see details</h2>
                             </div>
                         )}
-                        <div className="flex justify-center gap-4 mt-4">
-                            <button
-                                onClick={handleSaveGrades}
-                                disabled={Object.keys(modifiedGrades).length === 0 || isSaving}
-                                className={`
-                                    relative flex items-center justify-center
-                                    w-32 h-12 rounded-lg px-6 py-3 shadow-md
-                                    transition duration-200
-                                    ${isSaving || showSuccess 
-                                        ? 'bg-purple-500 text-white cursor-not-allowed'
-                                        : Object.keys(modifiedGrades).length === 0
-                                            ? 'bg-purple-300 text-white cursor-not-allowed'
-                                            : 'bg-purple-500 text-white hover:bg-purple-600'
-                                    }
-                                `}
-                            >
-                                {isSaving ? (
-                                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
-                                ) : showSuccess ? (
-                                    <svg 
-                                        className="w-6 h-6 text-white animate-scale-check" 
-                                        fill="none" 
-                                        stroke="currentColor" 
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path 
-                                            strokeLinecap="round" 
-                                            strokeLinejoin="round" 
-                                            strokeWidth={2} 
-                                            d="M5 13l4 4L19 7" 
-                                        />
-                                    </svg>
-                                ) : (
-                                    'Save Grades'
-                                )}
-                            </button>
-                            
-                            {/* Existing Calendar button */}
-                            <button
-                                onClick={uploadToCalendar}
-                                className="bg-white text-black border border-gray-300 rounded-lg px-6 py-3 shadow-md hover:bg-gray-100 transition duration-200"
-                            >
-                                {access_token ? "Upload to Calendar" : "Connect Google Calendar"}
-                            </button>
-                        </div>
                     </div>
                     {modalVisible && (
                         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">

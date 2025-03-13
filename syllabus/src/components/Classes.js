@@ -548,6 +548,30 @@ const Classes = () => {
                                             <h4>{selectedCourse.officeHours}</h4>
                                             </span>
                                         </p>
+                                        <p>
+                                            {selectedCourse.instructor}{" "}
+                                            <span style={{ marginLeft: "10px" }}>
+                                            <h3>{selectedCourse.email}</h3>
+                                            </span>
+                                        </p>
+                                        <p>
+                                            Office Hours {" "}
+                                            <span style={{ marginLeft: "4px" }}>
+                                            <h4>{selectedCourse.officeHours}</h4>
+                                            </span>
+                                        </p>
+                                        <p>
+                                            {selectedCourse.instructor}{" "}
+                                            <span style={{ marginLeft: "10px" }}>
+                                            <h3>{selectedCourse.email}</h3>
+                                            </span>
+                                        </p>
+                                        <p>
+                                            Office Hours {" "}
+                                            <span style={{ marginLeft: "4px" }}>
+                                            <h4>{selectedCourse.officeHours}</h4>
+                                            </span>
+                                        </p>
                                     </div>
                                     </div>
 
@@ -556,17 +580,16 @@ const Classes = () => {
                                         {/* Grade Calculator (Left Side) */}
                                         <div className="grade-calculator">
                                         <div className="statistics-inner-box">
-                                            <h4>Grade Calculator</h4>
                                             <p className="statistic-number">
                                             {selectedCourse ? `${calculateGrade(selectedCourse)}%` : '0%'}
                                             </p>
+                                            <h4>Grade Calculator</h4>
                                         </div>
                                         </div>
 
                                         {/* Uncompleted and Completed Tasks (Right Side) */}
                                         <div className="tasks-container">
                                         <div className="statistics-inner-box">
-                                            <h4>Uncompleted Tasks</h4>
                                             <p className="statistic-number">
                                             {
                                                 selectedCourse.assignments.filter(
@@ -574,9 +597,9 @@ const Classes = () => {
                                                 ).length
                                             }
                                             </p>
+                                            <h4>Incomplete Tasks</h4>
                                         </div>
                                         <div className="statistics-inner-box">
-                                            <h4>Completed Tasks</h4>
                                             <p className="statistic-number">
                                             {
                                                 selectedCourse.assignments.filter(
@@ -584,6 +607,7 @@ const Classes = () => {
                                                 ).length
                                             }
                                             </p>
+                                            <h4>Completed Tasks</h4>
                                         </div>
                                         </div>
                                     </div>

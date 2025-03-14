@@ -209,10 +209,10 @@ public class DataController {
                         courseMap.put("officeLocation", course.getCourseInfo().getOfficeHoursLocation());
                         courseMap.put("officeHours", course.getCourseInfo().getOfficeHoursTime());
                         courseMap.put("category", course.getCourseInfo().getCategory());
-                        courseMap.put("requiredResouces", course.getCourseInfo().getCategory());
-                        courseMap.put("attendanceAndLate", course.getCourseInfo().getCategory());
-                        courseMap.put("gradingPolicy", course.getCourseInfo().getCategory());
-                        courseMap.put("teachingAssistantInfo", course.getCourseInfo().getCategory());
+                        courseMap.put("requiredResouces", course.getCourseInfo().getRequiredResouces());
+                        courseMap.put("attendanceAndLate", course.getCourseInfo().getAttendanceAndLate());
+                        courseMap.put("gradingPolicy", course.getCourseInfo().getGradingPolicy());
+                        courseMap.put("teachingAssistantInfo", course.getCourseInfo().getTeachingAssistantInfo());
                         // Assignments with grades and completion status
                         List<Map<String, Object>> assignments = course.getAssignments().stream().map(assignment -> {
                             Map<String, Object> assignmentMap = new HashMap<>();

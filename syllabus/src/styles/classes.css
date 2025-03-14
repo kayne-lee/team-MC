@@ -305,36 +305,130 @@ background: linear-gradient(123deg, rgba(227, 204, 255, 0.80) 9.3%, rgba(243, 24
 
 .info-scroll-container {
     display: flex;
-    gap: 15px;
-    overflow-x: auto;
+    flex-wrap: wrap;
+    gap: 8px;
     padding-bottom: 10px;
-    width: 340px;
+    width: 100%;
+    position: relative;
+    height: auto;
+    min-height: 180px; /* Ensure container maintains height when items are hidden */
 }
 
 .info-item {
     background: #FFF;
-    border-radius: 25px;
-    padding: 20px;
-    width: 340px;
-    height: 108px;
+    border-radius: 15px;
+    padding: 12px;
+    width: calc(50% - 4px);
+    height: 80px;
     cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: top left; /* Change transform origin to top left */
+    overflow: hidden;
+    position: absolute; /* Change to absolute positioning */
+    margin-bottom: 8px;
 }
 
-/* .info-item {
-    flex: 0 0 auto;
-    padding: 10px 20px;
-    border-radius: 25px;
-    background: #FFF;
-    border: 2px solid #8338EC;
-    font-size: 14px;
-    color: #8338EC;
-    cursor: pointer;
-    transition: background 0.3s ease;
-} */
+/* Position items in a 2x2 grid */
+.info-item:nth-child(1) { top: 0; left: 0; }
+.info-item:nth-child(2) { top: 0; left: calc(50% + 4px); }
+.info-item:nth-child(3) { top: 88px; left: 0; }
+.info-item:nth-child(4) { top: 88px; left: calc(50% + 4px); }
 
-.info-item:hover {
-    background: #8338EC;
-    color: #FFF;
+.info-item.expanded {
+    position: absolute;
+    width: 100%;
+    min-height: 150px;
+    background: #F8F4FF;
+    border: 2px solid #8338EC;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: top left;
+    animation: expandAnimation 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.info-item h5 {
+    color: #000;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: #8338EC;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+    transition: transform 0.2s ease;
+}
+
+.info-content {
+    color: #6D6D6D;
+    font-size: 12px;
+    line-height: 1.4;
+    margin-top: 8px;
+    padding: 8px;
+    background: white;
+    border-radius: 12px;
+    animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    max-height: calc(100% - 50px);
+    overflow-y: auto;
+}
+
+@keyframes expandAnimation {
+    from {
+        transform: scale(0.98);
+        opacity: 0.9;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.info-item:not(.expanded) {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* When any item is expanded, hide others */
+.info-scroll-container:has(.expanded) .info-item:not(.expanded) {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: scale(0.98);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.close-button:hover {
+    transform: scale(1.2);
+}
+
+.info-item:hover:not(.expanded) {
+    background: #F8F4FF;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(131, 56, 236, 0.1);
 }
 
 /* Add these animations to your existing CSS */

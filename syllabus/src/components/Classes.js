@@ -25,6 +25,7 @@ const Classes = () => {
     const googleService = GoogleService();
     const apiUrl = process.env.REACT_APP_NUCLEUS_API; // This will get the value from .env file
     var access_token = localStorage.getItem("access_token");
+    const [expandedInfo, setExpandedInfo] = useState(null);
 
     useEffect(() => {
         access_token = localStorage.getItem("access_token");
@@ -349,6 +350,10 @@ const Classes = () => {
         return weightedSum.toFixed(1);
     };
 
+    const handleInfoClick = (infoType) => {
+        setExpandedInfo(expandedInfo === infoType ? null : infoType);
+    };
+
     return (
         <div className="courses-page">
             {isLoaded ? (
@@ -613,13 +618,108 @@ const Classes = () => {
                                     </div>
 
                                     {/* Additional Information Section */}
-                                    <div className="additional-info-section">
-                                        <h4>Additional Information</h4>
+                                    <div className="additional-info-section mt-4">
+                                        <h4 className="mb-4">Additional Information</h4>
                                         <div className="info-scroll-container">
-                                        <div className="info-item">Required Resources</div>
-                                        <div className="info-item">Attendance & Late Policy</div>
-                                        <div className="info-item">Course Schedule</div>
-                                        <div className="info-item">Grading Policy</div>
+                                            <div 
+                                                className={`info-item ${expandedInfo === 'resources' ? 'expanded' : ''}`}
+                                                onClick={() => !expandedInfo && handleInfoClick('resources')}
+                                            >
+                                                <div className="info-header">
+                                                    <h5>Required Resources</h5>
+                                                    {expandedInfo === 'resources' && (
+                                                        <button 
+                                                            className="close-button"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleInfoClick(null);
+                                                            }}
+                                                        >
+                                                            ×
+                                                        </button>
+                                                    )}
+                                                </div>
+                                                {expandedInfo === 'resources' && (
+                                                    <div className="info-content">
+                                                        {selectedCourse.requiredResources || 'No required resources specified.'}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div 
+                                                className={`info-item ${expandedInfo === 'attendance' ? 'expanded' : ''}`}
+                                                onClick={() => !expandedInfo && handleInfoClick('attendance')}
+                                            >
+                                                <div className="info-header">
+                                                    <h5>Attendance & Late Policy</h5>
+                                                    {expandedInfo === 'attendance' && (
+                                                        <button 
+                                                            className="close-button"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleInfoClick(null);
+                                                            }}
+                                                        >
+                                                            ×
+                                                        </button>
+                                                    )}
+                                                </div>
+                                                {expandedInfo === 'attendance' && (
+                                                    <div className="info-content">
+                                                        {selectedCourse.attendanceAndLate || 'No attendance policy specified.'}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div 
+                                                className={`info-item ${expandedInfo === 'grading' ? 'expanded' : ''}`}
+                                                onClick={() => !expandedInfo && handleInfoClick('grading')}
+                                            >
+                                                <div className="info-header">
+                                                    <h5>Grading Policy</h5>
+                                                    {expandedInfo === 'grading' && (
+                                                        <button 
+                                                            className="close-button"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleInfoClick(null);
+                                                            }}
+                                                        >
+                                                            ×
+                                                        </button>
+                                                    )}
+                                                </div>
+                                                {expandedInfo === 'grading' && (
+                                                    <div className="info-content">
+                                                        {selectedCourse.gradingPolicy || 'No grading policy specified.'}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div 
+                                                className={`info-item ${expandedInfo === 'ta' ? 'expanded' : ''}`}
+                                                onClick={() => !expandedInfo && handleInfoClick('ta')}
+                                            >
+                                                <div className="info-header">
+                                                    <h5>Teaching Assistant Info</h5>
+                                                    {expandedInfo === 'ta' && (
+                                                        <button 
+                                                            className="close-button"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleInfoClick(null);
+                                                            }}
+                                                        >
+                                                            ×
+                                                        </button>
+                                                    )}
+                                                </div>
+                                                {expandedInfo === 'ta' && (
+                                                    <div className="info-content">
+                                                        {selectedCourse.teachingAssistantInfo || 'No TA information specified.'}
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

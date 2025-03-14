@@ -122,8 +122,10 @@ public class OpenAIService {
         String prompt = "Extract all assignments, tests, midterms, and exams from the following syllabus. " +
                 "The output must be ONLY A **valid JSON object** that STARTS WITH { and ENDS WITH } with the keys 'title', 'courseInfo' and 'assignments'. Please do not write anything outside of the {} brackets." +
                 "The 'title' field should contain the course code, the 'courseInfo' field should be an object, and the 'assignments' field should be an array of assessments. " +
-                "The courseInfo object should have the fields 'instructorName', 'instructorEmail', 'officeHoursTime', 'officeHoursLocation', and 'category'" +
+                "The courseInfo object should have the fields 'instructorName', 'instructorEmail', 'officeHoursTime', 'officeHoursLocation', 'requiredResouces', 'attendanceAndLate', 'gradingPolicy', 'teachingAssistantInfo', and 'category'" +
                 "The category field MUST BE ONE OF THE FOLLOWING OPTIONS: science, math, art, business, coding, other. Pick the option based on the text in the input." +
+                "requiredResources should pull the name of any textbooks or other resources mentioned, and attendanceAndLate should indicate if attendance is tracked and graded, and gradingPolicy should indidate the late policy for submitting assessments." +
+                "If there is no info for any of these fields in the syllabus, LEAVE THEM BLANK EMPTY STRING. Do not make up information." +
                 "We are in the year 2025." +
                 "Example: {\"instructorName\": \"NAME_HERE\", \"instructorEmail\": \"example@queesnu.ca\", \"officeHoursTime\": \"DAY_OF_WEEK at TIME_OF_DAY\", \"officeHoursLocation\": \"LOCATION\", \"category\": \"CATEGORY\"} " +
                 "If any of the above fields are missing for courseInfo, just leave them as an empty string." +
@@ -210,8 +212,11 @@ public class OpenAIService {
         courseInfo.setOfficeHoursTime(courseNode.get("officeHoursTime").asText());
         courseInfo.setOfficeHoursLocation(courseNode.get("officeHoursLocation").asText());
         courseInfo.setCategory(courseNode.get("category").asText());
+        courseInfo.setRequiredResouces(courseNode.get("requiredResouces").asText());
+        courseInfo.setAttendanceAndLate(courseNode.get("attendanceAndLate").asText());
+        courseInfo.setGradingPolicy(courseNode.get("gradingPolicy").asText());
+        courseInfo.setTeachingAssistantInfo(courseNode.get("teachingAssistantInfo").asText());
         course.setCourseInfo(courseInfo);
-        
         // Extract assignments from the JsonNode
         List<Assignment> assignments = new ArrayList<>();
         if (c.has("assignments") && c.get("assignments").isArray()) {

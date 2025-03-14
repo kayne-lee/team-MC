@@ -13,5 +13,9 @@ public class CourseInfo {
     private String officeHoursTime;
     private String officeHoursLocation;
     private String category;
+    private String requiredResouces;
+    private String attendanceAndLate;
+    private String gradingPolicy;
+    private String teachingAssistantInfo;
 
 }

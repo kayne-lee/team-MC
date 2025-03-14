@@ -17,8 +17,8 @@
     /* margin-right: 150px; */
     overflow-y: auto;
     border-right: 2px solid #e0e0e0;
-    height: calc(100vh - 154px);
-    width: 550px;
+    height: 652px;
+    width: 590px;
 }
 
 .add-course-card {
@@ -67,7 +67,7 @@ background: linear-gradient(123deg, rgba(227, 204, 255, 0.80) 9.3%, rgba(243, 24
     transition: transform 0.2s ease;
     padding: 16px;
     height: 187px;
-    /* width: 250px; */
+    width: 250px;
 }
 
 .course-card:hover {
@@ -112,6 +112,14 @@ background: linear-gradient(123deg, rgba(227, 204, 255, 0.80) 9.3%, rgba(243, 24
     padding-top: 10px;
 }
 
+.calendar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: auto;
+    padding: 16px;
+    width: 100%;
+}
 
 /* COURSE DETAILS BOX (SOLO BOX ON THE RIGHT) */
 .main-content {
@@ -120,7 +128,7 @@ background: linear-gradient(123deg, rgba(227, 204, 255, 0.80) 9.3%, rgba(243, 24
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    width: 1119px;
+    width: 100%;
     padding: 20px 0 20px 20px;
     h1 {
         color: #000;
@@ -135,8 +143,8 @@ background: linear-gradient(123deg, rgba(227, 204, 255, 0.80) 9.3%, rgba(243, 24
 .course-details-container {
     background: #F2F2F2;
 
-    /* width: 739px; */
-    height: 90%;
+    width: 739px;
+    height: 98%;
     padding: 30px;  
     border-radius: 20px;
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
@@ -218,7 +226,268 @@ background: linear-gradient(123deg, rgba(227, 204, 255, 0.80) 9.3%, rgba(243, 24
     color: #6D6D6D;
 }
 
+/* Statistics Section */
 .statistics-section {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  margin-left: 20px;
+  width: 340px; /* Match the width of the instructors container */
+}
+
+/* Grade Calculator (Left Side) */
+.grade-calculator {
+  flex: 1;
+}
+
+.grade-calculator .statistics-inner-box {
+  height: 160px; /* Reduced height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 15px; /* Reduced padding */
+}
+
+/* Tasks Container (Right Side) */
+.tasks-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Reduced gap */
+}
+
+.tasks-container .statistics-inner-box {
+  height: 75px; /* Reduced height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px; /* Reduced padding */
+}
+
+/* Shared Styles for Statistics Boxes */
+.statistics-inner-box {
+  border-radius: 25px;
+  border: 3px solid #8338EC;
+  background: #FFF;
+  text-align: center;
+  width: 100%; /* Ensure boxes take full width of their container */
+}
+
+.statistics-inner-box h4 {
+  font-size: 14px;
+  color: #6D6D6D;
+  margin-bottom: 5px; /* Reduced margin */
+}
+
+.statistics-inner-box p {
+  font-size: 24px; /* Reduced font size */
+  font-weight: 800;
+  background: linear-gradient(180deg, #8338EC 0%, #BFA1E9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Additional Information Section */
+.additional-info-section {
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+.additional-info-section h4 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 10px;
+}
+
+.info-scroll-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-bottom: 10px;
+    width: 100%;
+    position: relative;
+    height: auto;
+    min-height: 180px; /* Ensure container maintains height when items are hidden */
+}
+
+.info-item {
+    background: #FFF;
+    border-radius: 15px;
+    padding: 12px;
+    width: calc(50% - 4px);
+    height: 80px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: top left; /* Change transform origin to top left */
+    overflow: hidden;
+    position: absolute; /* Change to absolute positioning */
+    margin-bottom: 8px;
+}
+
+/* Position items in a 2x2 grid */
+.info-item:nth-child(1) { top: 0; left: 0; }
+.info-item:nth-child(2) { top: 0; left: calc(50% + 4px); }
+.info-item:nth-child(3) { top: 88px; left: 0; }
+.info-item:nth-child(4) { top: 88px; left: calc(50% + 4px); }
+
+.info-item.expanded {
+    position: absolute;
+    width: 100%;
+    min-height: 150px;
+    background: #F8F4FF;
+    border: 2px solid #8338EC;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: top left;
+    animation: expandAnimation 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.info-item h5 {
+    color: #000;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: #8338EC;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+    transition: transform 0.2s ease;
+}
+
+.info-content {
+    color: #6D6D6D;
+    font-size: 12px;
+    line-height: 1.4;
+    margin-top: 8px;
+    padding: 8px;
+    background: white;
+    border-radius: 12px;
+    animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    max-height: calc(100% - 50px);
+    overflow-y: auto;
+}
+
+@keyframes expandAnimation {
+    from {
+        transform: scale(0.98);
+        opacity: 0.9;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.info-item:not(.expanded) {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* When any item is expanded, hide others */
+.info-scroll-container:has(.expanded) .info-item:not(.expanded) {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: scale(0.98);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.close-button:hover {
+    transform: scale(1.2);
+}
+
+.info-item:hover:not(.expanded) {
+    background: #F8F4FF;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(131, 56, 236, 0.1);
+}
+
+/* Add these animations to your existing CSS */
+@keyframes scale-check {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.animate-scale-check {
+    animation: scale-check 0.3s ease-in-out;
+}
+
+.instructor-info-container {
+    background: #FFF;
+    border-radius: 25px;
+    padding: 20px;
+    width: 340px;
+    height: 220px;
+    max-height: 220px;
+    overflow-y: auto;
+}
+  
+.instructor-info-container h3 {
+    color: #8338EC;
+    font-size: 15px;
+    margin-bottom: 4px;
+    text-decoration: underline;
+    display: inline;
+}
+  
+.instructor-info-container h4 {
+    color: #000;
+    font-size: 16px;
+    margin-bottom: 4px;
+    display: inline;
+}
+  
+.instructor-info-container p {
+    margin: 5px 0;
+    color: #8B898D;
+}
+  
+.instructor-info-container p strong {
+    color: #000;
+}
+
+
+/* OLD STYLES */
+/* .statistics-section {
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -251,8 +520,6 @@ background: linear-gradient(123deg, rgba(227, 204, 255, 0.80) 9.3%, rgba(243, 24
     
 }
 
-
-
 .statistics-section div {
     text-align: center;
 }
@@ -269,24 +536,4 @@ background: linear-gradient(123deg, rgba(227, 204, 255, 0.80) 9.3%, rgba(243, 24
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-}
-
-/* Add these animations to your existing CSS */
-@keyframes scale-check {
-    0% {
-        transform: scale(0);
-        opacity: 0;
-    }
-    50% {
-        transform: scale(1.2);
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-.animate-scale-check {
-    animation: scale-check 0.3s ease-in-out;
-}
-
+} */

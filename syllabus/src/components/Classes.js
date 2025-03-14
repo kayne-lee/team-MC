@@ -118,6 +118,10 @@ const Classes = () => {
                     instructor: course.instructor,
                     email: course.email,
                     officeLocation: course.officeLocation,
+                    requiredResouces: course.requiredResouces,
+                    attendanceAndLate: course.attendanceAndLate,
+                    gradingPolicy: course.gradingPolicy,
+                    teachingAssistantInfo: course.teachingAssistantInfo,
                     officeHours: course.officeHours,
                     image: `/courseImages/${course.category}.jpg`,
                     assignments: course.assignments.map((assignment, idx) => ({
@@ -255,6 +259,10 @@ const Classes = () => {
         }
     };
 
+    useEffect(() => {
+        console.log("selectedCourse:", selectedCourse);
+    }, [selectedCourse]);
+
     // Update handleSaveGrades to include loading states
     const handleSaveGrades = async () => {
         const gradeUpdates = [];
@@ -361,53 +369,54 @@ const Classes = () => {
             ) : (
                 <>
                     {/* Sidebar */}
-                    <div className="sidebar grid grid-cols-2 gap-[20px]">
-                        {
-                            courses.map((course) => (
-                                <div
-                                    key={course.id}
-                                    className={`course-card ${selectedCourse?.id === course.id ? "selected" : ""}`}
-                                    onClick={() => handleCourseSelect(course)}
-                                >
-                                    <div>
-                                        <img src={course.image} alt={course.title} className="course-image" />
-                                        <h2 className="course-title">{course.title}</h2>
+                    <div>
+                        <div className="sidebar grid grid-cols-2 gap-[20px]">
+                            {
+                                courses.map((course) => (
+                                    <div
+                                        key={course.id}
+                                        className={`course-card ${selectedCourse?.id === course.id ? "selected" : ""}`}
+                                        onClick={() => handleCourseSelect(course)}
+                                    >
+                                        <div>
+                                            <img src={course.image} alt={course.title} className="course-image" />
+                                            <h2 className="course-title">{course.title}</h2>
+                                        </div>
+                                        {/* <div className="course-details">
+                                            <div className="flex flex-col">
+                                                <div class="text-black font-poppins text-sm font-bold leading-[125%]">Instructor:</div>
+                                                <div class="text-[#8B898D] font-poppins text-sm font-normal leading-[125%]">{course.instructor}</div>
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <div class="text-black font-poppins text-sm font-bold leading-[125%]">Email:</div>
+                                                <div class="text-[#8B898D] font-poppins text-sm font-normal leading-[125%]">{course.email}</div>
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <div class="text-black font-poppins text-sm font-bold leading-[125%]">Office Location:</div>
+                                                <div class="text-[#8B898D] font-poppins text-sm font-normal leading-[125%]">{course.officeLocation}</div>
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <div class="text-black font-poppins text-sm font-bold leading-[125%]">Office Hours:</div>
+                                                <div class="text-[#8B898D] font-poppins text-sm font-normal leading-[125%]">{course.officeHours}</div>
+                                            </div>
+                                        </div> */}
                                     </div>
-                                    {/* <div className="course-details">
-                                        <div className="flex flex-col">
-                                            <div class="text-black font-poppins text-sm font-bold leading-[125%]">Instructor:</div>
-                                            <div class="text-[#8B898D] font-poppins text-sm font-normal leading-[125%]">{course.instructor}</div>
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <div class="text-black font-poppins text-sm font-bold leading-[125%]">Email:</div>
-                                            <div class="text-[#8B898D] font-poppins text-sm font-normal leading-[125%]">{course.email}</div>
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <div class="text-black font-poppins text-sm font-bold leading-[125%]">Office Location:</div>
-                                            <div class="text-[#8B898D] font-poppins text-sm font-normal leading-[125%]">{course.officeLocation}</div>
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <div class="text-black font-poppins text-sm font-bold leading-[125%]">Office Hours:</div>
-                                            <div class="text-[#8B898D] font-poppins text-sm font-normal leading-[125%]">{course.officeHours}</div>
-                                        </div>
-                                    </div> */}
-                                </div>
-                            ))
-                        }
-                        {/* ADD COURSES BUTTON  testing*/}
-                        <div className="add-course-card" onClick={openModal}>
-                            <img src={plus} alt="" className="w-[48px]"/>
+                                ))
+                            }
+                            {/* ADD COURSES BUTTON  testing*/}
+                            <div className="add-course-card" onClick={openModal}>
+                                <img src={plus} alt="" className="w-[48px]"/>
+                            </div>
                         </div>
-
-                        {/* Existing Calendar button */}
-                        <div className="calendar-container">
-                            <button
-                                onClick={uploadToCalendar}
-                                className="bg-white text-black border border-gray-300 rounded-lg px-6 py-3 shadow-md hover:bg-gray-100 transition duration-200"
-                            >
-                                {access_token ? "Upload to Calendar" : "Connect Google Calendar"}
-                            </button>
-                        </div>
+                            {/* Existing Calendar button */}
+                            <div className="calendar-container">
+                                <button
+                                    onClick={uploadToCalendar}
+                                    className="bg-white text-black border border-gray-300 rounded-lg px-6 py-3 shadow-md hover:bg-gray-100 transition duration-200"
+                                >
+                                    {access_token ? "Upload to Calendar" : "Connect Google Calendar"}
+                                </button>
+                            </div>
                     </div>
 
 
@@ -527,56 +536,30 @@ const Classes = () => {
                                             <h3>{selectedCourse.email}</h3>
                                             </span>
                                         </p>
-                                        {/* <p>
-                                                    <strong>Office Location</strong>
-                                                    <br />
-                                                    {selectedCourse.officeLocation}
-                                                </p> */}
-                                        <p>
-                                            Office Hours {" "}
-                                            <span style={{ marginLeft: "4px" }}>
-                                            <h4>{selectedCourse.officeHours}</h4>
-                                            </span>
+                                        {selectedCourse.officeLocation && (
+                                            <>
+                                            <p>
+                                                <strong>Office Location</strong><br />
+                                                {selectedCourse.officeLocation}{" "}
+                                                <span style={{ marginLeft: "10px" }}></span>
+                                            </p>
+                                            <p>
+                                            <strong>Office Hours</strong><br />
+                                            {selectedCourse.officeHours}{" "}
+                                            <span style={{ marginLeft: "10px" }}></span>
                                         </p>
+                                            </>
+    
+                                        )}
 
-                                        {/* idk the backend for this so i just left the variable names */}
-                                        <p>
-                                            <strong>Teaching Assistants</strong><br />
-                                            {selectedCourse.instructor}{" "}
-                                            <span style={{ marginLeft: "10px" }}>
-                                            <h3>{selectedCourse.email}</h3>
-                                            </span>
-                                        </p>
-                                        <p>
-                                            Office Hours {" "}
-                                            <span style={{ marginLeft: "4px" }}>
-                                            <h4>{selectedCourse.officeHours}</h4>
-                                            </span>
-                                        </p>
-                                        <p>
-                                            {selectedCourse.instructor}{" "}
-                                            <span style={{ marginLeft: "10px" }}>
-                                            <h3>{selectedCourse.email}</h3>
-                                            </span>
-                                        </p>
-                                        <p>
-                                            Office Hours {" "}
-                                            <span style={{ marginLeft: "4px" }}>
-                                            <h4>{selectedCourse.officeHours}</h4>
-                                            </span>
-                                        </p>
-                                        <p>
-                                            {selectedCourse.instructor}{" "}
-                                            <span style={{ marginLeft: "10px" }}>
-                                            <h3>{selectedCourse.email}</h3>
-                                            </span>
-                                        </p>
-                                        <p>
-                                            Office Hours {" "}
-                                            <span style={{ marginLeft: "4px" }}>
-                                            <h4>{selectedCourse.officeHours}</h4>
-                                            </span>
-                                        </p>
+                                        {/* idk the backend for this so i just left the variable names
+                                        {selectedCourse.teachingAssistantInfo && (
+                                            <p>
+                                                <strong>Teaching Assistants</strong><br />
+                                                {selectedCourse.teachingAssistantInfo}{" "}
+                                                <span style={{ marginLeft: "10px" }}></span>
+                                            </p>
+                                        )} */}
                                     </div>
                                     </div>
 
@@ -641,7 +624,7 @@ const Classes = () => {
                                                 </div>
                                                 {expandedInfo === 'resources' && (
                                                     <div className="info-content">
-                                                        {selectedCourse.requiredResources || 'No required resources specified.'}
+                                                        {selectedCourse.requiredResouces || 'No required resources specified.'}
                                                     </div>
                                                 )}
                                             </div>
